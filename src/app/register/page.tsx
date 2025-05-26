@@ -65,7 +65,7 @@ export default function Login() {
           </a>
           <div className="flex flex-row gap-1">
             <p>Já tem uma conta?</p>
-            <Link href={ROUTES.register} className="text-[#036D3C]">Logue-se</Link>
+            <Link href={ROUTES.login} className="text-[#036D3C]">Logue-se</Link>
           </div>
         </div>
       </div>
