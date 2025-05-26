@@ -6,6 +6,8 @@ import Link from "next/link";
 
 import Image from "next/image";
 import seta from "@/assets/seta.png"
+import { Button } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
 interface CardProps {
     title: string;
@@ -17,10 +19,11 @@ interface CardProps {
 }
 
 export const Card: React.FC<CardProps> = ({ title, status, adress, description, date, skills }) => {
+    const router = useRouter();
 
     return (
         <>
-            <div className="shadow-[5px_5px_10px_0px_rgba(0,_0,_0,_0.2)] hover:shadow-[5px_5px_10px_0px_rgba(3,_109,_60, 1)]  bg-white p-8 w-full flex flex-col gap-5 ">
+            <div className="shadow-[5px_5px_10px_0px_rgba(0,_0,_0,_0.2)] transition-all duration-500 hover:shadow-[5px_5px_10px_0px_rgba(48,_160,_64,0.7)] hover:scale-107 rounded-lg bg-white p-8 w-full flex flex-col gap-5 ">
                 <div className="flex flex-col gap-1">
                     <div className="flex flex-col md:flex-row justify-between">
                         <p className="text-[#036D3C] text-xl font-semibold">{title}</p>
@@ -53,10 +56,10 @@ export const Card: React.FC<CardProps> = ({ title, status, adress, description, 
                 </div>
                 <div className="flex flex-row justify-between items-center">
                     <p className="text-[#949494]">{date.toLocaleDateString()}</p>
-                    <Link href={ROUTES.vacancydetails} className="flex flex-row gap-2 items-center cursor-pointer">
-                        <p className="text-[#036D3C]">Ver detalhes</p>
+                    <Button onClick={() => router.push(ROUTES.vacancydetails)} className="flex flex-row gap-2 items-center cursor-pointer ">
+                        <p className="text-[#036D3C] ">Ver detalhes</p>
                         <Image src={seta} alt="seta" className="w-6"></Image>
-                    </Link>
+                    </Button>
                 </div>
             </div>
         </>
