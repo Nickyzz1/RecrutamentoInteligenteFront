@@ -28,17 +28,17 @@ const VacancyDetails : React.FC = () => {
                 endDate : '22/05/2025'
             },
             {
-                label :'Incrições',
+                label :'Analise de candidatos',
                 startDate : '12/05/25',
                 endDate : '22/05/2025'
             },
             {
-                label :'Incrições',
+                label :'Dinâmicas',
                 startDate : '12/05/25',
                 endDate : '22/05/2025'
             },
             {
-                label :'Incrições',
+                label :'Entrevistas',
                 startDate : '12/05/25',
                 endDate : '22/05/2025'
             },
