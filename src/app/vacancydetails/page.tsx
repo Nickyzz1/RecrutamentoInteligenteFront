@@ -164,7 +164,6 @@ const VacancyDetails : React.FC = () => {
                             <div className="flex flex-col gap-3">
                                 <h2 className="text-sm text-gray-500">Empresa</h2>
                                 <p>Darede à nuvem</p>
-                                <Divider/>
                             </div>
                         </div>
                     </div>
