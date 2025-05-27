@@ -1,6 +1,7 @@
 "use client"
 // imports internos
 import {HeaderLogged} from "@/components/header2/page"
+import {Card} from '@/components/vacancyCard/page'
 
 const manageAplication = () => {
 
@@ -20,6 +21,8 @@ const data = [
         <h1 className="text-[#036D3C]">Gerenciamento de vagas</h1>
 
         <div className="flex rounded shadow w-2/2">
+
+<Card title="a",/>
 
         </div>
 

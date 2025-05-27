@@ -39,11 +39,11 @@ export default function Login() {
         </div>
         <div className="flex flex-col items-center gap-7">
           <a href={ROUTES.start}>
-            <Button variant="contained" style={{backgroundColor: '#036D3C'}}>Candidatar-se</Button>
+            <Button variant="contained" style={{backgroundColor: '#036D3C'}}>Logar</Button>
           </a>
           <div className="flex flex-row gap-1">
             <p>Não tem uma conta?</p>
-            <Link href={ROUTES.register} className="text-[#036D3C]">Logar-se</Link>
+            <Link href={ROUTES.register} className="text-[#036D3C]">Cadastrar-se</Link>
           </div>
         </div>
       </div>

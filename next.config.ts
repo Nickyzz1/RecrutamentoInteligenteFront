@@ -12,6 +12,7 @@ const nextConfig = {
           source : '/manageApplication',
           destination: '/manageApplication'
         },
+
       ]
   },
 };
