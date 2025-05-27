@@ -6,6 +6,8 @@ import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import TrendingUpOutlinedIcon from '@mui/icons-material/TrendingUpOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import FunctionsOutlinedIcon from '@mui/icons-material/FunctionsOutlined';
+import { Button, Pagination } from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 const manageAplication = () => {
 
@@ -23,7 +25,16 @@ const manageAplication = () => {
         <div className="h-screen flex flex-col bg-[#F9FAFB] ">
             <HeaderLogged/>
                 <div className="flex flex-col px-5 md:px-20 gap-12">
-                    <h1 className="text-[#036D3C] text-2xl m-6">Gerenciamento de vagas</h1>
+                    <div className="flex items-center justify-between mt-12">
+                        <h1 className="text-[#036D3C] text-2xl font-semibold ">Gerenciar vagas</h1>
+                        {/* Adicionar nova vaga */}
+                        <div className="md:flex hidden">
+                            <Button variant="contained" className="flex gap-3 max-w-60" sx={{backgroundColor: '#0AA851FF'}}>
+                                <AddCircleOutlineIcon/>
+                                <p>Nova vaga</p>
+                            </Button>
+                        </div>
+                    </div>
                     {/* card de detalhes */}
                     <div className="flex flex-col lg:flex-row gap-9 justify-between">
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
@@ -55,6 +66,13 @@ const manageAplication = () => {
                             </div>
                         </div>
                     </div>
+                    {/* Adicionar nova vaga */}
+                    <div className="flex md:hidden">
+                        <Button variant="contained" className="flex gap-3 max-w-60" sx={{backgroundColor: '#0AA851FF'}}>
+                            <AddCircleOutlineIcon/>
+                            <p>Nova vaga</p>
+                        </Button>
+                    </div>
                     {/* card de vagas */}
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 items-center rounded justify-center gap-9">
                         <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={26}/>
@@ -63,7 +81,9 @@ const manageAplication = () => {
                         <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={6}/>
                         <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={6}/>
                     </div>
-               
+
+                    {/* <Pagination count={10} variant="outlined" shape="rounded" className="self-center" /> */}
+                    <Pagination count={10} variant="outlined" className="self-center" color="primary" />
             </div>
         </div>
         </>

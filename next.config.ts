@@ -12,6 +12,22 @@ const nextConfig = {
           source : '/manageApplication',
           destination: '/manageApplication'
         },
+         {
+          source : '/login',
+          destination: '/login'
+        },
+         {
+          source : '/register',
+          destination: '/register'
+        },
+         {
+          source : '/vacancyDeatails',
+          destination: '/vacancyDeatails'
+        },
+         {
+          source : '/viewCandidates',
+          destination: '/viewCandidates'
+        },
 
       ]
   },
