@@ -23,7 +23,7 @@ export const Card: React.FC<CardProps> = ({ title, status, adress, description, 
 
     return (
         <>
-            <div className="shadow-[5px_5px_10px_0px_rgba(0,_0,_0,_0.2)] transition-all duration-500 hover:shadow-[5px_5px_10px_0px_rgba(48,_160,_64,0.7)] hover:scale-107 rounded-lg bg-white p-8 w-full flex flex-col gap-5 ">
+            <div className="shadow-[5px_5px_10px_0px_rgba(0,_0,_0,_0.2)] transition-all duration-500 hover:shadow-[5px_5px_5px_0px_rgba(48,_160,_64,0.7)] hover:scale-107 rounded-lg bg-white p-8 w-full flex flex-col gap-5 ">
                 <div className="flex flex-col gap-1">
                     <div className="flex flex-col md:flex-row justify-between">
                         <p className="text-[#036D3C] text-xl font-semibold">{title}</p>

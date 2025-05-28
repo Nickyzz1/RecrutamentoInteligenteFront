@@ -6,4 +6,5 @@ export enum ROUTES {
     manageAplication = '/manageApplication',
     vacancydetails = "/vacancydetails",
     sendcandidature = "/sendcandidature",
+    viewCandidates = '/viewCandidates'
 }

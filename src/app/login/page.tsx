@@ -38,7 +38,7 @@ export default function Login() {
 
         </div>
         <div className="flex flex-col items-center gap-7">
-          <a href={ROUTES.start}>
+          <a href={ROUTES.home}>
             <Button variant="contained" style={{backgroundColor: '#036D3C'}}>Logar</Button>
           </a>
           <div className="flex flex-row gap-1">
