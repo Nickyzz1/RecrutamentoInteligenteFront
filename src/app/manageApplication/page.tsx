@@ -26,7 +26,10 @@ const manageAplication = () => {
             <HeaderLogged/>
                 <div className="flex flex-col px-5 md:px-20 gap-12">
                     <div className="flex items-center justify-between mt-12">
-                        <h1 className="text-[#036D3C] text-2xl font-semibold ">Gerenciar vagas</h1>
+                        <div className="flex flex-col gap-0.5">
+                            <h1 className="text-[#036D3C] text-2xl font-semibold">Gerenciar vagas</h1>
+                            <p className="text-gray-500 text-sm">Veja um painel geral das suas vagas!</p>
+                        </div>
                         {/* Adicionar nova vaga */}
                         <div className="md:flex hidden">
                             <Button variant="contained" className="flex gap-3 max-w-60" sx={{backgroundColor: '#0AA851FF'}}>
@@ -36,32 +39,44 @@ const manageAplication = () => {
                         </div>
                     </div>
                     {/* card de detalhes */}
-                    <div className="flex flex-col lg:flex-row gap-9 justify-between">
+                    <div className="flex flex-col lg:flex-row md:gap-6 gap-3 justify-between">
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
-                            <WorkOutlineOutlinedIcon sx={{color: '#4379ee', width:'40px', height: '40px', backgroundColor: '#dbeafe', borderRadius: '4px'}}/>
+                        <div className="flex items-center bg-[#dbeafe] p-1 rounded-lg">
+                            <WorkOutlineOutlinedIcon sx={{color: '#4379ee', width:'35px', height: '35px'}}/>
+
+                        </div>
                             <div>
-                                <h1 className="text-md">Total de vagas</h1>
+                                <h1 className="text-md text-gray-500">Total de vagas</h1>
                                 <h2 className="text-3xl font-bold">6</h2>
                             </div>
                         </div>
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
-                            <TrendingUpOutlinedIcon sx={{color: '#61c585', width:'40px', height: '40px', backgroundColor: '#dcfce7', borderRadius: '4px'}}/>
+                        <div className="flex items-center bg-[#dcfce7] p-1 rounded-lg">
+                            <TrendingUpOutlinedIcon sx={{color: '#61c585', width:'35px', height: '35px'}}/>
+
+                        </div>
                             <div>
-                                <h1 className="text-md">Vagas ativas</h1>
+                                <h1 className="text-md text-gray-500">Vagas ativas</h1>
                                 <h2 className="text-3xl font-bold">6</h2>
                             </div>
                         </div>
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
-                            <PeopleOutlineOutlinedIcon sx={{color: '#a24fed', width:'40px', height: '40px', backgroundColor: '#f3e8ff', borderRadius: '4px'}}/>
+                        <div className="flex items-center bg-[#f3e8ff] p-1 rounded-lg">
+                            <PeopleOutlineOutlinedIcon sx={{color: '#a24fed', width:'35px', height: '35px'}}/>
+
+                        </div>
                             <div>
-                                <h1 className="text-md">Candidaturas</h1>
+                                <h1 className="text-md text-gray-500">Candidaturas</h1>
                                 <h2 className="text-3xl font-bold">6</h2>
                             </div>
                         </div>
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
-                            <FunctionsOutlinedIcon sx={{color: '#ca8a04', width:'40px', height: '40px', backgroundColor: '#fef9c3', borderRadius: '4px'}}/>
+                        <div className="flex items-center bg-[#fef9c3] p-1 rounded-lg">
+                            <FunctionsOutlinedIcon sx={{color: '#ca8a04', width:'35px', height: '35px'}}/>
+
+                        </div>
                             <div>
-                                <h1 className="text-md">Média de candidaturas</h1>
+                                <h1 className="text-md text-gray-500">Média de candidaturas</h1>
                                 <h2 className="text-3xl font-bold">6</h2>
                             </div>
                         </div>
@@ -74,7 +89,7 @@ const manageAplication = () => {
                         </Button>
                     </div>
                     {/* card de vagas */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 items-center rounded justify-center gap-9">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 items-center rounded justify-center gap-6">
                         <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={26}/>
                         <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={6}/>
                         <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={6}/>
