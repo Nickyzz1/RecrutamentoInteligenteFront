@@ -27,7 +27,7 @@ export const HeaderLogged = () => {
             <div className="flex w-full justify-end gap-8">
                 <a href="https://images.steamusercontent.com/ugc/2077889393106802801/509548242CA42145059BDA2532B670FCDAD3C050/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true" className="hidden sm:flex text-black hover:text-[#036d3c]">Início</a>
                 <a href="https://images.steamusercontent.com/ugc/2077889393106802801/509548242CA42145059BDA2532B670FCDAD3C050/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true" className="hidden sm:flex text-black hover:text-[#036d3c]">Minhas Candidaturas</a>
-                <a href="https://images.steamusercontent.com/ugc/2077889393106802801/509548242CA42145059BDA2532B670FCDAD3C050/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true"  className="hidden sm:flex flex-row items-center gap-2">
+                <a href={ROUTES.profile}  className="hidden sm:flex flex-row items-center gap-2">
                     <Image src={user} alt="user" className="w-4"></Image>
                   <p className="text-black hover:text-[#036d3c]">Perfil</p>
                 </a>
