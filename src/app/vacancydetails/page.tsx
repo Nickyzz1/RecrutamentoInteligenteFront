@@ -80,9 +80,9 @@ const VacancyDetails : React.FC = () => {
     return(
         <>
             <HeaderLogged/>
-            <GoBack/>
             {/* Titlw od card */}
             <div className="flex flex-col w-screen min-h-screen overflow-x-hidden p-2 lg:px-32 gap-5">
+            <GoBack/>
                 <div className="flex flex-wrap flex-col md:flex-row bg-white border-1 rounded-2xl border-gray-200 p-7 gap-9">
                     <div className="flex flex-col gap-2 justif">
                         <h1 className="text-xl font-semibold">
