@@ -1,6 +1,7 @@
 "use client"
 // imports internos
-import {HeaderLogged} from "@/components/header2/page"
+import { HeaderLoggedAdmin } from '@/components/headerAdmin/page';
+
 import {Card} from '@/components/vacancyCard/page'
 import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import TrendingUpOutlinedIcon from '@mui/icons-material/TrendingUpOutlined';
@@ -8,22 +9,25 @@ import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined
 import FunctionsOutlinedIcon from '@mui/icons-material/FunctionsOutlined';
 import { Button, Pagination } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/constants/routes';
 
 const manageAplication = () => {
 
- const data = [
-    {
-    title : "Desenvolvedor react",
-    startDate: "15/02/2025",
-    status: 1,
-    candidates : []
-    },
-]
+    const data = [
+        {
+        title : "Desenvolvedor react",
+        startDate: "15/02/2025",
+        status: 1,
+        candidates : []
+        },
+        ]
+
 
     return(
         <>
         <div className="h-screen flex flex-col bg-[#F9FAFB] ">
-            <HeaderLogged/>
+            <HeaderLoggedAdmin/>
                 <div className="flex flex-col px-5 md:px-20 gap-12">
                     <div className="flex items-center justify-between mt-12">
                         <div className="flex flex-col gap-0.5">
@@ -89,14 +93,13 @@ const manageAplication = () => {
                         </Button>
                     </div>
                     {/* card de vagas */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 items-center rounded justify-center gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 items-center rounded justify-center gap-6">
                         <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={26}/>
                         <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={6}/>
                         <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={6}/>
                         <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={6}/>
                         <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={6}/>
                     </div>
-
                     {/* <Pagination count={10} variant="outlined" shape="rounded" className="self-center" /> */}
                     <Pagination count={10} variant="outlined" className="self-center" color="primary" />
             </div>

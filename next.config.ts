@@ -5,7 +5,7 @@ const nextConfig = {
   rewrites:() => {
       return[
         {
-          source : '/',
+          source : '/home',
           destination: '/home',
         },
         {
@@ -13,7 +13,7 @@ const nextConfig = {
           destination: '/manageApplication'
         },
          {
-          source : '/login',
+          source : '/',
           destination: '/login'
         },
          {
@@ -28,6 +28,11 @@ const nextConfig = {
           source : '/viewCandidates',
           destination: '/viewCandidates'
         },
+          {
+          source : '/DashBoard',
+          destination: '/DashBoard'
+        },
+
 
       ]
   },

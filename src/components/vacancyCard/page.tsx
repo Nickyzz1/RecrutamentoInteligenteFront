@@ -5,6 +5,8 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { create } from 'domain';
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/constants/routes';
 
 interface Data {
     title : string,
@@ -14,6 +16,15 @@ interface Data {
 }
 
 export const Card = ({title, status, created, quantityCandidates} : Data) => {
+    
+    const router = useRouter(); // ✅ Hook do Next para redirecionamento
+
+    const handle = () => {
+
+        router.push(ROUTES.viewCandidates); // ✅ Redireciona corretamente
+    
+    };
+
     return(
         <>
             <div className="flex  bg-white flex-col border w-full transition-all duration-500 hover:shadow-[5px_5px_5px_0px_rgba(48,_160,_64,0.7)] hover:scale-101 border-gray-100 shadow gap-3 p-6 rounded-2xl">
@@ -40,7 +51,7 @@ export const Card = ({title, status, created, quantityCandidates} : Data) => {
                 {/* botão de ver candidatos */}
                 <div className='flex justify-between items-center'>
                     {/* Btn de ver candidatos se  candidatos, senão modal de "Não há candidatos" */}
-                    <Button variant='outlined' className='flex flex-row gap-3' sx={{borderColor: '#008236',color: '#008236', transition: 'all 0.3s ease', '&:active': {
+                    <Button variant='outlined' onClick={() => handle()} className='flex flex-row gap-3' sx={{borderColor: '#008236',color: '#008236', transition: 'all 0.3s ease', '&:active': {
                             backgroundColor: 'transparent',
                             borderColor: '#008236',
                             color: '#008236',
