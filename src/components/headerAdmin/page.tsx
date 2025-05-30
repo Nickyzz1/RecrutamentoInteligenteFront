@@ -3,12 +3,18 @@ import { Button, Drawer } from "@mui/material";
 import React from 'react';
 import { ROUTES } from "@/constants/routes"
 import CloseIcon from '@mui/icons-material/Close';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 
 import Image from "next/image";
 import user from "@/assets/user.png"
 import menu from '@/assets/menu.png'
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+
 
 export const HeaderLoggedAdmin = () => {
+  const router = useRouter();
 
     const [open, setOpen] = React.useState(false);
 
@@ -16,21 +22,22 @@ export const HeaderLoggedAdmin = () => {
       setOpen(newOpen);
     };
 
-    const DrawerList = ['Vagas', 'Dashboard', 'Perfil']
+    const DrawerList = ['Vagas', 'Minhas candidaturas', 'Perfil']
 
     return(
         <>
         <div className="flex w-screen p-5 shadow-md items-center px-6 bg-[#ffffff]">
-            <h1 className="text-[#036D3C] font-bold sm:text-xl pl-2">Darede</h1>
-            <h1 className="text-[#F5991D] font-bold sm:text-xl">Recruit</h1>
+              <Link href={ROUTES.homeAdmin} className="flex items-center gap-0.5">
+                <h1 className="text-[#036D3C] font-bold sm:text-xl pl-2">Darede</h1>
+                <h1 className="text-[#F5991D] font-bold sm:text-xl">Recruit</h1>
+              </Link>
 
-            <div className="flex w-full justify-end gap-8">
-                <a href={ROUTES.manageAplication} className="hidden sm:flex text-black hover:text-[#036d3c]">Início</a>
-                <a href="https://images.steamusercontent.com/ugc/2077889393106802801/509548242CA42145059BDA2532B670FCDAD3C050/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true" className="hidden sm:flex text-black hover:text-[#036d3c]">Dashboard</a>
-                <a href={ROUTES.profile}  className="hidden sm:flex flex-row items-center gap-2">
-                    <Image src={user} alt="user" className="w-4"></Image>
-                  <p className="text-black hover:text-[#036d3c]">Perfil</p>
-                </a>
+            <div className="flex w-full justify-end gap-4">
+                <Link href={ROUTES.homeAdmin} className="hidden sm:flex text-black hover:text-[#036d3c]">Ínicio</Link>
+                <Link href={ROUTES.dashboard} className="hidden sm:flex text-black hover:text-[#036d3c]">Dashboard</Link>
+                <Link href={ROUTES.profile} className="hidden sm:flex text-black hover:text-[#036d3c]">Perfil</Link>
+
+
             </div>
 
             <Image width={20} height={10} alt="menu" src={menu} onClick={toggleDrawer(true)} className="sm:hidden"></Image>

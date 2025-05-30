@@ -4,7 +4,7 @@ export enum ROUTES {
     dashboard = '/DashBoard',
     register = "/register",
     start = "/start",
-    manageAplication = '/manageApplication',
+    homeAdmin = '/homeAdmin',
     vacancydetails = "/vacancydetails",
     sendcandidature = "/sendcandidature",
     viewCandidates = '/viewCandidates',

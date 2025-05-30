@@ -1,7 +1,7 @@
 //nn pode ser use client
 
 import { GoBack } from "@/components/goBack/page"
-import { HeaderLogged } from "@/components/header2/page"
+import { HeaderLogged } from "@/components/headerUser/page"
 
 enum Status{
     ANALISE = 'Análise',

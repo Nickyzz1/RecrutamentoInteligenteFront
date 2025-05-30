@@ -3,7 +3,7 @@ import Link from "next/link";
 
 // imports internos
 import { ROUTES } from "@/constants/routes"
-import { HeaderLogged } from "@/components/header2/page";
+import { HeaderLogged } from "@/components/headerUser/page";
 import seta from "@/assets/next.png"
 import back from "@/assets/back.png"
 

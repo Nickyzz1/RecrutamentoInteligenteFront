@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 // imports internos
-import { HeaderLogged } from "@/components/header2/page";
+import { HeaderLogged } from "@/components/headerUser/page";
 import { Card } from "@/components/card/page";
 import lupa from "@/assets/lupa.png"
 

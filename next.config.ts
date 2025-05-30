@@ -9,8 +9,8 @@ const nextConfig = {
           destination: '/home',
         },
         {
-          source : '/manageApplication',
-          destination: '/manageApplication'
+          source : '/homeAdmin',
+          destination: '/homeAdmin'
         },
          {
           source : '/',

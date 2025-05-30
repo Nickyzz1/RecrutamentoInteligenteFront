@@ -14,15 +14,29 @@ import { ROUTES } from '@/constants/routes';
 
 const manageAplication = () => {
 
-    const data = [
-        {
-        title : "Desenvolvedor react",
-        startDate: "15/02/2025",
-        status: 1,
-        candidates : []
-        },
-        ]
+  const vacancies = [
+    {
+      id: "1",
+      title: "Desenvolvedor React",
+      status: "Ativa",
+      adress: "Curitiba, PR",
+      description: "Descrição da vaga aqui...",
+      date: new Date("2025-02-26"),
+      skills: ["React", "TypeScript", "CSS", "Git"],
+    },
+    {
+      id: "2",
+      title: "Backend Node.js",
+      status: "Ativa",
+      adress: "São Paulo, SP",
+      description: "Descrição da vaga Backend...",
+      date: new Date("2025-03-01"),
+      skills: ["Node.js", "Express", "MongoDB"],
+    },
+    
+  ];
 
+    const router = useRouter();
 
     return(
         <>
@@ -43,7 +57,7 @@ const manageAplication = () => {
                         </div>
                     </div>
                     {/* card de detalhes */}
-                    <div className="flex flex-col lg:flex-row md:gap-6 gap-3 justify-between">
+                    <div className="flex flex-col lg:flex-row md:gap-4 gap-3 justify-between">
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
                         <div className="flex items-center bg-[#dbeafe] p-1 rounded-lg">
                             <WorkOutlineOutlinedIcon sx={{color: '#4379ee', width:'35px', height: '35px'}}/>
@@ -92,16 +106,20 @@ const manageAplication = () => {
                             <p>Nova vaga</p>
                         </Button>
                     </div>
-                    {/* card de vagas */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 items-center rounded justify-center gap-6">
-                        <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={26}/>
-                        <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={6}/>
-                        <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={6}/>
-                        <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={6}/>
-                        <Card title="Desenvolvedor React Senior" status='Ativa' created='26/02/2015' quantityCandidates={6}/>
-                    </div>
-                    {/* <Pagination count={10} variant="outlined" shape="rounded" className="self-center" /> */}
-                    <Pagination count={10} variant="outlined" className="self-center" color="primary" />
+                 <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-6">
+                    {vacancies.map((vacancy) => (
+                       <Card
+                            key={vacancy.id}
+                            title={vacancy.title}
+                            status={vacancy.status}
+                            adress={vacancy.adress}  // ESSA LINHA ESTÁ FALTANDO
+                            description={vacancy.description}
+                            date={vacancy.date}
+                            skills={vacancy.skills}
+                            onClick={() => router.push(`/vacancydetails/${vacancy.id}`)}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
         </>

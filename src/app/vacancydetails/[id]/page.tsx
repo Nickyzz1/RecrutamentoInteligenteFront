@@ -17,13 +17,15 @@ interface Candidate {
 }
 
 interface DataJSON {
+  id: number,
   title: string;
   candidates: Candidate[];
 }
 
 const Data: DataJSON[] = [
   {
-    title: "Processo Seletivo - Desenvolvedor",
+    id: 1,
+    title: "Processo Seletivo - Desenvolvedor React",
     candidates: [
       {
         name: "João Silva",
@@ -37,37 +39,74 @@ const Data: DataJSON[] = [
         status: "Em análise",
         idResume: 2,
       },
+      {
+        name: "Maria Souza",
+        created: "2024-01-20",
+        status: "Em análise",
+        idResume: 3,
+      },
+      {
+        name: "Maria Souza",
+        created: "2024-01-20",
+        status: "Em análise",
+        idResume: 4,
+      },
+      {
+        name: "Maria Souza",
+        created: "2024-01-20",
+        status: "Em análise",
+        idResume: 5,
+      },
+      {
+        name: "Maria Souza",
+        created: "2024-01-20",
+        status: "Em análise",
+        idResume: 6,
+      },
+      {
+        name: "Maria Souza",
+        created: "2024-01-20",
+        status: "Em análise",
+        idResume: 7,
+      },
     ],
   },
   {
+    id: 2,
     title: "Processo Seletivo - Designer",
     candidates: [
       {
         name: "Ana Lima",
         created: "2024-02-10",
         status: "Reprovado",
-        idResume: 3,
+        idResume: 1,
       },
       {
         name: "Carlos Santos",
         created: "2024-02-12",
         status: "Dinâmica",
-        idResume: 4,
+        idResume: 2,
       },
     ],
   },
 ];
 
-const ViewCandidates = () => {
+
+export default function Page({ params }: { params: { id: string } }) {
+  
+  const id = Number(params.id);
+  const processo = Data.find(p => p.id === id)
+
+
+  if (!processo) {
+    return <div>Processo seletivo não encontrado</div>;
+  }
   return (
     <>
       <HeaderLoggedAdmin />
-
-      <div className="flex flex-col bg-[#F9FAFB] p-6 space-y-12">
+      <div className="flex flex-col p-6">
         <GoBack />
-
-        {Data.map((processo, idx) => (
-          <div key={idx} className="bg-white rounded-xl border border-zinc-400 p-4">
+          <div className="bg-white rounded-xl mt-9 border border-zinc-400 p-4">
             <h2 className="text-2xl text-green-700 mb-4">{processo.title}</h2>
 
             <TableContainer component={Paper}>
@@ -100,10 +139,8 @@ const ViewCandidates = () => {
               </Table>
             </TableContainer>
           </div>
-        ))}
       </div>
     </>
   );
 };
 
-export default ViewCandidates;

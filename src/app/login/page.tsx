@@ -15,7 +15,7 @@ export default function Login() {
 
   const handleLogin = () => {
     if (user === 'admin@email.com' && password === '123') {
-      router.push(ROUTES.manageAplication); // ✅ Redireciona corretamente
+      router.push(ROUTES.homeAdmin); // ✅ Redireciona corretamente
     } else {
       router.push(ROUTES.home);
     }
