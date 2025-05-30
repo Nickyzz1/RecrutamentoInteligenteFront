@@ -1,6 +1,7 @@
 // prova PA 2
 import { GoBack } from "@/components/goBack/page"
 import { HeaderLogged } from "@/components/header2/page"
+import { HeaderLoggedAdmin } from "@/components/headerAdmin/page"
 
 enum Status{
     ANALISE = 'Análise',
@@ -20,10 +21,10 @@ type Data = {
     }]
 }
 
-export const ViewCandidates = ({title, candidates} : Data) => {
+const ViewCandidates = ({title, candidates} : Data) => {
     return(
         <>
-            <HeaderLogged/>
+            <HeaderLoggedAdmin/>
             <div className="flex  bg-[#F9FAFB]">
                 <GoBack/>
 
@@ -36,7 +37,7 @@ export const ViewCandidates = ({title, candidates} : Data) => {
                             <h2 className="text-zinc-800">Status</h2>
                             <h2 className="text-zinc-800">Ações</h2>
                         </div>
-                        {candidates.map((e, index)=> {
+                        {/* {candidates.map((e, index)=> {
                             return(
                                 <>
                                     <div key={index} className="bg-white ">
@@ -44,7 +45,7 @@ export const ViewCandidates = ({title, candidates} : Data) => {
                                     </div>
                                 </>
                             )
-                        })}
+                        })} */}
                         <div>
 
                         </div>
@@ -55,3 +56,5 @@ export const ViewCandidates = ({title, candidates} : Data) => {
         </>
     )
 }
+
+export default ViewCandidates;
