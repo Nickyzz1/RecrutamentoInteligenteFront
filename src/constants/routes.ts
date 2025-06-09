@@ -8,5 +8,6 @@ export enum ROUTES {
     vacancydetails = "/vacancydetails",
     sendcandidature = "/sendcandidature",
     viewCandidates = '/viewCandidates',
-    profile = '/profile'
+    profile = '/profile',
+    resumeCandidate = '/resumeCandidate'
 }

@@ -1,6 +1,8 @@
+"use client"
+
+import * as React from "react";
 import { GoBack } from "@/components/goBack/page";
 import { HeaderLoggedAdmin } from "@/components/headerAdmin/page";
-import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,139 +10,181 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { useParams } from "next/navigation";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
+
+// enum de status
+enum EApplicationStatus {
+  ANALISE = 0,
+  APROVADO = 1,
+  REPROVADO = 2,
+  DINAMICA = 3,
+  ENTREVISTA = 4,
+}
 
 interface Candidate {
+  id: number;
+  email: string;
   name: string;
+  phone: string | null;
+}
+
+type DataJSON = {
+  id: number;
+  candidate: Candidate;
   created: string;
-  status: string;
-  idResume: number;
-}
+  dismissalStage: {
+    id: number;
+    description: string;
+    startDate: string;
+    endDate: string;
+  } | null;
+  status: number;
+}[];
 
-interface DataJSON {
-  id: number,
-  title: string;
-  candidates: Candidate[];
-}
-
-const Data: DataJSON[] = [
+// mock inicial
+const mockData: DataJSON = [
   {
     id: 1,
-    title: "Processo Seletivo - Desenvolvedor React",
-    candidates: [
-      {
-        name: "João Silva",
-        created: "2024-01-15",
-        status: "Aprovado",
-        idResume: 1,
-      },
-      {
-        name: "Maria Souza",
-        created: "2024-01-20",
-        status: "Em análise",
-        idResume: 2,
-      },
-      {
-        name: "Maria Souza",
-        created: "2024-01-20",
-        status: "Em análise",
-        idResume: 3,
-      },
-      {
-        name: "Maria Souza",
-        created: "2024-01-20",
-        status: "Em análise",
-        idResume: 4,
-      },
-      {
-        name: "Maria Souza",
-        created: "2024-01-20",
-        status: "Em análise",
-        idResume: 5,
-      },
-      {
-        name: "Maria Souza",
-        created: "2024-01-20",
-        status: "Em análise",
-        idResume: 6,
-      },
-      {
-        name: "Maria Souza",
-        created: "2024-01-20",
-        status: "Em análise",
-        idResume: 7,
-      },
-    ],
+    created: "2022-02-20",
+    dismissalStage: {
+      id: 1,
+      description: "a",
+      startDate: "2022-02-20",
+      endDate: "2022-03-20",
+    },
+    candidate: {
+      id: 1,
+      name: "João Silva",
+      email: "joao@email.com",
+      phone: "41 99999-9999",
+    },
+    status: EApplicationStatus.ANALISE,
   },
   {
     id: 2,
-    title: "Processo Seletivo - Designer",
-    candidates: [
-      {
-        name: "Ana Lima",
-        created: "2024-02-10",
-        status: "Reprovado",
-        idResume: 1,
-      },
-      {
-        name: "Carlos Santos",
-        created: "2024-02-12",
-        status: "Dinâmica",
-        idResume: 2,
-      },
-    ],
+    created: "2022-02-20",
+    dismissalStage: {
+      id: 2,
+      description: "a",
+      startDate: "2022-02-20",
+      endDate: "2022-03-20",
+    },
+    candidate: {
+      id: 2,
+      name: "Nicolle Silva",
+      email: "joao@email.com",
+      phone: "41 99999-9999",
+    },
+    status: EApplicationStatus.ANALISE,
   },
 ];
 
 
-export default function Page({ params }: { params: { id: string } }) {
-  
-  const id = Number(params.id);
-  const processo = Data.find(p => p.id === id)
 
+// mampeamento dos status legíveis
+// { [key: number]: string } diz que esse objeto tem chaves numéricas e valores do
+const statusOptions: { [key: number]: string } = {
+  [EApplicationStatus.ANALISE]: "Em análise",
+  [EApplicationStatus.APROVADO]: "Aprovado",
+  [EApplicationStatus.REPROVADO]: "Reprovado",
+  [EApplicationStatus.DINAMICA]: "Dinâmica",
+  [EApplicationStatus.ENTREVISTA]: "Entrevista",
+};
 
-  if (!processo) {
-    return <div>Processo seletivo não encontrado</div>;
-  }
+export default function Page() {
+  const params = useParams();
+  const [data, setData] = React.useState<DataJSON>(mockData);
+
+  // atualiza o status do candidato com base no ID
+  const handleChange = (event: SelectChangeEvent<number>, id: number) => {
+    const updatedData = data.map((item) =>
+      item.id === id ? { ...item, status: event.target.value as number } : item
+    );
+    setData(updatedData);
+  };
+
   return (
     <>
       <HeaderLoggedAdmin />
       <div className="flex flex-col p-6">
         <GoBack />
-          <div className="bg-white rounded-xl mt-9 border border-zinc-400 p-4">
-            <h2 className="text-2xl text-green-700 mb-4">{processo.title}</h2>
+        <div className="bg-white rounded-xl mt-9 border border-zinc-400 p-4">
+          <h2 className="text-2xl text-green-700 mb-4">Processo Seletivo</h2>
 
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="Tabela de candidatos">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Nome</TableCell>
-                    <TableCell>Data da candidatura</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell>Ações</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {processo.candidates.map((candidate) => (
-                    <TableRow
-                      key={candidate.idResume}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="Tabela de candidatos">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Nome</TableCell>
+                  <TableCell>Data da candidatura</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Ações</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.map((item) => (
+                  <TableRow
+                    key={item.id}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                      ":hover": {
+                        backgroundColor: "#f0f0f0",
+                        transition: "background-color 130ms ease-in",
+                      },
+                    }}
+                  >
+                    <TableCell>{item.candidate.name}</TableCell>
+                    <TableCell>{item.created}</TableCell>
+                    <TableCell>
+                      <FormControl fullWidth>
+                        <InputLabel id={`status-label-${item.id}`}>Status</InputLabel>
+                        <Select
+                          labelId={`status-label-${item.id}`}
+                          value={item.status}
+                          label="Status"
+                          onChange={(e) => handleChange(e, item.id)}
+                        >
+                          {Object.entries(statusOptions).map(([key, label]) => (
+                            <MenuItem key={key} value={Number(key)}>
+                              {label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </TableCell>
+                    <TableCell>
+                    <Button
+                      variant="outlined"                      
+                      sx={{
+                        borderColor: 'green',
+                        color: 'green',
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 128, 0, 0.1)', // verde clarinho no fundo ao hover
+                          borderColor: 'green',
+                          color: 'green',
+                          transition: 'all 0.3s ease',
+                        },
+                        transition: 'all 0.3s ease',
+                      }}
                     >
-                      <TableCell component="th" scope="row">
-                        {candidate.name}
-                      </TableCell>
-                      <TableCell>{candidate.created}</TableCell>
-                      <TableCell>{candidate.status}</TableCell>
-                      <TableCell>
-                        <button className="text-green-600 hover:underline">Ver</button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
+                      Ver
+                    </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
     </>
   );
-};
-
+}

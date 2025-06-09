@@ -32,8 +32,10 @@ const nextConfig = {
           source : '/DashBoard',
           destination: '/DashBoard'
         },
-
-
+        {
+          source : '/resumeCandidate',
+          destination: '/resumeCandidate'
+        },
       ]
   },
 };
