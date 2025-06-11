@@ -1,6 +1,7 @@
 import { HeaderLoggedAdmin } from "@/components/headerAdmin/page"
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
 import { GoBack } from "@/components/goBack/page";
+import { Divider, Link } from "@mui/material";
 
 const ResumeCandidate = () => {
 
@@ -29,15 +30,15 @@ const ResumeCandidate = () => {
             "email" : string,
             "bio" : string | null,
             "admin" : boolean,
-            "phone" : string
+            "phone" : string | null
             "educations" : {
                 "id" : number,
                 "institution" : string,
                 "course" : string,
                 "status" : EEducationStatus,
                 "type" : EEducationType,
-                "startDate" : Date,
-                "endDate" : Date
+                "startDate" : string,
+                "endDate" : string
             }[],
             "experiences" : {
                 "id" : number,
@@ -45,18 +46,17 @@ const ResumeCandidate = () => {
                 "role" : string,
                 "description" : string,
                 "location" : string,
-                "startDate" : Date,
-                "endDate" : Date | null
+                "startDate" : string,
+                "endDate" : string | null
             }[],
             "languages" : {
                 "id" : number,
                 "name" : string,
                 "level" : EProficiencyLevel
             }[],
-            "addresses" : {
-                "id" : number,
-                "address" : string
-            }[],
+          
+            "address" : string | null
+            ,
             "skills" : {
                 "id" : number,
                 "name" : string
@@ -67,20 +67,250 @@ const ResumeCandidate = () => {
                 "description" : string
             }[]
         }
-        
+
+        const data : IResume = {
+            "id" : 1,
+            "name" : "Sabrina Mortean Loures de Souza",
+            "email" : "Sabrina.souza.2754@gmail.com",
+            "bio" : "Sou desenvolvedora de software com experiência na criação de soluções tecnológicas robustas, escaláveis e centradas no usuário. Minha formação em [Curso] pela [Universidade] me deu uma base sólida, e desde então venho atuando no setor de tecnologia há mais de [X anos], com passagens por startups e empresas de médio e grande porte. Trabalho principalmente com [principais linguagens/tecnologias, ex: JavaScript, Python, React, Node.js], e tenho experiência no desenvolvimento de aplicações web e mobile, além de arquiteturas backend. Gosto de trabalhar em times ágeis, utilizando metodologias como Scrum e Kanban, com foco em entregas contínuas e de qualidade.",
+            "admin" : false,
+            "phone" :"41 99999-9999",
+            "educations" : [{
+                "id" : 1,
+                "institution" : "Universidade Positivo - UP",
+                "course" : "Engenharia de sofware",
+                "status" : 1,
+                "type" : 1,
+                "startDate" : "2020-03-26",
+                "endDate" :  "2020-03-26"
+            },
+            {
+                "id" : 2,
+                "institution" : "Senai cic",
+                "course" : "Analise e desenvolvimento de sistemas",
+                "status" : 1,
+                "type" : 1,
+                "startDate" : "2024-02-26",
+                "endDate" :  "2025-07-09"
+            }
+            ],
+            "experiences" : [{
+                "id" : 1,
+                "company" : "Robert Bosch",
+                "role" : "PO - Product Owner",
+                "description" : "Responsável por gerenciar o backlog do produto, priorizando funcionalidades com base em valor de negócio, feedback de usuários e metas estratégicas. Atua como ponte entre as áreas de negócio e o time de desenvolvimento, garantindo alinhamento e entregas com foco no cliente. Trabalha com metodologias ágeis, definição de requisitos, validação de entregas e evolução contínua do produto.",
+                "location" : "Juscelino Kubitschek",
+                "startDate" :  "2018-03-26",
+                "endDate" :  "2020-02-26"
+            },
+            {
+                "id" : 2,
+                "company" : "IBM",
+                "role" : "Desenvolvedor Frontend pleno",
+                "description" : "Experiência com avaScript, TypeScript, React e Sass, com foco em arquitetura escalável, testes automatizados e integração com APIs em ambientes corporativos.",
+                "location" : "Paraná, Curitiba",
+                "startDate" :  "2015-05-26",
+                "endDate" :  "2018-01-26"
+            },
+            ],
+            "languages" : [{
+                "id" : 1,
+                "name" : "Inglês",
+                "level" : 3
+            }],
+          
+            "address" : "Renato hugo vardanega, 84",
+           
+            "skills" : [{
+                "id" : 1,
+                "name" : 'Comunicação'
+            },
+            {
+                "id" : 2,
+                "name" : 'C#'
+            },
+             {
+                "id" : 3,
+                "name" : 'React Next'
+            },
+            {
+                "id" : 4,
+                "name" : 'Talwind'
+            },        
+            {
+                "id" : 5,
+                "name" : 'React Native'
+            }    
+            ],
+            "links" : [{
+                "id" : 1,
+                "url" : "https://github.com/nickyzz1",
+                "description" : "Github"
+            }]
+        }
+
+        const dataVacancy = {
+            name : "Desenvolvedor React Sênior"
+        }
+
+    const levels: { [key: number]: string } = {
+    [EProficiencyLevel.Benniger]: "Básico",
+    [EProficiencyLevel.Intermediate]: "Intermediário",
+    [EProficiencyLevel.Advanced]: "Avançado",
+    [EProficiencyLevel.Fluent]: "Fluente",
+    };
+
 
         return(
             <>
                 <HeaderLoggedAdmin/>
-                <div className="flex flex-col items-center min-h-screen" >
+                <div className="flex flex-col items-center min-h-screen gap-3" >
                     <GoBack/>
-                    <div>
-                        <FeedOutlinedIcon/>
-                    </div>
-                </div>           
-            </>
-        )
+                    <div className="bg-white flex flex-col w-4/5 rounded-xl shadow p-6 word gap-3" >
+                        <div className="flex items-center gap-3">
+                            <div className="hidden md:flex">
+                                <FeedOutlinedIcon sx={{color: "#036d3c"}}/>
+                            </div>
+                            <div  className="flex flex-col gap-1">
+                                <h1 className="text-2xl font-semibold">{data.name} </h1>
+                                <p className="text-sm" >Candidura para {dataVacancy.name} </p>
+                            </div>
+                        </div>
 
+                        <div className="flex flex-col gap-9">
+                            {/* Dados pessoais */}
+                            <h1 className="text-[#036d3c] text-xl font-semibold" >Informações pessoais</h1>
+                            <div className="w-full grid grid-cols-1, md:grid-cols-2 gap-3 " >
+                                <div>
+                                    <h2 className="text-neutral-400" >Nome completo</h2>
+                                    <p>{data.name}</p>
+                                </div>
+                                <div>
+                                    <h2 className="text-neutral-400">Email</h2>
+                                    <p className="break-words">{data.email}</p>
+                                </div>
+                                <div>
+                                    <h2 className="text-neutral-400" >Telefone</h2>
+                                    <p>{data.phone}</p>
+                                </div>
+                                <div>
+                                    <h2 className="text-neutral-400" >Endereço</h2>
+                                    <p>{data.address}</p>
+                                </div>
+                                <div>
+                                    {data.links.map((i, index) => {
+                                        return(
+                                            <div key={index} className="flex-wrap" >
+                                                <h2 className="text-neutral-400">{i.description}</h2>
+                                                <Link href="#" variant="body2">
+                                                {i.url}
+                                                </Link>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Experienca profissional */}
+                            <div className="flex flex-col gap-6" >
+                                <h1 className="text-[#036d3c] text-xl font-semibold" >Experiência profissional</h1>
+                                <Divider/>
+                                {
+                                    data.experiences.map((e, index) => 
+                                        {
+                                            return(
+                                                <div key={index} className="bg-gray-100 shadow-[0px_0px_5px_rgba(0,0,0,0.15)] flex flex-col p-4 gap-3 rounded-xl" >
+                                            <div className="flex flex-col">
+                                                <div className="flex items-start flex-col md:grid md:grid-cols-2">
+                                                    <h1 className="text-xl font-semibold">{e.role}</h1>
+                                                    <h2 className="flex justify-end text-neutral-500" >{e.startDate} -  {e.startDate}</h2>
+                                                </div>
+                                                <h2 className="text-sm text-neutral-500 font-semibold">{e.company} - {e.location}</h2>
+                                            </div>
+                                            <p className="text-neutral-500">{e.description}</p>
+                                        </div>
+                                        )
+                                    })
+                                }
+
+                            </div>
+
+                            {/* Formação academica */}
+                            <div className="flex flex-col gap-6" >
+                                <h1 className="text-[#036d3c] text-xl font-semibold" >Formação acadêmica</h1>
+                                <Divider/>
+                                {
+                                    data.educations.map((e, index) => {
+                                        return(
+                                            <div key={index} className="bg-gray-100 shadow-[0px_0px_5px_rgba(0,0,0,0.15)] flex flex-col p-4 gap-3 rounded-xl" >
+                                                <div className="flex flex-col gap-2">
+                                                    <div className="flex items-start flex-col md:grid md:grid-cols-2">
+                                                        <h1 className="text-xl font-semibold">{e.course}</h1>
+                                                        <h2 className="flex justify-end text-neutral-500" >{e.startDate} -  {e.startDate}</h2>
+                                                    </div>
+                                                    <h2 className="text-sm text-neutral-500 font-semibold">{e.institution}</h2>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+
+                        {/* Habilidades */}
+                            <div className="flex flex-col gap-6" >
+                                <h1 className="text-[#036d3c] text-xl font-semibold" >Formação acadêmica</h1>
+                                <Divider/>
+                                <div className="flex gap-2 flex-wrap wrap">
+                                {
+                                    data.skills.map((s, index) => {
+                                        return(
+                                            <p className="border rounded-2xl bg-green-100 px-2 border-green-700">{s.name}</p>      
+                                        )
+                                    })
+                                }
+                                </div>
+                            </div>
+
+                          {/* Idiomas */}
+                            <div className="flex flex-col gap-6" >
+                                <h1 className="text-[#036d3c] text-xl font-semibold" >Formação acadêmica</h1>
+                                <Divider/>
+                                <div className="flex gap-2 flex-wrap wrap">
+                                {
+                                    data.languages.map((e, index) => {
+                                        return(
+                                            <p key={index} className="border rounded-2xl bg-green-100 px-2 border-green-700">{e.name} - {levels[e.level]}</p>      
+                                        )
+                                    })
+                                }
+                                </div>
+                            </div>
+
+                         {/* Links extternos */}
+                            <div className="flex flex-col gap-6" >
+                                <h1 className="text-[#036d3c] text-xl font-semibold" >Links externos</h1>
+                                <Divider/>
+                                <div className="flex gap-2 flex-wrap wrap">
+                                {
+                                    data.links.map((l, index) => {
+                                        return(
+                                            <div>
+                                            <Link href="#" variant="body2">
+                                                {l.url}
+                                            </Link>
+
+                                            </div>
+                                        )
+                                    })
+                                }
+                                </div>
+                            </div>
+
+                    </div>
+                </div>
+            </div>           
+        </>
+    )
 }
 
 export default ResumeCandidate;
