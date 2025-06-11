@@ -239,7 +239,7 @@ const ResumeCandidate = () => {
         return(
             <>
                 <HeaderLoggedAdmin/>
-                <div className="flex flex-col items-center min-h-screen gap-3" >
+                <div className="flex flex-col items-center min-h-screen gap-3 py-7" >
                     <GoBack/>
                     <div className="bg-white flex flex-col w-4/5 rounded-xl shadow p-6 word gap-3" >
                         <div className="flex items-center gap-3">
