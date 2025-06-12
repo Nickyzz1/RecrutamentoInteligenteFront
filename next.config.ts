@@ -35,7 +35,10 @@ const nextConfig = {
         {
           source : '/resumeCandidate',
           destination: '/resumeCandidate'
-        },
+        }, {
+          source : '/createVacancy',
+          destination: '/createVacancy'
+        }
       ]
   },
 };

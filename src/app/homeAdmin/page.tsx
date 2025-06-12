@@ -10,6 +10,7 @@ import FunctionsOutlinedIcon from '@mui/icons-material/FunctionsOutlined';
 import { Button, Pagination } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/constants/routes';
 
 const manageAplication = () => {
 
@@ -49,7 +50,7 @@ const manageAplication = () => {
                         </div>
                         {/* Adicionar nova vaga */}
                         <div className="md:flex hidden">
-                            <Button variant="contained" className="flex gap-3 max-w-60" sx={{backgroundColor: '#0AA851FF'}}>
+                            <Button onClick={() => {router.push(ROUTES.createVacancy)}} variant="contained" className="flex gap-3 max-w-60" sx={{backgroundColor: '#0AA851FF'}}>
                                 <AddCircleOutlineIcon/>
                                 <p>Nova vaga</p>
                             </Button>
