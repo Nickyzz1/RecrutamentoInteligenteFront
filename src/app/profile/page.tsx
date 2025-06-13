@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 
 import { HeaderLogged } from "@/components/headerUser/page";
@@ -11,9 +12,24 @@ import chapeu from "@/assets/chapeu.png"
 import pessoa from "@/assets/profile.png"
 
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import { useState } from "react";
 
 
 export default function Start() {
+
+    const [modal, setModal] = useState(false);
+    const [bio, setBio] = useState<string>("");
+
+
+      const closeModal = () => {
+        setBio("");
+        setModal(false);
+    }
+
+    const openModal = () => {
+        setModal(true);
+    }
+
     return (
         <>
             <HeaderLogged />
@@ -23,9 +39,11 @@ export default function Start() {
                     
                     {/* Lado Esquerdo */}
                     <div className="shadow-[0px_0px_5px_1px_rgba(0,_0,_0,_0.2)] rounded-[12px] p-6 w-full md:w-[450px] bg-white ">
-                        <div className="flex flex-row justify-end gap-5">
-                            <LogoutOutlinedIcon/>
-                            <Image src={editar} alt="editar" className="w-8 h-8" />
+                        <div className="flex flex-row justify-end gap-3">
+                            <Image src={sair} alt="sair" className="w-8 h-8" />
+                            <button onClick={() => openModal()} className="cursor-pointer">
+                                <Image src={editar} alt="editar" className="w-8 h-8" />
+                            </button>
                         </div>
                         <div className="flex justify-center my-8">
                             <div className="p-3 rounded-full shadow-[0px_0px_5px_1px_rgba(0,_0,_0,_0.2)]">
@@ -89,6 +107,23 @@ export default function Start() {
                     </div>
                 </div>
             </div>
+
+              <div className={modal ? "fixed inset-0 flex items-center justify-center  bg-black/50 z-50" : "disabled z-0 fixed opacity-0"}>
+                <div className="bg-white dark:bg-slate-100 p-8 rounded-lg shadow-lg flex items-center justify-center flex-col" >
+                    <div className="p-2 flex flex-col w-96 z-50">
+                        <h2 className="text-xl font-semibold">New Chat</h2>
+                        <form className="flex flex-col">
+                            <label htmlFor="" className="mt-8">Name</label>
+                            <input type="text" placeholder="Chat name" className="text-gray-800 border-gray-800 border rounded-[5px] p-1 mt-1 text-[13px]" value={bio} onChange={(e) => { setBio(e.target.value) }} ></input>
+                        </form>
+                        <div className="flex justify-between mt-10">
+                            <button onClick={() => closeModal()} className="flex justify-center items-center h-8 text-[15px] bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600">Cancel</button>
+                            <button onClick={() => closeModal()} className="flex justify-center items-center h-8 text-[15px] bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </>
     );
 }
