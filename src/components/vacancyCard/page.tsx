@@ -2,8 +2,8 @@
 import React from 'react';
 import { ROUTES } from "@/constants/routes"
 import Link from "next/link";
-
-
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import Image from "next/image";
 import seta from "@/assets/seta.png"
 import { Button } from '@mui/material';
@@ -55,6 +55,8 @@ export const Card: React.FC<CardProps> = ({ title, status, adress, description, 
                         })
                     )}
                 </div>
+
+             
                 <div className="flex flex-row justify-between items-center">
                     <p className="text-[#949494]">{date.toLocaleDateString()}</p>
                     <Button onClick={onClick} className="flex flex-row gap-2 items-center cursor-pointer ">
