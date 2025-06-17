@@ -7,6 +7,8 @@ import logo from "@/assets/logo.png";
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import Link from "next/link";
+import { APIURL } from "@/constants/api"
+import jwt from "jsonwebtoken"
 
 export default function Login() {
   const [user, setUser] = useState('');
@@ -14,11 +16,31 @@ export default function Login() {
   const router = useRouter(); // ✅ Hook do Next para redirecionamento
 
   const handleLogin = () => {
-    if (user === 'admin@email.com' && password === '123') {
-      router.push(ROUTES.homeAdmin); // ✅ Redireciona corretamente
-    } else {
-      router.push(ROUTES.home);
-    }
+    fetch(`${APIURL}/auth`, {
+      method: "POST",
+      headers: {
+        "Content-Type" : "application/json"
+      },
+      body: JSON.stringify({
+        email: user,
+        password: password
+      })
+    })
+    .then(response => {
+      if(response.status != 200){
+        response.json().then((data) => console.log(data.message))
+      }else{
+        response.json().then((data) => {
+          localStorage.setItem("AUTH", data.token)
+          const tokenData = JSON.parse(JSON.stringify(jwt.decode(data.token)))
+          if(tokenData.Admin == "True"){
+            router.push(ROUTES.homeAdmin)
+          }else{
+            router.push(ROUTES.home)
+          }
+        })
+      }
+    })
   };
 
   return (
