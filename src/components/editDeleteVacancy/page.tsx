@@ -8,7 +8,12 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
 
-const EditDelete = () => 
+
+interface Isla {
+    id: string
+}
+
+const EditDelete = ({id} : Isla) => 
 {
     const router = useRouter()
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -40,7 +45,7 @@ const EditDelete = () =>
     return(
         <>
             <div className="flex gap-3">
-                <IconButton onClick={() => (router.push(ROUTES.editVacancy))} color='success'>
+                <IconButton  onClick={() => router.push(`/editVacancy/${id}`)} color='success'>
                     <BorderColorOutlinedIcon />
                 </IconButton>
 

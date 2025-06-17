@@ -41,7 +41,7 @@ const createVacancy = () => {
     const [responsabilityValue, setResponsabilityValue] = useState('')
     const [modal, setModal] = useState(2)
     
-    interface InitialData {
+    interface iVacancyFirstData {
         
         "title" : string,
         "description" : string,
@@ -51,7 +51,7 @@ const createVacancy = () => {
         "canApply" : boolean
     }
 
-    interface IVacancy {
+    interface IVacancySecondData {
         
         "Etapas_da_Vaga": string[],
         "Responsabilidades_e_atribuições": string[],
@@ -60,7 +60,7 @@ const createVacancy = () => {
         "Habilidades": string[],
     }
 
-    const data : InitialData = {
+    const firstPageData : iVacancyFirstData = {
         title : title,
         description : description,
         workDays : startDayWeek + endDayWeek,
@@ -68,7 +68,7 @@ const createVacancy = () => {
         workEnd: workEnd ? workEnd.toDate() : new Date(),
         canApply : true
     }
-    const vacancy : IVacancy = {
+    const secondPageData : IVacancySecondData = {
         Etapas_da_Vaga: listSteps,
         Responsabilidades_e_atribuições: listResponsabilities,
         Requisitos: listRequiments,
@@ -77,9 +77,9 @@ const createVacancy = () => {
     };
       
     // testando primeiro post para api
-    console.log(JSON.stringify(data, null, 2));
+    console.log(JSON.stringify(firstPageData, null, 2));
     // testando segundo post par api
-    console.log(JSON.stringify(vacancy, null, 2));
+    console.log(JSON.stringify(secondPageData, null, 2));
 
     return(
         <>

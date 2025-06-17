@@ -18,7 +18,7 @@ const Page = async ({params: {id}} : IParams) => {
         <div className="bg-white rounded-xl border border-zinc-400 p-4">
             <div className="w-full flex justify-between p-2">
               <h2 className="text-2xl text-green-700 mb-4">Processo Seletivo</h2>
-              <EditDelete/>
+              <EditDelete id={id}/>
             </div>
             <VacancyTb/>
         </div>
