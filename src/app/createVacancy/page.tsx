@@ -4,12 +4,14 @@ import * as React from 'react';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 import { HeaderLoggedAdmin } from "@/components/headerAdmin/page"
 import { GoBack } from "@/components/goBack/page"
 import {Button, MenuItem, Select, TextField } from "@mui/material"
 import { useState } from "react";
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -104,7 +106,6 @@ const createVacancy = () => {
                                 <p>Semanal</p>
                                 <div className="flex flex-col gap-5 md:flex-row">
                                         <Select
-                                            
                                             sx={{ minWidth: 110, maxWidth: 200}}
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
@@ -218,8 +219,11 @@ const createVacancy = () => {
                                 {listSteps.map((i, index) => {
                                     return(
                                         <div key={index} className='flex gap-3 items-center'>
-                                            <p className='rounded-full w-8 h-8 text-white flex items-center justify-center bg-[#0AA851FF] p-2'>{index + 1}</p>
+                                            <p className='rounded-full w-6 h-6 text-white flex items-center justify-center bg-[#0AA851FF] p-2'>{index + 1}</p>
                                             <p>{i}</p>
+                                            <div className='flex w-full justify-end'>
+                                                <IconButton className=''><DeleteIcon color='error'/></IconButton>
+                                            </div>
                                         </div>
                                     )
                                 })}
@@ -239,7 +243,10 @@ const createVacancy = () => {
                             {listResponsabilities.map((i, index) => {
                                 return(
                                     <div key={index} className='flex gap-3 items-center'>
-                                        <p className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >{i}</p>
+                                        <div className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >
+                                            <p >{i}</p>
+                                            <IconButton className=''><HighlightOffIcon/></IconButton>
+                                        </div>
                                     </div>
                                 )
                             })}
@@ -259,7 +266,10 @@ const createVacancy = () => {
                             {listRequiments.map((i, index) => {
                                 return(
                                     <div key={index} className='flex gap-3 items-center'>
-                                        <p className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >{i}</p>
+                                         <div className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >
+                                            <p >{i}</p>
+                                            <IconButton className=''><HighlightOffIcon/></IconButton>
+                                        </div>
                                     </div>
                                 )
                             })}
@@ -279,7 +289,10 @@ const createVacancy = () => {
                             {listBenefits.map((i, index) => {
                                 return(
                                     <div key={index} className='flex gap-3 items-center'>
-                                        <p className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >{i}</p>
+                                      <div className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >
+                                            <p >{i}</p>
+                                            <IconButton className=''><HighlightOffIcon/></IconButton>
+                                        </div>
                                     </div>
                                 )
                             })}
@@ -299,16 +312,17 @@ const createVacancy = () => {
                             {listAbilities.map((i, index) => {
                                 return(
                                     <div key={index} className='flex gap-3 items-center'>
-                                        <p className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >{i}</p>
+                                          <div className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >
+                                            <p >{i}</p>
+                                            <IconButton className=''><HighlightOffIcon/></IconButton>
+                                        </div>
                                     </div>
                                 )
                             })}
                         </div>
-
                         <Button onClick={() => setModal(2)} variant='contained' className="flex gap-3 max-w-80 self-center" sx={{backgroundColor: '#0AA851FF'}}>
                             Próximo
                         </Button>
-
                     </div>
                     {/* fim */}
                 </div> 

@@ -65,7 +65,7 @@ const manageAplication = () => {
                         </div>
                             <div>
                                 <h1 className="text-md text-gray-500">Total de vagas</h1>
-                                <h2 className="text-3xl font-bold">6</h2>
+                                <h2 className="text-3xl font-bold text-black">6</h2>
                             </div>
                         </div>
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
@@ -75,7 +75,7 @@ const manageAplication = () => {
                         </div>
                             <div>
                                 <h1 className="text-md text-gray-500">Vagas ativas</h1>
-                                <h2 className="text-3xl font-bold">6</h2>
+                                <h2 className="text-3xl font-bold text-black">6</h2>
                             </div>
                         </div>
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
@@ -85,7 +85,7 @@ const manageAplication = () => {
                         </div>
                             <div>
                                 <h1 className="text-md text-gray-500">Candidaturas</h1>
-                                <h2 className="text-3xl font-bold">6</h2>
+                                <h2 className="text-3xl font-bold text-black">6</h2>
                             </div>
                         </div>
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
@@ -95,7 +95,7 @@ const manageAplication = () => {
                         </div>
                             <div>
                                 <h1 className="text-md text-gray-500">Média de candidaturas</h1>
-                                <h2 className="text-3xl font-bold">6</h2>
+                                <h2 className="text-3xl font-bold text-black">6</h2>
                             </div>
                         </div>
                     </div>

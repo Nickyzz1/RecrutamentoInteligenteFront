@@ -2,10 +2,8 @@
 import Image from "next/image";
 
 import { HeaderLogged } from "@/components/headerUser/page";
-import { Card } from "@/components/card/page";
 import editar from "@/assets/editar.png"
 import sair from "@/assets/sair.png"
-import primo from "@/assets/primo.jpg"
 import email from "@/assets/emailgreen.png"
 import fone from "@/assets/phonegreen.png"
 import chapeu from "@/assets/chapeu.png"
