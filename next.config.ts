@@ -38,6 +38,10 @@ const nextConfig = {
         }, {
           source : '/createVacancy',
           destination: '/createVacancy'
+        }, 
+        {
+          source : '/editVacancy',
+          destination : '/editVacancy'
         }
       ]
   },
