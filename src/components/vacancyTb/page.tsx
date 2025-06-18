@@ -34,6 +34,12 @@ type DataJSON = {
   status: number;
 }[];
 
+// ----- fazer requisição para pegar todos os candidatos da vaga
+
+const getCandidates = () => {
+
+}
+
 // mock inicial
 const mockData: DataJSON = [
   {
@@ -85,20 +91,22 @@ interface IParams {
   id : string
 }
 
-const router = useRouter();
-const VacancyTb = async ({id} : IParams) =>{
+const VacancyTb = ({id} : IParams) => {
+
+  const router = useRouter();
 
   const viewResume = (userId : string) => {
-    // fazer requisição para ver o currículo com o id da vaga e o id do candidato
+    // ----- fazer requisição para ver o currículo com o id da vaga e o id do candidato
     router.push(`${ROUTES.resumeCandidate}/${userId}`)
   }
     
   const [data, setData] = useState<DataJSON>(mockData);
 
-  // atualiza o status do candidato com base no ID
+  // ----- atualiza o status do candidato com base no ID
   const handleChange = (event: SelectChangeEvent<number>, id: number) => {
   const updatedData = data.map((item) =>
       item.id === id ? { ...item, status: event.target.value as number } : item
+      // ----- fazer requisição de update
   );
   setData(updatedData);
   };
