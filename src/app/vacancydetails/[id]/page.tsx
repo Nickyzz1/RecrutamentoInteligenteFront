@@ -20,7 +20,7 @@ const Page = async ({params: {id}} : IParams) => {
               <h2 className="text-2xl text-green-700 mb-4">Processo Seletivo</h2>
               <EditDelete id={id}/>
             </div>
-            <VacancyTb/>
+            <VacancyTb id={id} />
         </div>
       </div>
     </>

@@ -81,19 +81,27 @@ const statusOptions: { [key: number]: string } = {
   [EApplicationStatus.ENTREVISTA]: "Entrevista",
 };
 
-const VacancyTb = () => {
+interface IParams { 
+  id : string
+}
+
+const router = useRouter();
+const VacancyTb = async ({id} : IParams) =>{
+
+  const viewResume = (userId : string) => {
+    // fazer requisição para ver o currículo com o id da vaga e o id do candidato
+    router.push(`${ROUTES.resumeCandidate}/${userId}`)
+  }
     
-  const router = useRouter();
+  const [data, setData] = useState<DataJSON>(mockData);
 
-    const [data, setData] = useState<DataJSON>(mockData);
-
-    // atualiza o status do candidato com base no ID
-    const handleChange = (event: SelectChangeEvent<number>, id: number) => {
-    const updatedData = data.map((item) =>
-        item.id === id ? { ...item, status: event.target.value as number } : item
-    );
-    setData(updatedData);
-    };
+  // atualiza o status do candidato com base no ID
+  const handleChange = (event: SelectChangeEvent<number>, id: number) => {
+  const updatedData = data.map((item) =>
+      item.id === id ? { ...item, status: event.target.value as number } : item
+  );
+  setData(updatedData);
+  };
 
     return(
         <>
@@ -142,7 +150,7 @@ const VacancyTb = () => {
                     <TableCell>
                       {/* onClick={() => router.push(`/vacancydetails/${vacancy.id}`)} */}
                     <Button
-                    onClick={() => router.push(`/resumeCandidate/`) }
+                    onClick={() => viewResume(item.id.toString()) }
                       variant="outlined"                      
                       sx={{
                         borderColor: 'green',

@@ -10,7 +10,13 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkIcon from '@mui/icons-material/Link';
 
-const ResumeCandidate = () => {
+interface IParams { 
+  params: {idUser : string}
+}
+
+const ResumeCandidate = async ({params: {idUser: id}} : IParams) => {
+
+    // fazer requisição para pegar os dados do usuário com o idUser
 
     enum EEducationStatus {
         Incomplete = 0,
@@ -103,7 +109,7 @@ const ResumeCandidate = () => {
             }[]
         }
 
-        const data : IResume = {
+        const mockData : IResume = {
             "id" : 1,
             "name" : "Sabrina Mortean Loures de Souza",
             "email" : "Sabrina.souza.2754@gmail.com",
@@ -247,7 +253,7 @@ const ResumeCandidate = () => {
                                 <FeedOutlinedIcon sx={{color: "#036d3c"}}/>
                             </div>
                             <div  className="flex flex-col gap-1">
-                                <h1 className="text-2xl font-semibold">{data.name} </h1>
+                                <h1 className="text-2xl font-semibold">{mockData.name} </h1>
                                 <p className="text-sm" >Candidura para {dataVacancy.name} </p>
                             </div>
                         </div>
@@ -258,22 +264,22 @@ const ResumeCandidate = () => {
                             <div className="w-full grid grid-cols-1, md:grid-cols-2 gap-3 " >
                                 <div>
                                     <h2 className="text-neutral-400" >Nome completo</h2>
-                                    <p>{data.name}</p>
+                                    <p>{mockData.name}</p>
                                 </div>
                                 <div>
                                     <h2 className="text-neutral-400">Email</h2>
-                                    <p className="break-words">{data.email}</p>
+                                    <p className="break-words">{mockData.email}</p>
                                 </div>
                                 <div>
                                     <h2 className="text-neutral-400" >Telefone</h2>
-                                    <p>{data.phone}</p>
+                                    <p>{mockData.phone}</p>
                                 </div>
                                 <div>
                                     <h2 className="text-neutral-400" >Endereço</h2>
-                                    <p>{data.address}</p>
+                                    <p>{mockData.address}</p>
                                 </div>
                                 <div>
-                                    {data.links.map((i, index) => {
+                                    {mockData.links.map((i, index) => {
                                         if(i.url.includes("linkedin"))
                                         return(
                                             <div key={index} className="flex-wrap" >
@@ -292,7 +298,7 @@ const ResumeCandidate = () => {
                                 <h1 className="text-[#036d3c] text-xl font-semibold" >Experiência profissional</h1>
                                 <Divider/>
                                 {
-                                    data.experiences.map((e, index) => 
+                                    mockData.experiences.map((e, index) => 
                                         {
                                             return(
                                                 <div key={index} className="bg-gray-100 shadow-[0px_0px_5px_rgba(0,0,0,0.15)] flex flex-col p-4 gap-3 rounded-xl" >
@@ -316,7 +322,7 @@ const ResumeCandidate = () => {
                                 <h1 className="text-[#036d3c] text-xl font-semibold" >Formação acadêmica</h1>
                                 <Divider/>
                                 {
-                                    data.educations.map((e, index) => {
+                                    mockData.educations.map((e, index) => {
                                         return(
                                             <div key={index} className="bg-gray-100 shadow-[0px_0px_5px_rgba(0,0,0,0.15)] flex flex-col p-4 gap-3 rounded-xl" >
                                                 <div className="flex flex-col gap-2">
@@ -338,7 +344,7 @@ const ResumeCandidate = () => {
                                 <Divider/>
                                 <div className="flex gap-2 flex-wrap wrap">
                                 {
-                                    data.skills.map((s, index) => {
+                                    mockData.skills.map((s, index) => {
                                         return(
                                             <p key={index} className="border rounded-2xl bg-green-100 px-2 border-green-700">{s.name}</p>      
                                         )
@@ -353,7 +359,7 @@ const ResumeCandidate = () => {
                                 <Divider/>
                                 <div className="flex gap-2 flex-wrap wrap">
                                 {
-                                    data.languages.map((e, index) => {
+                                    mockData.languages.map((e, index) => {
                                         return(
                                             <p key={index} className="border rounded-2xl bg-green-100 px-2 border-green-700">{e.name} - {levels[e.level]}</p>      
                                         )
@@ -368,7 +374,7 @@ const ResumeCandidate = () => {
                                 <Divider/>
                                 <div className="flex gap-2 flex-wrap wrap">
                                 {
-                                    data.links.map((l, index) => {
+                                    mockData.links.map((l, index) => {
                                         return(
                                             <div key={index} className="flex gap-2">
                                                 {l.url.includes("github") ? (

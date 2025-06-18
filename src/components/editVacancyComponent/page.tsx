@@ -1,19 +1,19 @@
 "use client"
 import * as React from 'react';
 
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import { HeaderLoggedAdmin } from "@/components/headerAdmin/page"
-import { GoBack } from "@/components/goBack/page"
-import {Button, Checkbox, ListItemText, MenuItem, Select, TextField } from "@mui/material"
+import {Box, Button, Checkbox, ListItemText, MenuItem, Modal, Select, TextField, Typography } from "@mui/material"
 import { useState } from "react";
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import dayjs, { Dayjs } from 'dayjs';
+import { useRouter } from 'next/navigation';
 
 type EditVacancyProps = {
     id: string;
@@ -179,7 +179,7 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
     const [listBenefits, setListBenefits] = useState<string[]>(mockData.benefits.map(i => i.title))
     const [listSkills, setListSkills] = useState<string[]>(mockData.desiredSkills.map(i => i.name))
     const [selectedWorkDays, setSelectedWorkDays] = useState<number[]>(getWorkDaysArray(mockData.workDays));
-    const [modal, setModal] = useState(1)
+    const [page, setPage] = useState(2)
 
     // ------- processando data
 
@@ -246,6 +246,8 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
     console.log(JSON.stringify(firstPageData, null, 2));
     // testando segundo edit par api
     console.log(JSON.stringify(secondPageData, null, 2));
+
+    // ------- requisições de update
     
     const editPart1 = () => {
         //fz requisição para atualizar dados principais da vaga (primeira página)
@@ -259,10 +261,39 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
         //f az requisição para atualizar perfil do candidato
     }
 
+    // ------ para controlar o modal de excluir dados
+
+    const router = useRouter()
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const style = {
+        position: 'absolute' as 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '90vw',
+        maxWidth: 400,
+        maxHeight: '90vh',
+        bgcolor: 'background.paper',
+        borderRadius: 5,
+        boxShadow: 10,
+        p: 3,
+        overflowY: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 1,
+    };
+
+    const handleRemove = () => {
+        setIsDeleteModalOpen(false);
+        // fazer requisição para deletar vaga aqui
+        console.log("Vaga excluída");
+    }
+
     return(
         <>
-        {/* modal 1 */}
-        {modal === 1 && (
+        {/* page 1 */}
+        {page === 1 && (
             // header
             <div className="bg-white flex flex-col max-w-[1200px] w-4/5 rounded-xl shadow p-6 word gap-6">
                 <h1 className="text-2xl font-semibold">{mockData.title}</h1>
@@ -355,14 +386,14 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
                             />
                     </div>
                     {/* btn de próximo*/}
-                    <Button onClick={() => setModal(2)} variant='contained' className="flex gap-3 max-w-80 self-center" sx={{backgroundColor: '#0AA851FF'}}>
+                    <Button onClick={() => setPage(2)} variant='contained' className="flex gap-3 max-w-80 self-center" sx={{backgroundColor: '#0AA851FF'}}>
                         Próximo
                     </Button>
             </div>
             )}
             {/* fim */}
-            {/* modal 2 */}
-            {modal === 2 && (
+            {/* page 2 */}
+            {page === 2 && (
             <div className="bg-white flex flex-col max-w-[1200px] w-4/5 rounded-xl shadow p-6 word gap-6">
                 {/* etapas da vaga */}
                 <div className='flex flex-col gap-3'>
@@ -384,7 +415,7 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
                                         <p className='rounded-full w-6 h-6 text-white flex items-center justify-center bg-[#0AA851FF] p-2'>{index + 1}</p>
                                         <p className='w-full m-2'>{i}</p>
                                         <div className='flex w-full justify-end'>
-                                            <IconButton className=''><DeleteIcon color='error'/></IconButton>
+                                            <IconButton onClick={() => setIsDeleteModalOpen(true)} className=''><DeleteIcon color='error'/></IconButton>
                                         </div>
                                     </div>
                                 )
@@ -408,7 +439,7 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
                                         <p className='rounded-full w-6 h-6 text-white flex items-center justify-center bg-[#0AA851FF] p-2'>{index + 1}</p>
                                         <p className='w-full m-2'>{i}</p>
                                         <div className='flex w-full justify-end'>
-                                            <IconButton className=''><DeleteIcon color='error'/></IconButton>
+                                            <IconButton onClick={() => setIsDeleteModalOpen(true)} className=''><DeleteIcon color='error'/></IconButton>
                                         </div>
                                     </div>
                                 )
@@ -432,7 +463,7 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
                                         <p className='rounded-full w-6 h-6 text-white flex items-center justify-center bg-[#0AA851FF] p-2'>{index + 1}</p>
                                         <p className='w-full m-2'>{i}</p>
                                         <div className='flex w-full justify-end'>
-                                            <IconButton className=''><DeleteIcon color='error'/></IconButton>
+                                            <IconButton onClick={() => setIsDeleteModalOpen(true)} className=''><DeleteIcon color='error'/></IconButton>
                                         </div>
                                     </div>
                                 )
@@ -449,13 +480,13 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
                                 setListBenefits((prev) => [...prev, benefit.trim()])
                                 setBenefit('')
                     }}}/>
-                    <div className='flex gap-3 mt-3'>
+                    <div className='flex wrap flex-wrap gap-3 mt-3'>
                         {listBenefits.map((i, index) => {
                             return(
                                 <div key={index} className='flex gap-3 items-center'>
                                     <div className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >
                                         <p >{i}</p>
-                                        <IconButton className=''><HighlightOffIcon/></IconButton>
+                                        <IconButton onClick={() => setIsDeleteModalOpen(true)} className=''><HighlightOffIcon/></IconButton>
                                     </div>
                                 </div>
                             )
@@ -463,7 +494,7 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
                     </div>
                 </div>
                 {/* Habilidades relevantes */}
-                <div className='flex flex-col gap-3'>
+                <div className='flex  flex-col gap-3'>
                     <h2 className="font-semibold">Habilidades relevantes</h2>
                     <TextField value={skill} id="outlined-basic" label="ex: Líderar equipe" variant="outlined"
                         onChange={(e) => setSkill(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))}
@@ -472,23 +503,49 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
                                 setListSkills((prev) => [...prev, skill.trim()])
                                 setSkill('')
                     }}}/>
-                    <div className='flex mb-5 gap-3 mt-3'>
+                    <div className='flex wrap flex-wrap mb-10 gap-3 mt-3'>
                         {listSkills.map((i, index) => {
                             return(
                                 <div key={index} className='flex gap-3 items-center'>
                                         <div className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >
                                         <p >{i}</p>
-                                        <IconButton className=''><HighlightOffIcon/></IconButton>
+                                        <IconButton onClick={() => setIsDeleteModalOpen(true)} className=''><HighlightOffIcon/></IconButton>
                                     </div>
                                 </div>
                             )
                         })}
                     </div>
-                    <Button onClick={() => setModal(2)} variant='contained' className="flex gap-3 max-w-80 self-center" sx={{backgroundColor: '#0AA851FF'}}>
-                        Próximo
-                    </Button>
+                     <div className='flex gap-3 items-center justify-center w-full'>
+                         <Button onClick={() =>setPage(1)} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{backgroundColor: '#747882FF'}}>
+                            <ArrowBackIcon/>
+                            <p>Anterior</p>
+                        </Button>
+                        <Button onClick={() => setPage(3)} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{backgroundColor: '#0AA851FF'}}>
+                            <p>Próximo</p>
+                            <ArrowForwardIcon/>
+                        </Button>
+                     </div>
                 </div>
                 {/* fim */}
+                {/* modal 3 definir perfil */}
+                {/* modal para excluir */}
+                <Modal
+                    open={isDeleteModalOpen}
+                    onClose={() => setIsDeleteModalOpen(false)}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description">
+                    <Box sx={style}>
+
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Deseja mesmo excluir esse atributo?
+                        </Typography>
+
+                        <div className="flex items-center justify-center flex-row gap-3 mt-4">
+                            <Button sx={{width: 100}} onClick={() => setIsDeleteModalOpen(false)} variant="contained" color="primary">Cancelar</Button>
+                            <Button sx={{width: 100}} onClick={handleRemove} variant="contained" color="error">Excluir</Button>
+                        </div>
+                    </Box>
+                </Modal>
             </div> 
             )}
         </>
