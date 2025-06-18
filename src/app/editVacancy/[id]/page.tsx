@@ -14,7 +14,7 @@ const EditVacancy = async ({params: {id}} : IParams) => {
       <HeaderLoggedAdmin />
       <GoBack />
   
-      <div className="h-screen flex flex-col bg-[#F9FAFB] items-center pb-6">
+      <div className="min-h-screen flex flex-col bg-[#F9FAFB] items-center pb-6">
           <EditVacancyComponent id={id}/>
       </div> 
     </>

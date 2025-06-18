@@ -22,3 +22,36 @@ Nickyzz1 has invited you to join a team Equipe on Apidog https://app.apidog.com/
 miro: ----https://miro.com/welcome/TlBIR0JMUkMzK1ZiT3hRSTNuczBCVVNNT0pXcVhsMEVEeEZzTXZSUDNLREwxUjIycWgybG1LencxdXEwOE1FMERTV09CMzRBVjdDYzJnSFRHcEUwMTJQT1l0cGJmc3NwanA4czFUbUJBZW11WFdudlBORE1XT2p4Z09lbTlsVmdyVmtkMG5hNDA3dVlncnBvRVB2ZXBnPT0hdjE=?share_link_id=959643025075
 
 canva : https://www.canva.com/design/DAGo2LAsVR4/l83rRQ2N470YBTcQViP04Q/edit?utm_content=DAGo2LAsVR4&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
+{/* <Select
+                                        sx={{ minWidth: 110, maxWidth: 200}}
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={startDayWeek}
+                                        label="Início"
+                                        onChange={(e) => {setStartDayWeek(e.target.value)}}
+                                    >
+                                        <MenuItem value={1}>Segunda</MenuItem>
+                                        <MenuItem value={2}>Terça</MenuItem>
+                                        <MenuItem value={4}>Quarta</MenuItem>
+                                        <MenuItem value={8}>Quinta</MenuItem>
+                                        <MenuItem value={16}>Sexta</MenuItem>
+                                        <MenuItem value={32}>Sábado</MenuItem>
+                                        <MenuItem value={64}>Domingo</MenuItem>
+                                    </Select>
+                                        <Select
+                                        sx={{ minWidth: 110, maxWidth: 200}}
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={endDayWeek}
+                                        label="Início"
+                                        onChange={(e) => {setEndDayWeek(e.target.value)}}
+                                    >
+                                        <MenuItem value={1}>Segunda</MenuItem>
+                                        <MenuItem value={2}>Terça</MenuItem>
+                                        <MenuItem value={4}>Quarta</MenuItem>
+                                        <MenuItem value={8}>Quinta</MenuItem>
+                                        <MenuItem value={16}>Sexta</MenuItem>
+                                        <MenuItem value={32}>Sábado</MenuItem>
+                                        <MenuItem value={64}>Domingo</MenuItem>
+                                    </Select> */}
