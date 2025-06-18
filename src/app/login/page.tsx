@@ -32,7 +32,9 @@ export default function Login() {
       }else{
         response.json().then((data) => {
           localStorage.setItem("AUTH", data.token)
-          const tokenData = JSON.parse(JSON.stringify(jwt.decode(data.token)))
+          let userData = jwt.decode(data.token)
+          localStorage.setItem("UserData", JSON.stringify(userData))
+          const tokenData = JSON.parse(JSON.stringify(userData))
           if(tokenData.Admin == "True"){
             router.push(ROUTES.homeAdmin)
           }else{

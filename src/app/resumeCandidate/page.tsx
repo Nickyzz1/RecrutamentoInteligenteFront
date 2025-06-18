@@ -24,7 +24,7 @@ const ResumeCandidate = () => {
         PosGraduation = 3
     }
     enum EProficiencyLevel {
-        Benniger = 0,
+        Beginner = 0,
         Intermediate = 1,
         Advanced = 2,
         Fluent = 3
@@ -229,7 +229,7 @@ const ResumeCandidate = () => {
         }
 
         const levels: { [key: number]: string } = {
-        [EProficiencyLevel.Benniger]: "Básico",
+        [EProficiencyLevel.Beginner]: "Básico",
         [EProficiencyLevel.Intermediate]: "Intermediário",
         [EProficiencyLevel.Advanced]: "Avançado",
         [EProficiencyLevel.Fluent]: "Fluente",
