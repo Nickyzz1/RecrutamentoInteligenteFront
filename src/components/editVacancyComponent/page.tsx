@@ -33,7 +33,6 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
         // fazer requsição para update das info da página do perfil do candidato aqui
     }
 
-
     enum EProficiencyLevel
     {
         Beginner = 0,
@@ -192,7 +191,7 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
     const [listBenefits, setListBenefits] = useState<string[]>(mockData.benefits.map(i => i.title))
     const [listSkills, setListSkills] = useState<string[]>(mockData.desiredSkills.map(i => i.name))
     const [selectedWorkDays, setSelectedWorkDays] = useState<number[]>(getWorkDaysArray(mockData.workDays));
-    const [page, setPage] = useState(2)
+    const [page, setPage] = useState(1)
 
     // ------- processando data
 
