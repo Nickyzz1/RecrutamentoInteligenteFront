@@ -2,8 +2,8 @@
 import React from 'react';
 import { ROUTES } from "@/constants/routes"
 import Link from "next/link";
-
-
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import Image from "next/image";
 import seta from "@/assets/seta.png"
 import { Button } from '@mui/material';
@@ -38,9 +38,9 @@ export const Card: React.FC<CardProps> = ({ title, status, adress, description, 
                         <>
                             {skills.slice(0, 3).map((item, index) => {
                                 return item.length > 15 ? (
-                                    <p key={index} className="border-[#036D3C] rounded-2xl px-3 border-[1px] w-fit">{item.slice(0, 15)}...</p>
+                                    <p key={index} className="border-[#036D3C] text-black rounded-2xl px-3 border-[1px] w-fit">{item.slice(0, 15)}...</p>
                                 ) : (
-                                    <p key={index} className="border-[#036D3C] rounded-2xl px-3 border-[1px] w-fit">{item}</p>
+                                    <p key={index} className="border-[#036D3C] text-black rounded-2xl px-3 border-[1px] w-fit">{item}</p>
                                 );
                             })}
                             <button className="border-[#036D3C] rounded-2xl px-2 border-[1px] w-fit hover:text-white hover:bg-[#036D3C] hover:cursor-pointer transition duration-200">+{skills.length - 3}</button>
@@ -48,13 +48,14 @@ export const Card: React.FC<CardProps> = ({ title, status, adress, description, 
                     ) : (
                         skills.map((item, index) => {
                             return item.length > 15 ? (
-                                <p key={index} className="border-[#036D3C] rounded-2xl px-3 border-[1px] w-fit">{item.slice(0, 15)}...</p>
+                                <p key={index} className="border-[#036D3C] text-black rounded-2xl px-3 border-[1px] w-fit">{item.slice(0, 15)}...</p>
                             ) : (
-                                <p key={index} className="border-[#036D3C] rounded-2xl px-3 border-[1px] w-fit">{item}</p>
+                                <p key={index} className="border-[#036D3C] text-black rounded-2xl px-3 border-[1px] w-fit">{item}</p>
                             );
                         })
                     )}
                 </div>
+
                 <div className="flex flex-row justify-between items-center">
                     <p className="text-[#949494]">{date.toLocaleDateString()}</p>
                     <Button onClick={onClick} className="flex flex-row gap-2 items-center cursor-pointer ">

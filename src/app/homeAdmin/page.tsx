@@ -10,30 +10,44 @@ import FunctionsOutlinedIcon from '@mui/icons-material/FunctionsOutlined';
 import { Button, Pagination } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/constants/routes';
 
 const manageAplication = () => {
 
-  const vacancies = [
-    {
-      id: "1",
-      title: "Desenvolvedor React",
-      status: "Ativa",
-      adress: "Curitiba, PR",
-      description: "Descrição da vaga aqui...",
-      date: new Date("2025-02-26"),
-      skills: ["React", "TypeScript", "CSS", "Git"],
-    },
-    {
-      id: "2",
-      title: "Backend Node.js",
-      status: "Ativa",
-      adress: "São Paulo, SP",
-      description: "Descrição da vaga Backend...",
-      date: new Date("2025-03-01"),
-      skills: ["Node.js", "Express", "MongoDB"],
-    },
+    // fazer requisição de get para as vagas
     
-  ];
+    const getData = () => {
+
+    }
+
+    const mockVacancies = [
+        {
+        id: "1",
+        title: "Desenvolvedor React",
+        status: "Ativa",
+        adress: "Curitiba, PR",
+        description: "Descrição da vaga aqui...",
+        date: new Date("2025-02-26"),
+        skills: ["React", "TypeScript", "CSS", "Git"],
+        },
+        {
+        id: "2",
+        title: "Backend Node.js",
+        status: "Ativa",
+        adress: "São Paulo, SP",
+        description: "Descrição da vaga Backend...",
+        date: new Date("2025-03-01"),
+        skills: ["Node.js", "Express", "MongoDB"],
+        },
+        
+    ];
+    // mapear quantas vagas estão ativas
+    let activeVacancy = 0
+
+    mockVacancies.map((i) => {
+        if(i.status == "Ativa")
+            activeVacancy +=1
+    })
 
     const router = useRouter();
 
@@ -49,7 +63,7 @@ const manageAplication = () => {
                         </div>
                         {/* Adicionar nova vaga */}
                         <div className="md:flex hidden">
-                            <Button variant="contained" className="flex gap-3 max-w-60" sx={{backgroundColor: '#0AA851FF'}}>
+                            <Button onClick={() => {router.push(ROUTES.createVacancy)}} variant="contained" className="flex gap-3 max-w-60" sx={{backgroundColor: '#0AA851FF'}}>
                                 <AddCircleOutlineIcon/>
                                 <p>Nova vaga</p>
                             </Button>
@@ -60,11 +74,10 @@ const manageAplication = () => {
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
                         <div className="flex items-center bg-[#dbeafe] p-1 rounded-lg">
                             <WorkOutlineOutlinedIcon sx={{color: '#4379ee', width:'35px', height: '35px'}}/>
-
                         </div>
                             <div>
                                 <h1 className="text-md text-gray-500">Total de vagas</h1>
-                                <h2 className="text-3xl font-bold">6</h2>
+                                <h2 className="text-3xl font-bold text-black">{mockVacancies.length}</h2>
                             </div>
                         </div>
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
@@ -74,7 +87,7 @@ const manageAplication = () => {
                         </div>
                             <div>
                                 <h1 className="text-md text-gray-500">Vagas ativas</h1>
-                                <h2 className="text-3xl font-bold">6</h2>
+                                <h2 className="text-3xl font-bold text-black">{activeVacancy}</h2>
                             </div>
                         </div>
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
@@ -84,7 +97,7 @@ const manageAplication = () => {
                         </div>
                             <div>
                                 <h1 className="text-md text-gray-500">Candidaturas</h1>
-                                <h2 className="text-3xl font-bold">6</h2>
+                                <h2 className="text-3xl font-bold text-black">6</h2>
                             </div>
                         </div>
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
@@ -94,7 +107,7 @@ const manageAplication = () => {
                         </div>
                             <div>
                                 <h1 className="text-md text-gray-500">Média de candidaturas</h1>
-                                <h2 className="text-3xl font-bold">6</h2>
+                                <h2 className="text-3xl font-bold text-black">6</h2>
                             </div>
                         </div>
                     </div>
@@ -106,7 +119,7 @@ const manageAplication = () => {
                         </Button>
                     </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-6">
-                    {vacancies.map((vacancy) => (
+                    {mockVacancies.map((vacancy) => (
                        <Card
                             key={vacancy.id}
                             title={vacancy.title}

@@ -9,5 +9,7 @@ export enum ROUTES {
     sendcandidature = "/sendcandidature",
     viewCandidates = '/viewCandidates',
     profile = '/profile',
-    resumeCandidate = '/resumeCandidate'
+    resumeCandidate = '/resumeCandidate',
+    createVacancy = '/createVacancy',
+    editVacancy = '/editVacancy'
 }
