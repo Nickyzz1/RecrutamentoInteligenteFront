@@ -156,7 +156,7 @@ const VacancyTb = ({id} : IParams) => {
                       </FormControl>
                     </TableCell>
                     <TableCell>
-                      {/* onClick={() => router.push(`/vacancydetails/${vacancy.id}`)} */}
+                    {/* onClick={() => router.push(`/vacancydetails/${vacancy.id}`)} */}
                     <Button
                     onClick={() => viewResume(item.id.toString()) }
                       variant="outlined"                      

@@ -21,6 +21,19 @@ type EditVacancyProps = {
 
 const EditVacancyComponent = ({ id }: EditVacancyProps) => {
 
+    const updateFirstPage = () => {
+        // fazer requsição para update das info da primeira página aqui
+    }
+
+    const updateSecondPage = () => {
+        // fazer requsição para update das info da segunda página aqui
+    }
+
+    const updateProfilePage = () => {
+        // fazer requsição para update das info da página do perfil do candidato aqui
+    }
+
+
     enum EProficiencyLevel
     {
         Beginner = 0,
