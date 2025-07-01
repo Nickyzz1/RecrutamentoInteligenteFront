@@ -61,9 +61,7 @@ export default function Start() {
         <>
             <HeaderLogged />
             <div className="flex flex-col items-center justify-start w-full">
-
                 <div className="flex flex-col md:flex-row items-start justify-between w-full max-w-[1440px] p-8 gap-10 flex-1">
-
                     {/* Lado Esquerdo */}
                     <div className="shadow-[0px_0px_5px_1px_rgba(0,_0,_0,_0.2)] rounded-[12px] p-6 w-full md:w-[450px] bg-white ">
                         <div className="flex flex-row justify-end gap-3">
@@ -121,15 +119,18 @@ export default function Start() {
                                 </div>
                             </div>
                             <div className="flex items-center flex-col gap-2 text-center mb-6">
+                                <p className="text-3xl font-bold text-[#036D3C]">{user?.name}</p>
                                 {/* <p className="text-xl text-[#666666] font-semibold">Suport para rollout TI</p> */}
                             </div>
                             <div className="bg-[#036D3C] w-full h-[2px] mb-5" />
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-center gap-3">
                                     <Image src={email} alt="email" className="w-6 h-6 object-contain" />
+                                    <p className="text-[#666666] text-xl">E-mail: {user?.email}</p>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <Image src={fone} alt="telefone" className="w-6 h-6 object-contain" />
+                                    <p className="text-[#666666] text-xl">{user?.phone == null ? '' : `Tel: ${user?.phone}`}</p>
                                 </div>
                                 {/* <div className="flex items-center gap-3">
                                     <Image src={chapeu} alt="formação" className="w-6 h-6 object-contain" />
@@ -235,8 +236,6 @@ export default function Start() {
                     </div>
                 </div>
             )}
-
-
         </>
     );
 }
