@@ -8,12 +8,11 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
 
 //mui imports
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import { Box, Button, Checkbox, Divider, FormControl, InputLabel, ListItemText, MenuItem, Modal, Select, TextField, Typography } from "@mui/material"
+import {Button, Checkbox, Divider, FormControl, InputLabel, ListItemText, MenuItem, Modal, Select, TextField, Typography } from "@mui/material"
 
 // icons
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
@@ -21,6 +20,21 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+
+interface IEducation {
+    "education": string,
+    "level": string
+}
+
+interface IExperience {
+    "experience": string,
+    "time": number
+}
+
+interface ILanguage {
+    "language" : string,
+    "level": string
+}
 
 const createVacancy = () => {
     const [title, setTitle] = useState('')
@@ -32,14 +46,14 @@ const createVacancy = () => {
     const [workStart, setWorkStart] = useState<Dayjs>(dayjs(""));
     const [workEnd, setWorkEnd] = useState<Dayjs>(dayjs(""));
     const [stepValue, setStepValue] = useState('')
-    
-    const [profession, setProfession] = useState('')
+
+    const [education, setEducation] = useState('')
     const [level, setLevel] = useState('')
     const [experienceRole, setExperienceRole] = useState('')
     const [experienceTime, setExperienceTime] = useState(0)
     const [language, setLanguage] = useState('')
     const [languageLevel, setLanguageLevel] = useState('')
-
+    const [skip, setSkip] = useState(false)
 
     const [listSteps, setListSteps] = useState<string[]>([])
     const [listResponsabilities, setListResponsabilities] = useState<string[]>([])
@@ -48,8 +62,10 @@ const createVacancy = () => {
     const [listSkills, setListSkills] = useState<string[]>([])
     const [selectedWorkDays, setSelectedWorkDays] = useState<number[]>([]);
 
-    const [listEducation, setListEducation] = useState([])
-    
+    const [listEducation, setListEducation] = useState<IEducation[]>([])
+    const [listExperience, setListExperience] = useState<IExperience[]>([])
+    const [listLanguages, setListlanguages] = useState<ILanguage[]>([])
+
     const router = useRouter()
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     // controla a página den iniciação
@@ -66,17 +82,48 @@ const createVacancy = () => {
         { label: 'Domingo', value: 64 },
     ];
 
+    const addEducation = () => {
+        if (education.trim() !== '' && level.trim() !== '') {
+            let educ: IEducation = {
+                education: education,
+                level: level
+            };
+            setListEducation([...listEducation, educ])
+            setEducation('')
+            setLevel('')
+        }
+    }
+
+    const addExperience = () => {
+        if (experienceRole.trim() !== '' && experienceTime !== 0) {
+            let exp: IExperience = {
+                experience: experienceRole,
+                time: experienceTime
+            };
+            setListExperience([...listExperience, exp])
+            setExperienceRole('')
+            setExperienceTime(0)
+        }
+    }
+
+    const addLanguages = () => {
+        if (language.trim() !== '' && languageLevel.trim() !== '') {
+            let lan: ILanguage = {
+                language: language,
+                level: languageLevel
+            };
+            setListlanguages([...listLanguages, lan])
+            setLanguage('')
+            setLanguageLevel('')
+        }
+    }
+
     const handleWorkDaysChange = (event: any) => {
         const { value } = event.target;
         setSelectedWorkDays(typeof value === 'string' ? value.split(',').map(Number) : value);
     };
     const workDaysSum = selectedWorkDays.reduce((acc, curr) => acc + curr, 0);
-
-    const addToList = (list: string[]) => {
-
-    }
-
-    interface IVacancyFirstDataToEdit {
+    interface IVacancyFirstData {
 
         "title": string,
         "description": string,
@@ -87,7 +134,7 @@ const createVacancy = () => {
     }
 
     // ------- Dados da segunda etapa
-    interface IVacancySecondDataToEdit {
+    interface IVacancySecondData {
 
         "Etapas_da_Vaga": string[],
         "Responsabilidades_e_atribuições": string[],
@@ -96,8 +143,11 @@ const createVacancy = () => {
         "Habilidades": string[],
     }
 
+    interface IProfileData {
+        
+    }
 
-    const firstPageData: IVacancyFirstDataToEdit = {
+    const firstPageData: IVacancyFirstData = {
         title: title,
         description: description,
         workDays: workDaysSum,
@@ -107,7 +157,7 @@ const createVacancy = () => {
     }
 
     // ------- segundo json para requisição de update
-    const secondPageData: IVacancySecondDataToEdit = {
+    const secondPageData: IVacancySecondData = {
         Etapas_da_Vaga: listSteps,
         Responsabilidades_e_atribuições: listResponsabilities,
         Requisitos: listRequeriments,
@@ -115,32 +165,42 @@ const createVacancy = () => {
         Habilidades: listSkills,
     };
 
+    const thirdPageData: IProfileData = {
+        education: listEducation,
+        experience: listExperience,
+        language: listLanguages,
+        skill: listSkills
+    }
+
     // testando primeiro post para api
     console.log(JSON.stringify(firstPageData, null, 2));
     // testando segundo post par api
     console.log(JSON.stringify(secondPageData, null, 2));
+    // testando segundo post par api
+    console.log(JSON.stringify(thirdPageData, null, 2));
 
-    const removeFild = (index: number) => {
+    
+    const removeFieldEducation = (index: number) => {
+        setListEducation(listEducation.filter((item, idx) => idx != index))
+    }
+    
+    const removeFieldExperience = (index: number) => {
+        setListExperience(listExperience.filter((item, idx) => idx != index))
+    }
+    
+    const removeFieldLanguage = (index: number) => {
+        setListlanguages(listLanguages.filter((item, idx) => idx != index))
+    }
+    
+    const removeFildSkills = (index: number) => {
         setListSkills(listSkills.filter((item, idx) => idx != index))
     }
 
-    const style = {
-        position: 'absolute' as 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '90vw',
-        maxWidth: 400,
-        maxHeight: '90vh',
-        bgcolor: 'background.paper',
-        borderRadius: 5,
-        boxShadow: 10,
-        p: 3,
-        overflowY: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
+    const request = () => {
+        // faça a requisição de post aqui com a  firstPageData para criar  avga, secondPageData mais detalhes e thirdPageData para o perfil
     }
 
+ 
     return (
         <>
             <HeaderLoggedAdmin />
@@ -185,7 +245,7 @@ const createVacancy = () => {
                                         ))}
                                     </Select>
                                 </div>
-         
+
                             </div>
                             {/* horário de trabalho Diário */}
                             <div className=" flex flex-col gap-3 lg:flex-row lg:items-center">
@@ -394,7 +454,7 @@ const createVacancy = () => {
 
                 {page === 3 && (
                     <div className="bg-white flex flex-col max-w-[1200px] w-4/5 rounded-xl shadow p-6 word gap-6">
-                                  
+
                         <h1 className="text-2xl font-semibold">Crie o perfil do candidato</h1>
                         <h2>Crie o perfil do candidato para a vaga</h2>
                         {/* formações desejadas */}
@@ -402,7 +462,7 @@ const createVacancy = () => {
                             {/* input formação desejada */}
                             <div className='flex md:w-3/4 flex-col gap-3'>
                                 <h2 className="font-semibold">Fomação desejada</h2>
-                                <TextField fullWidth onChange={(e) => setProfession(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))} value={title} id="outlined-basic" label="ex: Assistente de RH" variant="outlined" />
+                                <TextField fullWidth onChange={(e) => setEducation(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))} value={education} id="outlined-basic" label="ex: Administração" variant="outlined" />
                             </div>
                             {/* input nivel e icone de add */}
                             <div className='flex gap-3 md:w-2/4'>
@@ -412,22 +472,22 @@ const createVacancy = () => {
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label">Ens.Superior</InputLabel>
                                             <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={level}
-                                            label="Ens.Superior"
-                                            onChange={(e) => setLevel(e.target.value)}
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={level}
+                                                label="Ens.Superior"
+                                                onChange={(e) => setLevel(e.target.value)}
                                             >
-                                            <MenuItem value={"Educação Básica"}>Educação Básica</MenuItem>
-                                            <MenuItem value={"Técnico"}>Técnico</MenuItem>
-                                            <MenuItem value={"Ensino Superior"}>Ensino Superior</MenuItem>
-                                            <MenuItem value={"Pós graduação"}>Pós Graduação</MenuItem>
+                                                <MenuItem value={"Educação Básica"}>Educação Básica</MenuItem>
+                                                <MenuItem value={"Técnico"}>Técnico</MenuItem>
+                                                <MenuItem value={"Ensino Superior"}>Ensino Superior</MenuItem>
+                                                <MenuItem value={"Pós graduação"}>Pós Graduação</MenuItem>
                                             </Select>
                                         </FormControl>
                                         {/* icone de add */}
                                         <div className='hidden md:flex items-center'>
-                                            <IconButton>
-                                            <AddCircleIcon fontSize='large' color='success'/>
+                                            <IconButton onClick={() => addEducation()} >
+                                                <AddCircleIcon fontSize='large' color='success' />
                                             </IconButton>
                                         </div>
                                     </div>
@@ -435,21 +495,33 @@ const createVacancy = () => {
                             </div>
                             {/* btn de add */}
                             <div className='flex mt-5 md:hidden w-full items-center'>
-                                <Button fullWidth variant='outlined' color='success' sx={{display: 'flex',gap:3}} >
-                                    <AddCircleIcon fontSize='small' color='success'/>
+                                <Button onClick={() => addEducation()} fullWidth variant='outlined' color='success' sx={{ display: 'flex', gap: 3 }} >
+                                    <AddCircleIcon fontSize='small' color='success' />
                                     <p>Adicionar</p>
                                 </Button>
                             </div>
                             {/* fazer exibição de itens abaixo*/}
                             <div className='flex mt-5 md:hidden w-full items-center'>
-                                <Button onClick={() => addToList(listEducation)} fullWidth variant='outlined' color='success' sx={{display: 'flex',gap:3}} >
-                                    <AddCircleIcon fontSize='small' color='success'/>
+                                <Button onClick={() => addEducation()} fullWidth variant='outlined' color='success' sx={{ display: 'flex', gap: 3 }} >
+                                    <AddCircleIcon fontSize='small' color='success' />
                                     <p>Adicionar</p>
                                 </Button>
                             </div>
-                        </div>
 
-                        <Divider/>
+                        </div>
+                        {listEducation.map((i, index) => {
+                            return (
+                                    <div key={index} className='flex flex-col gap-3'>
+                                        <div className='flex gap-3 items-center'>
+                                            <div className='bg-green-800 rounded-full h-3 w-3'></div>
+                                            <p>{i.education} - {i.level}</p>
+                                            <IconButton onClick={() => removeFieldEducation(index)} className=''><HighlightOffIcon /></IconButton>
+                                        </div>
+                                    </div>
+                            )
+                        })}
+
+                        <Divider />
 
                         {/* Experiencia busca cargo, categoria: anos, tempo */}
                         <h2 className="font-semibold">Experiências</h2>
@@ -457,64 +529,64 @@ const createVacancy = () => {
                         <div className='flex flex-col w-full md:flex-row md:items-center gap-3'>
                             <div className='flex md:w-3/4 flex-col gap-3'>
                                 <h2 className="font-semibold">Cargo</h2>
-                                <TextField onChange={(e) => setExperienceRole(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))} value={title} id="outlined-basic" label="ex: Assistente de RH" variant="outlined" />
+                                <TextField onChange={(e) => setExperienceRole(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))} value={experienceRole} id="outlined-basic" label="ex: Assistente de RH" variant="outlined" />
                             </div>
                             <div className='flex md:w-2/4 flex-col gap-3'>
                                 <h2 className="font-semibold">Tempo em meses</h2>
                                 <div className='flex gap-3 w-full'>
-                                    <TextField fullWidth inputProps={{ min: 0 }} type='number' onChange={(e) => setExperienceTime(parseInt(e.target.value))} value={title} id="outlined-basic" label="ex: 24" variant="outlined" />
+                                    <TextField fullWidth inputProps={{ min: 0 }} type='number' onChange={(e) => setExperienceTime(parseInt(e.target.value))} value={experienceTime} id="outlined-basic" label="ex: 24" variant="outlined" />
                                     {/* icone de add */}
                                     <div className='hidden md:flex items-center'>
-                                        <IconButton>
-                                            <AddCircleIcon fontSize='large' color='success'/>
+                                        <IconButton onClick={() => addExperience()}>
+                                            <AddCircleIcon fontSize='large' color='success' />
                                         </IconButton>
                                     </div>
                                 </div>
                             </div>
                             {/* btn de add */}
-                             <div className='flex mt-5 md:hidden w-full items-center'>
-                                <Button onClick={() => addToList(listEducation)} fullWidth variant='outlined' color='success' sx={{display: 'flex',gap:3}} >
-                                    <AddCircleIcon fontSize='small' color='success'/>
+                            <div className='flex mt-5 md:hidden w-full items-center'>
+                                <Button onClick={() => addExperience()} fullWidth variant='outlined' color='success' sx={{ display: 'flex', gap: 3 }} >
+                                    <AddCircleIcon fontSize='small' color='success' />
                                     <p>Adicionar</p>
                                 </Button>
                             </div>
-                            {/* fazer exibição de itens abaixo*/}
-                            <div className='flex w-full flex-col gap-3 '>
-                                {listSteps.map((i, index) => {
-                                    return (
-                                        <div key={index} className='flex w-full gap-3 items-center'>
-                                            <p className='rounded-full w-6 h-6 text-white flex items-center justify-center bg-[#0AA851FF] p-2'>{index + 1}</p>
-                                            <p className='w-full m-2'>{i}</p>
-                                            <div className='flex w-full justify-end'>
-                                                <IconButton onClick={() => setIsDeleteModalOpen(true)} className=''><DeleteIcon color='error' /></IconButton>
-                                            </div>
-                                        </div>
-                                    )
-                                })}
-                            </div>
+                        </div>
+                        {/* fazer exibição de itens abaixo*/}
+                        <div className='flex w-full flex-col gap-3 '>
+                            {listExperience.map((i, index) => {
+                                return (
+                                    <div key={index} className='flex flex-col gap-3'>
+                                    <div className='flex gap-3 items-center'>
+                                        <div className='bg-green-800 rounded-full h-3 w-3'></div>
+                                        <p>{i.experience} - {i.time}</p>
+                                        <IconButton onClick={() => removeFieldEducation(index)} className=''><HighlightOffIcon /></IconButton>
+                                    </div>
+                                </div>
+                                )
+                            })}
                         </div>
 
-                        <Divider/>
+                        <Divider />
 
                         {/* idiomas e profeiencia */}
-                       
+
                         <div className='flex flex-col md:flex-row md:items-center w-full gap-3'>
                             <div className='flex md:w-3/4 flex-col gap-3'>
                                 <h2 className="font-semibold">Idiomas e proficiência</h2>
-                                <TextField onChange={(e) => setLanguage(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))} value={title} id="outlined-basic" label="ex: Inglês" variant="outlined" />
+                                <TextField onChange={(e) => setLanguage(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))} value={language} id="outlined-basic" label="ex: Inglês" variant="outlined" />
                             </div>
                             <div className='flex flex-col md:w-2/4 gap-3'>
                                 <h2 className="font-semibold">Nível</h2>
                                 <div className='flex gap-3'>
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-simple-select-label">Nível</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={languageLevel}
-                                                label="Ens.Superior"
-                                                onChange={(e) => setLanguageLevel(e.target.value)}
-                                            >
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={languageLevel}
+                                            label="Ens.Superior"
+                                            onChange={(e) => setLanguageLevel(e.target.value)}
+                                        >
                                             <MenuItem value={"Básico"}>Básico</MenuItem>
                                             <MenuItem value={"Intermediário"}>Intermediário</MenuItem>
                                             <MenuItem value={"Avançado"}>Avançado</MenuItem>
@@ -523,26 +595,36 @@ const createVacancy = () => {
                                     </FormControl>
                                     {/* icone de add */}
                                     <div className='hidden md:flex items-center'>
-                                        <IconButton>
-                                        <AddCircleIcon fontSize='large' color='success'/>
+                                        <IconButton onClick={() => addLanguages()} >
+                                            <AddCircleIcon fontSize='large' color='success' />
                                         </IconButton>
                                     </div>
                                 </div>
                             </div>
                             {/* btn de add */}
                             <div className='flex mt-5 md:hidden w-full items-center'>
-                                <Button fullWidth variant='outlined' color='success' sx={{display: 'flex',gap:3}} >
-                                    <AddCircleIcon fontSize='small' color='success'/>
+                                <Button fullWidth onClick={() => addLanguages()} variant='outlined' color='success' sx={{ display: 'flex', gap: 3 }} >
+                                    <AddCircleIcon fontSize='small' color='success' />
                                     <p>Adicionar</p>
                                 </Button>
                             </div>
-                            {/* fazer exibição de itens abaixo*/}
-                            <div>
-
-                            </div>
                         </div>
 
-                        <Divider/>
+                        <div className='flex w-full flex-col gap-3 '>
+                        {listLanguages.map((i, index) => {
+                           return (
+                               <div key={index} className='flex flex-col gap-3'>
+                                    <div className='flex gap-3 items-center'>
+                                        <div className='bg-green-800 rounded-full h-3 w-3'></div>
+                                        <p>{i.language} - {i.level}</p>
+                                        <IconButton onClick={() => removeFieldEducation(index)} className=''><HighlightOffIcon /></IconButton>
+                                    </div>
+                               </div>
+                           )
+                        })}
+                        </div>    
+
+                        <Divider />
 
                         {/* Habilidades relevantes */}
                         <div className='flex flex-col gap-3'>
@@ -561,15 +643,15 @@ const createVacancy = () => {
                                         <div key={index} className='flex gap-3 items-center'>
                                             <div className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >
                                                 <p >{i}</p>
-                                                <IconButton onClick={() => removeFild(index)} className=''><HighlightOffIcon /></IconButton>
+                                                <IconButton onClick={() => removeFildSkills(index)} className=''><HighlightOffIcon /></IconButton>
                                             </div>
                                         </div>
                                     )
                                 })}
                             </div>
-                       
+
                             <div className='flex items-center gap-3 mb-3'>
-                                <Checkbox {...label} />
+                                <Checkbox onChange={() => skip == true? setSkip(false): setSkip(true)} {...label} />
                                 <p>Pular criação de perfil</p>
                             </div>
                             <div className='flex gap-3 items-center justify-center w-full'>
@@ -577,11 +659,11 @@ const createVacancy = () => {
                                     <ArrowBackIcon />
                                     <p>Anterior</p>
                                 </Button>
-                                <Button onClick={() => setPage(3)} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{ backgroundColor: '#0AA851FF' }}>
+                                <Button disabled={Object.keys(thirdPageData).length === 0 || skip == false} onClick={() => setPage(3)} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{ backgroundColor: '#0AA851FF' }}>
                                     <p>Finalizar</p>
                                     <ArrowForwardIcon />
                                 </Button>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 )}
