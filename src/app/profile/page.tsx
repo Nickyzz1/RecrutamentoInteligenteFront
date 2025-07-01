@@ -10,8 +10,13 @@ import fone from "@/assets/phonegreen.png"
 import chapeu from "@/assets/chapeu.png"
 import pessoa from "@/assets/primo.jpg"
 
+import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+
 import { APIURL } from "@/constants/api";
+import { IconButton } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/constants/routes";
 
 interface UserProfile {
     name : string,
@@ -24,6 +29,12 @@ interface UserProfile {
 export default function Start() {
 
     const [user, setUser] = useState<UserProfile | null>(null)
+    const router = useRouter()
+
+    const logout = () => {
+        localStorage.removeItem("AUTH")
+        router.push(ROUTES.login)
+    }
 
     useEffect(() => {
         const _user = localStorage.getItem("UserData")
@@ -65,10 +76,13 @@ export default function Start() {
                     {/* Lado Esquerdo */}
                     <div className="shadow-[0px_0px_5px_1px_rgba(0,_0,_0,_0.2)] rounded-[12px] p-6 w-full md:w-[450px] bg-white ">
                         <div className="flex flex-row justify-end gap-3">
-                            <Image src={sair} alt="sair" className="w-8 h-8" />
-                            <button onClick={() => openModal()} className="cursor-pointer">
-                                <Image src={editar} alt="editar" className="w-8 h-8" />
-                            </button>
+                            <IconButton onClick={logout}>
+                                <LogoutOutlinedIcon fontSize="large" color="success" />
+                            </IconButton>
+                         
+                            <IconButton onClick={() => openModal()}>
+                                <DriveFileRenameOutlineOutlinedIcon fontSize="large" color="success" />
+                            </IconButton>
                         </div>
                         <div className="flex justify-center my-8">
                             <div className="p-3 rounded-full shadow-[0px_0px_5px_1px_rgba(0,_0,_0,_0.2)]">
