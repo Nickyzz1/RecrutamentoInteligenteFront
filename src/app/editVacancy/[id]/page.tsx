@@ -15,6 +15,7 @@ const EditVacancy = async ({params: {id}} : IParams) => {
       <GoBack />
   
       <div className="min-h-screen flex flex-col bg-[#F9FAFB] items-center pb-6">
+          {/* fazer requisições para update com hooks no componente abaixo, ele é client component */}
           <EditVacancyComponent id={id}/>
       </div> 
     </>

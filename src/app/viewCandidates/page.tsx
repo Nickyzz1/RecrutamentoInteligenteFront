@@ -13,7 +13,7 @@ interface Candidate {
   name: string;
   created: string;
   status: string;
-  idResume: number;
+  id: number;
 }
 
 interface DataJSON {
@@ -29,13 +29,13 @@ const Data: DataJSON[] = [
         name: "João Silva",
         created: "2024-01-15",
         status: "Aprovado",
-        idResume: 1,
+        id: 1,
       },
       {
         name: "Maria Souza",
         created: "2024-01-20",
         status: "Em análise",
-        idResume: 2,
+        id: 2,
       },
     ],
   },
@@ -46,13 +46,13 @@ const Data: DataJSON[] = [
         name: "Ana Lima",
         created: "2024-02-10",
         status: "Reprovado",
-        idResume: 3,
+        id: 3,
       },
       {
         name: "Carlos Santos",
         created: "2024-02-12",
         status: "Dinâmica",
-        idResume: 4,
+        id: 4,
       },
     ],
   },
@@ -83,7 +83,7 @@ const ViewCandidates = () => {
                 <TableBody>
                   {processo.candidates.map((candidate) => (
                     <TableRow
-                      key={candidate.idResume}
+                      key={candidate.id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
