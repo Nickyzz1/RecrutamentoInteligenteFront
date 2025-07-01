@@ -1,11 +1,38 @@
+"use client"
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 // imports internos
 import { HeaderLogged } from "@/components/headerUser/page";
 import { Card } from "@/components/card/page";
 import lupa from "@/assets/lupa.png"
+import { APIURL } from "@/constants/api";
+
+interface IVacancyData {
+    "id" : number,
+    "title" : string,
+    "description" : string,
+    "canApply" : boolean,
+    "createdAt" : string,
+    "skills" : string[]
+}
 
 export default function Start() {
+
+    const [vacancies, setVacancies] = useState<IVacancyData[]>([])
+    const [title, setTitle] = useState<string>("")
+
+    useEffect(() => {
+        fetch(`${APIURL}/vacancy?${title != "" ? `title=${title}&`: ""}`, {
+            method: "GET",
+            headers: {
+                "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => setVacancies(data.value))
+    }, [])
+
     return (
         <div className="flex max-w-screen overflow-hidden flex-col items-center justify-center bg-[#F9FAFB]">
             <HeaderLogged />
@@ -24,16 +51,19 @@ export default function Start() {
                         <button className="cursor-pointer">
                             <Image src={lupa} alt="lupa" className="w-6"></Image>
                         </button>
-                        <input type="text" className="text-md placeholder:text-[#909192] outline-hidden" placeholder="Pesquise por cargo"></input>
+                        <input
+                            type="text"
+                            className="text-md placeholder:text-[#909192] outline-hidden"
+                            placeholder="Pesquise por cargo"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        ></input>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 flex-wrap gap-10 justify-center py-6">
-                        <Card skills={["Comunicação", "Liderança", "Comunicação com equipes"]} date={new Date()} title={"Desenvolvedor React senior"} status={"Ativa"} adress={"Curitiba, PR"} description={"Estamos buscando um desenvolvedor React experiente para se juntar ao nosso time de tecnologia. Você trabalhará em projetos legais."}></Card>
-                        <Card skills={["Comunicação", "Liderança", "Iniciativa", "Cooperatividade"]} date={new Date()} title={"Desenvolvedor React senior"} status={"Ativa"} adress={"Curitiba, PR"} description={"Estamos buscando um desenvolvedor React experiente para se juntar ao nosso time de tecnologia. Você trabalhará em projetos legais."}></Card>
-                        <Card skills={["Comunicação", "Liderança", "Comunicação com equipes"]} date={new Date()} title={"Desenvolvedor React senior"} status={"Ativa"} adress={"Curitiba, PR"} description={"Estamos buscando um desenvolvedor React experiente para se juntar ao nosso time de tecnologia. Você trabalhará em projetos legais."}></Card>
-                        <Card skills={["Comunicação", "Liderança", "Iniciativa", "Cooperatividade"]} date={new Date()} title={"Desenvolvedor React senior"} status={"Ativa"} adress={"Curitiba, PR"} description={"Estamos buscando um desenvolvedor React experiente para se juntar ao nosso time de tecnologia. Você trabalhará em projetos legais."}></Card>
-                        <Card skills={["Comunicação", "Liderança", "Iniciativa"]} date={new Date()} title={"Desenvolvedor React senior"} status={"Ativa"} adress={"Curitiba, PR"} description={"Estamos buscando um desenvolvedor React experiente para se juntar ao nosso time de tecnologia. Você trabalhará em projetos legais."}></Card>
-                        <Card skills={["Comunicação", "Liderança", "Iniciativa", "Cooperatividade"]} date={new Date()} title={"Desenvolvedor React senior"} status={"Ativa"} adress={"Curitiba, PR"} description={"Estamos buscando um desenvolvedor React experiente para se juntar ao nosso time de tecnologia. Você trabalhará em projetos legais."}></Card>
+                        {vacancies.map((item, index) => (
+                            <Card key={index} skills={item.skills} date={new Date(item.createdAt)} title={item.title} status={item.canApply ? "Ativa" : "Inativa"} adress={""} description={item.description}></Card>
+                        ))}
                     </div>
                 </div>
 

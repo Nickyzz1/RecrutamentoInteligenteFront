@@ -442,7 +442,7 @@ const createVacancy = () => {
                             </div>
                             {/* fazer exibição de itens abaixo*/}
                             <div className='flex mt-5 md:hidden w-full items-center'>
-                                <Button onClick={addToList(listEducation)} fullWidth variant='outlined' color='success' sx={{display: 'flex',gap:3}} >
+                                <Button onClick={() => addToList(listEducation)} fullWidth variant='outlined' color='success' sx={{display: 'flex',gap:3}} >
                                     <AddCircleIcon fontSize='small' color='success'/>
                                     <p>Adicionar</p>
                                 </Button>
@@ -473,7 +473,7 @@ const createVacancy = () => {
                             </div>
                             {/* btn de add */}
                              <div className='flex mt-5 md:hidden w-full items-center'>
-                                <Button onClick={addToList(listEducation)} fullWidth variant='outlined' color='success' sx={{display: 'flex',gap:3}} >
+                                <Button onClick={() => addToList(listEducation)} fullWidth variant='outlined' color='success' sx={{display: 'flex',gap:3}} >
                                     <AddCircleIcon fontSize='small' color='success'/>
                                     <p>Adicionar</p>
                                 </Button>

@@ -11,43 +11,50 @@ import { Button, Pagination } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/constants/routes';
+import { useEffect, useState } from 'react';
+import { APIURL } from '@/constants/api';
+
+interface IVacancyData {
+    "id" : number,
+    "title" : string,
+    "description" : string,
+    "canApply" : boolean,
+    "createdAt" : string,
+    "skills" : string[]
+}
+
+interface IVacancyStats {
+    totalVacancies : number,
+    totalActiveVacancies : number,
+    totalApplications : number,
+    averageApplications : number
+}
 
 const manageAplication = () => {
 
-    // fazer requisição de get para as vagas
-    
-    const getData = () => {
+    useEffect(() => {
+        fetch(`${APIURL}/vacancy`, {
+            method: "GET",
+            headers: {
+                "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => setVacancies(data.value))
 
-    }
+        fetch(`${APIURL}/vacancy/stats`, {
+            method: "GET",
+            headers: {
+                "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => setStats(data.value))
 
-    const mockVacancies = [
-        {
-        id: "1",
-        title: "Desenvolvedor React",
-        status: "Ativa",
-        adress: "Curitiba, PR",
-        description: "Descrição da vaga aqui...",
-        date: new Date("2025-02-26"),
-        skills: ["React", "TypeScript", "CSS", "Git"],
-        },
-        {
-        id: "2",
-        title: "Backend Node.js",
-        status: "Ativa",
-        adress: "São Paulo, SP",
-        description: "Descrição da vaga Backend...",
-        date: new Date("2025-03-01"),
-        skills: ["Node.js", "Express", "MongoDB"],
-        },
-        
-    ];
-    // mapear quantas vagas estão ativas
-    let activeVacancy = 0
+    }, [])
 
-    mockVacancies.map((i) => {
-        if(i.status == "Ativa")
-            activeVacancy +=1
-    })
+    const [vacancies, setVacancies] = useState<IVacancyData[]>([])
+    const [stats, setStats] = useState<IVacancyStats>({totalActiveVacancies : 0, totalApplications : 0, totalVacancies : 0, averageApplications : 0})
 
     const router = useRouter();
 
@@ -77,7 +84,7 @@ const manageAplication = () => {
                         </div>
                             <div>
                                 <h1 className="text-md text-gray-500">Total de vagas</h1>
-                                <h2 className="text-3xl font-bold text-black">{mockVacancies.length}</h2>
+                                <h2 className="text-3xl font-bold text-black">{stats.totalVacancies}</h2>
                             </div>
                         </div>
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
@@ -87,7 +94,7 @@ const manageAplication = () => {
                         </div>
                             <div>
                                 <h1 className="text-md text-gray-500">Vagas ativas</h1>
-                                <h2 className="text-3xl font-bold text-black">{activeVacancy}</h2>
+                                <h2 className="text-3xl font-bold text-black">{stats.totalActiveVacancies}</h2>
                             </div>
                         </div>
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
@@ -97,7 +104,7 @@ const manageAplication = () => {
                         </div>
                             <div>
                                 <h1 className="text-md text-gray-500">Candidaturas</h1>
-                                <h2 className="text-3xl font-bold text-black">6</h2>
+                                <h2 className="text-3xl font-bold text-black">{stats.totalApplications}</h2>
                             </div>
                         </div>
                         <div className="bg-white lg:w-full border max-4/5 border-gray-100 shadow flex items-center gap-6 rounded-xl p-2">
@@ -107,7 +114,7 @@ const manageAplication = () => {
                         </div>
                             <div>
                                 <h1 className="text-md text-gray-500">Média de candidaturas</h1>
-                                <h2 className="text-3xl font-bold text-black">6</h2>
+                                <h2 className="text-3xl font-bold text-black">{stats.averageApplications}</h2>
                             </div>
                         </div>
                     </div>
@@ -119,17 +126,17 @@ const manageAplication = () => {
                         </Button>
                     </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-6">
-                    {mockVacancies.map((vacancy) => (
-                       <Card
-                            key={vacancy.id}
-                            title={vacancy.title}
-                            status={vacancy.status}
-                            adress={vacancy.adress}  // ESSA LINHA ESTÁ FALTANDO
-                            description={vacancy.description}
-                            date={vacancy.date}
-                            skills={vacancy.skills}
-                            onClick={() => router.push(`/vacancydetails/${vacancy.id}`)}
-                        />
+                    {vacancies.map((item, index) => (
+                        <Card
+                            key={index}
+                            skills={item.skills}
+                            date={new Date(item.createdAt)}
+                            title={item.title}
+                            status={item.canApply ? "Ativa" : "Inativa"}
+                            adress={""}
+                            description={item.description}
+                            onClick={() => router.push(`/vacancydetails/${item.id}`)}
+                        ></Card>
                     ))}
                 </div>
             </div>
