@@ -35,7 +35,7 @@ export const HeaderLoggedAdmin = () => {
               <div className="flex w-full justify-end gap-4 mx-4">
                   <Link href={ROUTES.homeAdmin} className="hidden sm:flex text-black hover:text-[#036d3c]">Início</Link>
                   <Link href={ROUTES.dashboard} className="hidden sm:flex text-black hover:text-[#036d3c]">Dashboard</Link>
-                  <Link href={ROUTES.profile} className="hidden sm:flex text-black hover:text-[#036d3c]">Perfil</Link>
+                  {/* <Link href={ROUTES.profile} className="hidden sm:flex text-black hover:text-[#036d3c]">Perfil</Link> */}
               </div>
 
               <Image width={20} height={10} alt="menu" src={menu} onClick={toggleDrawer(true)} className="sm:hidden"></Image>
