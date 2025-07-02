@@ -561,7 +561,7 @@ const createVacancy = () => {
                                     <div className='flex gap-3 items-center'>
                                         <div className='bg-green-800 rounded-full h-3 w-3'></div>
                                         <p>{i.experience} - {i.time}</p>
-                                        <IconButton onClick={() => removeFieldEducation(index)} className=''><HighlightOffIcon /></IconButton>
+                                        <IconButton onClick={() => removeFieldExperience(index)} className=''><HighlightOffIcon /></IconButton>
                                     </div>
                                 </div>
                                 )
@@ -619,18 +619,18 @@ const createVacancy = () => {
                                     <div className='flex gap-3 items-center'>
                                         <div className='bg-green-800 rounded-full h-3 w-3'></div>
                                         <p>{i.language} - {i.level}</p>
-                                        <IconButton onClick={() => removeFieldEducation(index)} className=''><HighlightOffIcon /></IconButton>
+                                        <IconButton onClick={() => removeFieldLanguage(index)} className=''><HighlightOffIcon /></IconButton>
                                     </div>
                                </div>
                            )
                         })}
                         </div>    
 
-                        <Divider />
+                        {/* <Divider /> */}
 
                         {/* Habilidades relevantes */}
                         <div className='flex flex-col gap-3'>
-                            <h2 className="font-semibold">Habilidades relevantes</h2>
+                            {/* <h2 className="font-semibold">Habilidades relevantes</h2>
                             <TextField value={skill} id="outlined-basic" label="ex: Líderar equipe" variant="outlined"
                                 onChange={(e) => setSkill(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))}
                                 onKeyDown={(e) => {
@@ -650,7 +650,7 @@ const createVacancy = () => {
                                         </div>
                                     )
                                 })}
-                            </div>
+                            </div> */}
 
                             <div className='flex items-center gap-3 mb-3'>
                                 <Checkbox onChange={() => skip == true? setSkip(false): setSkip(true)} {...label} />
@@ -661,7 +661,7 @@ const createVacancy = () => {
                                     <ArrowBackIcon />
                                     <p>Anterior</p>
                                 </Button>
-                                <Button disabled={Object.keys(thirdPageData).length === 0 || skip == false} onClick={() => setPage(3)} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{ backgroundColor: '#0AA851FF' }}>
+                                <Button disabled={thirdPageData.educations.length === 0 || thirdPageData.experiences.length === 0 || thirdPageData.languages.length === 0 || thirdPageData.languages.length === 0 ||   skip == false} onClick={() => setPage(3)} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{ backgroundColor: '#0AA851FF' }}>
                                     <p>Finalizar</p>
                                     <ArrowForwardIcon />
                                 </Button>
