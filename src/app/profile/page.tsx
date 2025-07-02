@@ -5,7 +5,7 @@ import { HeaderLogged } from "@/components/headerUser/page";
 import { useState, useEffect } from "react";
 import editar from "@/assets/editar.png"
 import sair from "@/assets/sair.png"
-import email from "@/assets/emailgreen.png"
+import _email from "@/assets/emailgreen.png"
 import fone from "@/assets/phonegreen.png"
 import chapeu from "@/assets/chapeu.png"
 import pessoa from "@/assets/primo.jpg"
@@ -56,15 +56,54 @@ export default function Start() {
 
 
     const [modal, setModal] = useState(false);
-    const [bio, setBio] = useState<string>("");
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [phone, setPhone] = useState<string>("")
+    const [bio, setBio] = useState("")
+    const [interests, setInterests] = useState<string[]>([])
 
 
     const closeModal = () => {
-        setBio("");
         setModal(false);
+    }
+    
+    const saveChanges = () => {
+        const _user = localStorage.getItem("UserData")
+        const userData = JSON.parse(_user != null ? _user : "")
+        fetch(`${APIURL}/user/profile/${userData.Id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type" : "application/json",
+            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+          },
+          body: JSON.stringify({
+            name: name == user?.name ? null : name,
+            email: email == user?.email ? null : email,
+            bio: bio == user?.bio ? null : bio,
+            phone: phone == user?.phone ? null : phone
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message)
+            setUser({
+                name: data.value.name,
+                email: data.value.email,
+                bio: data.value.bio,
+                phone: data.value.phone,
+                interests: user?.interests ? user.interests : [],
+            })
+            setModal(false);
+        })
     }
 
     const openModal = () => {
+        if(user) {
+            setName(user.name)
+            setEmail(user.email)
+            setPhone(user.phone ? user.phone : "")
+            setBio(user.bio ? user.bio : "")
+        }
         setModal(true);
     }
 
@@ -90,22 +129,17 @@ export default function Start() {
                             </div>
                         </div>
                         <div className="flex items-center flex-col gap-2 text-center mb-6">
-                            <p className="text-3xl font-bold text-[#036D3C]">Adriana Alves</p>
-                            <p className="text-xl text-[#666666] font-semibold">Suport para rollout TI</p>
+                            <p className="text-3xl font-bold text-[#036D3C]">{user?.name}</p>
                         </div>
                         <div className="bg-[#036D3C] w-full h-[2px] mb-5" />
                         <div className="flex flex-col gap-4">
                             <div className="flex items-center gap-3">
-                                <Image src={email} alt="email" className="w-6 h-6 object-contain" />
-                                <p className="text-[#666666] text-xl">E-mail: adriana@gmail.com</p>
+                                <Image src={_email} alt="email" className="w-6 h-6 object-contain" />
+                                <p className="text-[#666666] text-xl">E-mail: {user?.email}</p>
                             </div>
                             <div className="flex items-center gap-3">
                                 <Image src={fone} alt="telefone" className="w-6 h-6 object-contain" />
-                                <p className="text-[#666666] text-xl">Tel: 41 9 9090-9090</p>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <Image src={chapeu} alt="formação" className="w-6 h-6 object-contain" />
-                                <p className="text-[#666666] text-xl">Engenharia de software</p>
+                                <p className="text-[#666666] text-xl">Tel: {user?.phone}</p>
                             </div>
                         </div>
                     </div>
@@ -125,7 +159,7 @@ export default function Start() {
                                     <Image src={editar} alt="editar" className="w-6 h-6 object-contain" />
                                 </div>
                                 <div className="flex flex-wrap gap-3">
-                                    {["Liderança", "Comunicação", "TI", "Automação", "Gerencia"].map((item, index) => (
+                                    {user?.interests.map((item, index) => (
                                         <span key={index} className="bg-[#036D3C] text-white px-5 py-2 rounded-full text-sm font-medium shadow-sm">
                                             {item}
                                         </span>
@@ -139,7 +173,7 @@ export default function Start() {
                             <div className="bg-[#036D3C] w-full h-[2px] mb-5" />
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-center gap-3">
-                                    <Image src={email} alt="email" className="w-6 h-6 object-contain" />
+                                    <Image src={_email} alt="email" className="w-6 h-6 object-contain" />
                                     <p className="text-[#666666] text-xl">E-mail: {user?.email}</p>
                                 </div>
                                 <div className="flex items-center gap-3">
@@ -156,10 +190,7 @@ export default function Start() {
                             <div>
                                 <p className="text-[#036D3C] font-bold text-lg mb-2">Biografia</p>
                                 <p className="text-base text-[#333] leading-relaxed">
-                                    Maecenas a nulla augue. Phasellus accumsan vulputate justo, ac ultrices lectus fringilla ac.
-                                    Nunc mattis nulla non condimentum congue. Sed tempus pharetra urna. Nam accumsan erat et ipsum sodales tincidunt.
-                                    Nulla sed pulvinar ex, sed auctor tellus. Aliquam vel tincidunt nibh. Integer vestibulum neque at nibh hendrerit,
-                                    eu sodales sem egestas. Donec vehicula dui sit amet elementum dictum.
+                                    {user?.bio}
                                 </p>
                             </div>
                         </div>
@@ -187,15 +218,8 @@ export default function Start() {
                                     type="text"
                                     placeholder="Nome"
                                     className="w-full border-b border-gray-300 text-gray-600 focus:outline-none py-1 placeholder:text-gray-400"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="text-sm text-gray-600 font-semibold">Profissão</label>
-                                <input
-                                    type="text"
-                                    placeholder="Profissão"
-                                    className="w-full border-b border-gray-300 text-gray-600 focus:outline-none py-1 placeholder:text-gray-400"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
                                 />
                             </div>
 
@@ -205,6 +229,8 @@ export default function Start() {
                                     type="email"
                                     placeholder="Email"
                                     className="w-full border-b border-gray-300 text-gray-600 focus:outline-none py-1 placeholder:text-gray-400"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
 
@@ -214,21 +240,19 @@ export default function Start() {
                                     type="text"
                                     placeholder="(99) 99999-9999"
                                     className="w-full border-b border-gray-300 text-gray-600 focus:outline-none py-1 placeholder:text-gray-400"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
                                 />
                             </div>
-
+                            
                             <div>
-                                <label className="text-sm text-gray-600 font-semibold">Formação/curso</label>
-                                <div className="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="Formação"
-                                        className="w-full border-b border-gray-300 text-gray-600 focus:outline-none py-1 placeholder:text-gray-400 pr-6"
-                                    />
-                                    <div className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-600">
-                                        ▼
-                                    </div>
-                                </div>
+                                <label className="text-sm text-gray-600 font-semibold">Biografia</label>
+                                <textarea
+                                    placeholder="Escreva sobre você"
+                                    className="w-full border-b border-gray-300 text-gray-600 focus:outline-none py-1 placeholder:text-gray-400"
+                                    value={bio}
+                                    onChange={(e) => setBio(e.target.value)}
+                                />
                             </div>
                         </form>
 
@@ -241,7 +265,7 @@ export default function Start() {
                                 Cancelar
                             </button>
                             <button
-                                onClick={closeModal}
+                                onClick={saveChanges}
                                 className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 cursor-pointer"
                             >
                                 Salvar
