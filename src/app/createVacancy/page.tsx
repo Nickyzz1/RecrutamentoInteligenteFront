@@ -661,7 +661,7 @@ const createVacancy = () => {
                             )
                         })}
 
-                        <Divider />
+                        
 
                         {/* Experiencia busca cargo, categoria: anos, tempo */}
                         <h2 className="font-semibold">Experiências</h2>
@@ -706,7 +706,7 @@ const createVacancy = () => {
                             })}
                         </div>
 
-                        <Divider />
+                       
 
                         {/* idiomas e profeiencia */}
 
@@ -799,7 +799,10 @@ const createVacancy = () => {
                                     <ArrowBackIcon />
                                     <p>Anterior</p>
                                 </Button>
-                                <Button disabled={thirdPageData.educations.length === 0 || thirdPageData.experiences.length === 0 || thirdPageData.languages.length === 0 || thirdPageData.languages.length === 0 ||   skip == false} onClick={() => setPage(3)} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{ backgroundColor: '#0AA851FF' }}>
+                                <Button disabled={!skip && 
+    thirdPageData.educations.length === 0 &&
+    thirdPageData.experiences.length === 0 &&
+    thirdPageData.languages.length === 0} onClick={() => setPage(3)} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{ backgroundColor: '#0AA851FF' }}>
                                     <p>Finalizar</p>
                                     <ArrowForwardIcon />
                                 </Button>
