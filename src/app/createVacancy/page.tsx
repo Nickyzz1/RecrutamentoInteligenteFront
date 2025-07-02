@@ -68,8 +68,8 @@ const createVacancy = () => {
 
     const router = useRouter()
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    // controla a página den iniciação
-    const [page, setPage] = useState(3)
+    // controla a página de iniciação
+    const [page, setPage] = useState(1)
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
     const workDaysOptions = [
@@ -144,7 +144,10 @@ const createVacancy = () => {
     }
 
     interface IProfileData {
-        
+        educations: IEducation[],
+        experiences: IExperience[],
+        languages: ILanguage[],
+        skills:  string[]
     }
 
     const firstPageData: IVacancyFirstData = {
@@ -166,10 +169,10 @@ const createVacancy = () => {
     };
 
     const thirdPageData: IProfileData = {
-        education: listEducation,
-        experience: listExperience,
-        language: listLanguages,
-        skill: listSkills
+        educations: listEducation,
+        experiences: listExperience,
+        languages: listLanguages,
+        skills: listSkills
     }
 
     // testando primeiro post para api
@@ -179,7 +182,6 @@ const createVacancy = () => {
     // testando segundo post par api
     console.log(JSON.stringify(thirdPageData, null, 2));
 
-    
     const removeFieldEducation = (index: number) => {
         setListEducation(listEducation.filter((item, idx) => idx != index))
     }
