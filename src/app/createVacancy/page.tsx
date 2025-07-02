@@ -136,18 +136,17 @@ const createVacancy = () => {
     // ------- Dados da segunda etapa
     interface IVacancySecondData {
 
-        "Etapas_da_Vaga": string[],
-        "Responsabilidades_e_atribuições": string[],
-        "Requisitos": string[],
-        "Benefícios": string[],
-        "Habilidades": string[],
+        Etapas_da_Vaga: string[],
+        Responsabilidades_e_atribuições: string[],
+        Requisitos: string[],
+        Benefícios: string[],
+        Habilidades: string[],
     }
 
     interface IProfileData {
         educations: IEducation[],
         experiences: IExperience[],
         languages: ILanguage[],
-        skills:  string[]
     }
 
     const firstPageData: IVacancyFirstData = {
@@ -172,7 +171,6 @@ const createVacancy = () => {
         educations: listEducation,
         experiences: listExperience,
         languages: listLanguages,
-        skills: listSkills
     }
 
     // testando primeiro post para api
