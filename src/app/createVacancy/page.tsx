@@ -20,19 +20,21 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { APIURL } from '@/constants/api';
+import { EEducationType, EProficiencyLevel } from '@/constants/enums';
 
 interface IEducation {
-    "education": string,
-    "level": string
+    "name": string,
+    "type": string
 }
 
 interface IExperience {
-    "experience": string,
+    "name": string,
     "time": number
 }
 
 interface ILanguage {
-    "language" : string,
+    "name" : string,
     "level": string
 }
 
@@ -72,6 +74,132 @@ const createVacancy = () => {
     const [page, setPage] = useState(1)
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
+
+    function create()
+    {
+        const vacancy: IVacancyFirstData = {
+            title: title,
+            description: description,
+            workDays: workDaysSum,
+            workStart: (workStart ? workStart.toDate() : new Date()),
+            workEnd: (workEnd ? workEnd.toDate() : new Date()),
+            canApply: true
+        }
+        fetch(`${APIURL}/vacancy`, {
+            method: "POST",
+            headers: {
+                "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`,
+                "Content-type" : "application/json"
+            },
+            body: JSON.stringify(vacancy)
+        })
+        .then((res) => res.json())
+        .then((vacancyData) => {
+            listResponsabilities.forEach((item) => {
+                let data : any = {name: item, vacancyId: vacancyData.value.id}
+                fetch(`${APIURL}/vacancy/assignment`,{
+                    method: `POST`,
+                    headers: {
+                        "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`,
+                        "Content-type" : "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
+                .catch(error => console.log(error))
+            })
+            listRequeriments.forEach((item) => {
+                let data : any = {name: item, vacancyId: vacancyData.value.id}
+                fetch(`${APIURL}/vacancy/requirement`,{
+                    method: `POST`,
+                    headers: {
+                        "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`,
+                        "Content-type" : "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
+                .catch(error => console.log(error))
+            })
+            listBenefits.forEach((item) => {
+                let data : any = {name: item, vacancyId: vacancyData.value.id}
+                fetch(`${APIURL}/vacancy/benefit`,{
+                    method: `POST`,
+                    headers: {
+                        "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`,
+                        "Content-type" : "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
+                .catch(error => console.log(error))
+            })
+            listSkills.forEach((item) => {
+                let data : any = {name: item, vacancyId: vacancyData.value.id}
+                fetch(`${APIURL}/vacancy/desiredSkill`,{
+                    method: `POST`,
+                    headers: {
+                        "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`,
+                        "Content-type" : "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
+                .catch(error => console.log(error))
+            })
+            listEducation.forEach((item) => {
+                let data : any = item
+                data["vacancyId"] = vacancyData.value.id
+                fetch(`${APIURL}/vacancy/desiredEducation`,{
+                    method: `POST`,
+                    headers: {
+                        "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`,
+                        "Content-type" : "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
+                .catch(error => console.log(error))
+            })
+            listExperience.forEach((item) => {
+                let data : any = item
+                data["vacancyId"] = vacancyData.value.id
+                fetch(`${APIURL}/vacancy/desiredExperience`,{
+                    method: `POST`,
+                    headers: {
+                        "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`,
+                        "Content-type" : "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
+                .catch(error => console.log(error))
+            })
+            listLanguages.forEach((item) => {
+                let data : any = item
+                data["vacancyId"] = vacancyData.value.id
+                fetch(`${APIURL}/vacancy/desiredLanguage`,{
+                    method: `POST`,
+                    headers: {
+                        "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`,
+                        "Content-type" : "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
+                .catch(error => console.log(error))
+            })
+        })
+    }
+
+
     const workDaysOptions = [
         { label: 'Segunda', value: 1 },
         { label: 'Terça', value: 2 },
@@ -85,8 +213,8 @@ const createVacancy = () => {
     const addEducation = () => {
         if (education.trim() !== '' && level.trim() !== '') {
             let educ: IEducation = {
-                education: education,
-                level: level
+                name: education,
+                type: level
             };
             setListEducation([...listEducation, educ])
             setEducation('')
@@ -97,7 +225,7 @@ const createVacancy = () => {
     const addExperience = () => {
         if (experienceRole.trim() !== '' && experienceTime !== 0) {
             let exp: IExperience = {
-                experience: experienceRole,
+                name: experienceRole,
                 time: experienceTime
             };
             setListExperience([...listExperience, exp])
@@ -109,7 +237,7 @@ const createVacancy = () => {
     const addLanguages = () => {
         if (language.trim() !== '' && languageLevel.trim() !== '') {
             let lan: ILanguage = {
-                language: language,
+                name: language,
                 level: languageLevel
             };
             setListlanguages([...listLanguages, lan])
@@ -173,13 +301,6 @@ const createVacancy = () => {
         languages: listLanguages,
     }
 
-    // testando primeiro post para api
-    console.log(JSON.stringify(firstPageData, null, 2));
-    // testando segundo post par api
-    console.log(JSON.stringify(secondPageData, null, 2));
-    // testando segundo post par api
-    console.log(JSON.stringify(thirdPageData, null, 2));
-
     const removeFieldEducation = (index: number) => {
         setListEducation(listEducation.filter((item, idx) => idx != index))
     }
@@ -192,7 +313,7 @@ const createVacancy = () => {
         setListlanguages(listLanguages.filter((item, idx) => idx != index))
     }
     
-    const removeFildSkills = (index: number) => {
+    const removeFieldSkills = (index: number) => {
         setListSkills(listSkills.filter((item, idx) => idx != index))
     }
 
@@ -478,10 +599,10 @@ const createVacancy = () => {
                                                 label="Ens.Superior"
                                                 onChange={(e) => setLevel(e.target.value)}
                                             >
-                                                <MenuItem value={"Educação Básica"}>Educação Básica</MenuItem>
-                                                <MenuItem value={"Técnico"}>Técnico</MenuItem>
-                                                <MenuItem value={"Ensino Superior"}>Ensino Superior</MenuItem>
-                                                <MenuItem value={"Pós graduação"}>Pós Graduação</MenuItem>
+                                                <MenuItem value={EEducationType.BasicEducation}>Educação Básica</MenuItem>
+                                                <MenuItem value={EEducationType.TechnicalCourse}>Técnico</MenuItem>
+                                                <MenuItem value={EEducationType.Graduation}>Ensino Superior</MenuItem>
+                                                <MenuItem value={EEducationType.PostGraduation}>Pós Graduação</MenuItem>
                                             </Select>
                                         </FormControl>
                                         {/* icone de add */}
@@ -514,7 +635,7 @@ const createVacancy = () => {
                                     <div key={index} className='flex flex-col gap-3'>
                                         <div className='flex gap-3 items-center'>
                                             <div className='bg-green-800 rounded-full h-3 w-3'></div>
-                                            <p>{i.education} - {i.level}</p>
+                                            <p>{i.name} - {i.type}</p>
                                             <IconButton onClick={() => removeFieldEducation(index)} className=''><HighlightOffIcon /></IconButton>
                                         </div>
                                     </div>
@@ -558,8 +679,8 @@ const createVacancy = () => {
                                     <div key={index} className='flex flex-col gap-3'>
                                     <div className='flex gap-3 items-center'>
                                         <div className='bg-green-800 rounded-full h-3 w-3'></div>
-                                        <p>{i.experience} - {i.time}</p>
-                                        <IconButton onClick={() => removeFieldExperience(index)} className=''><HighlightOffIcon /></IconButton>
+                                        <p>{i.name} - {i.time}</p>
+                                        <IconButton onClick={() => removeFieldEducation(index)} className=''><HighlightOffIcon /></IconButton>
                                     </div>
                                 </div>
                                 )
@@ -587,10 +708,10 @@ const createVacancy = () => {
                                             label="Ens.Superior"
                                             onChange={(e) => setLanguageLevel(e.target.value)}
                                         >
-                                            <MenuItem value={"Básico"}>Básico</MenuItem>
-                                            <MenuItem value={"Intermediário"}>Intermediário</MenuItem>
-                                            <MenuItem value={"Avançado"}>Avançado</MenuItem>
-                                            <MenuItem value={"Fluente"}>Fluente</MenuItem>
+                                            <MenuItem value={EProficiencyLevel.Beginner}>Básico</MenuItem>
+                                            <MenuItem value={EProficiencyLevel.Intermediate}>Intermediário</MenuItem>
+                                            <MenuItem value={EProficiencyLevel.Advanced}>Avançado</MenuItem>
+                                            <MenuItem value={EProficiencyLevel.Fluent}>Fluente</MenuItem>
                                         </Select>
                                     </FormControl>
                                     {/* icone de add */}
@@ -616,8 +737,8 @@ const createVacancy = () => {
                                <div key={index} className='flex flex-col gap-3'>
                                     <div className='flex gap-3 items-center'>
                                         <div className='bg-green-800 rounded-full h-3 w-3'></div>
-                                        <p>{i.language} - {i.level}</p>
-                                        <IconButton onClick={() => removeFieldLanguage(index)} className=''><HighlightOffIcon /></IconButton>
+                                        <p>{i.name} - {i.level}</p>
+                                        <IconButton onClick={() => removeFieldEducation(index)} className=''><HighlightOffIcon /></IconButton>
                                     </div>
                                </div>
                            )
@@ -643,7 +764,7 @@ const createVacancy = () => {
                                         <div key={index} className='flex gap-3 items-center'>
                                             <div className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >
                                                 <p >{i}</p>
-                                                <IconButton onClick={() => removeFildSkills(index)} className=''><HighlightOffIcon /></IconButton>
+                                                <IconButton onClick={() => removeFieldSkills(index)} className=''><HighlightOffIcon /></IconButton>
                                             </div>
                                         </div>
                                     )
