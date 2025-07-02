@@ -15,6 +15,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { APIURL } from '@/constants/api';
+import { EEducationType, EProficiencyLevel } from '@/constants/enums';
 
 type EditVacancyProps = {
     id: string;
@@ -33,22 +34,7 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
     const updateProfilePage = () => {
         // fazer requsição para update das info da página do perfil do candidato aqui
     }
-
-    enum EProficiencyLevel
-    {
-        Beginner = 0,
-        Intermediate = 1,
-        Advanced = 2,
-        Fluent = 3
-    }
-
-    enum EEducationType
-    {
-        BasicEducation = 0,
-        TechnicalCourse = 1,
-        Graduation = 2,
-        PostGraduation = 3
-    }
+    
 
     interface IFullData {
         "id" : number,

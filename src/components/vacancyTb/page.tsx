@@ -4,16 +4,9 @@ import { Button, FormControl, InputLabel, MenuItem, Paper, Select, SelectChangeE
 import { useState } from "react"; 
 import { ROUTES } from "@/constants/routes";
 import { useParams, useRouter } from "next/navigation";
+import { EApplicationStatus } from "@/constants/enums";
 
 // enum de status
-enum EApplicationStatus {
-  ANALISE = 0,
-  APROVADO = 1,
-  REPROVADO = 2,
-  DINAMICA = 3,
-  ENTREVISTA = 4,
-}
-
 interface Candidate {
   id: number;
   email: string;
@@ -31,7 +24,7 @@ type DataJSON = {
     startDate: string;
     endDate: string;
   } | null;
-  status: number;
+  status: EApplicationStatus;
 }[];
 
 // ----- fazer requisição para pegar todos os candidatos da vaga
@@ -79,7 +72,7 @@ const mockData: DataJSON = [
 ];
 
 // { [key: number]: string } diz que esse objeto tem chaves numéricas e valores do
-const statusOptions: { [key: number]: string } = {
+const statusOptions: { [key: string]: string } = {
   [EApplicationStatus.ANALISE]: "Em análise",
   [EApplicationStatus.APROVADO]: "Aprovado",
   [EApplicationStatus.REPROVADO]: "Reprovado",
@@ -103,12 +96,12 @@ const VacancyTb = ({id} : IParams) => {
   const [data, setData] = useState<DataJSON>(mockData);
 
   // ----- atualiza o status do candidato com base no ID
-  const handleChange = (event: SelectChangeEvent<number>, id: number) => {
-  const updatedData = data.map((item) =>
-      item.id === id ? { ...item, status: event.target.value as number } : item
-      // ----- fazer requisição de update
-  );
-  setData(updatedData);
+  const handleChange = (event: SelectChangeEvent<string>, id: number) => {
+    const updatedData = data.map((item) =>
+        item.id === id ? { ...item, status: event.target.value as EApplicationStatus } : item
+        // ----- fazer requisição de update
+    );
+    setData(updatedData);
   };
 
     return(
@@ -147,11 +140,11 @@ const VacancyTb = ({id} : IParams) => {
                           label="Status"
                           onChange={(e) => handleChange(e, item.id)}
                         >
-                          {Object.entries(statusOptions).map(([key, label]) => (
-                            <MenuItem key={key} value={Number(key)}>
-                              {label}
-                            </MenuItem>
-                          ))}
+                          <MenuItem value={EApplicationStatus.ANALISE}>Em análise</MenuItem>
+                          <MenuItem value={EApplicationStatus.APROVADO}>Aprovado</MenuItem>
+                          <MenuItem value={EApplicationStatus.REPROVADO}>Reprovado</MenuItem>
+                          <MenuItem value={EApplicationStatus.DINAMICA}>Dinâmica</MenuItem>
+                          <MenuItem value={EApplicationStatus.ENTREVISTA}>Entrevista</MenuItem>
                         </Select>
                       </FormControl>
                     </TableCell>

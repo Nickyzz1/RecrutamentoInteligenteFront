@@ -9,6 +9,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkIcon from '@mui/icons-material/Link';
+import { EApplicationStatus, EEducationStatus, EEducationType, EProficiencyLevel } from "@/constants/enums";
 
 interface IParams { 
   params: {idUser : string}
@@ -19,32 +20,6 @@ const ResumeCandidate = ({params: {idUser: id}} : IParams) => {
     // ---- fazer requisição para pegar os dados do usuário com o idUser
     const getResumeCandidate = () => {
 
-    }
-
-    enum EEducationStatus {
-        Incomplete = 0,
-        Underway = 1,
-        Complete = 2
-    }
-    enum EEducationType {
-        BasicEducation = 0,
-        TechnicalCourse = 1,
-        Graduation = 2,
-        PosGraduation = 3
-    }
-    enum EProficiencyLevel {
-        Benniger = 0,
-        Intermediate = 1,
-        Advanced = 2,
-        Fluent = 3
-    }
-
-    enum EApplicationStatus {
-        ANALISE = 0,
-        APROVADO = 1,
-        REPROVADO = 2,
-        DINAMICA = 3,
-        ENTREVISTA = 4,
     }
 
     interface IApplication {
@@ -123,8 +98,8 @@ const ResumeCandidate = ({params: {idUser: id}} : IParams) => {
             "id" : 1,
             "institution" : "Universidade Positivo - UP",
             "course" : "Engenharia de sofware",
-            "status" : 1,
-            "type" : 1,
+            "status" : EEducationStatus.Complete,
+            "type" : EEducationType.Graduation,
             "startDate" : "2020-03-26",
             "endDate" :  "2020-03-26"
         },
@@ -132,8 +107,8 @@ const ResumeCandidate = ({params: {idUser: id}} : IParams) => {
             "id" : 2,
             "institution" : "Senai cic",
             "course" : "Analise e desenvolvimento de sistemas",
-            "status" : 1,
-            "type" : 1,
+            "status" : EEducationStatus.Underway,
+            "type" : EEducationType.Graduation,
             "startDate" : "2024-02-26",
             "endDate" :  "2025-07-09"
         }
@@ -160,7 +135,7 @@ const ResumeCandidate = ({params: {idUser: id}} : IParams) => {
         "languages" : [{
             "id" : 1,
             "name" : "Inglês",
-            "level" : 3
+            "level" : EProficiencyLevel.Advanced
         }],
         
         "address" : "Renato hugo vardanega, 84",
@@ -222,7 +197,7 @@ const ResumeCandidate = ({params: {idUser: id}} : IParams) => {
         email: "Sabrina.souza.2754@gmail.com",
         phone: "41 99999-9999"
         },
-        status: 1,
+        status: EApplicationStatus.DINAMICA,
         note: `Sou Sabrina, desenvolvedora com experiência sólida como desenvolvedora plena e também como Product Owner. Essa trajetória me proporcionou uma visão ampla do ciclo completo de desenvolvimento, desde o entendimento das necessidades do negócio até a entrega de soluções técnicas eficientes. 
 
         Após atuar como PO, desenvolvi habilidades valiosas de comunicação, priorização e alinhamento com stakeholders, que agregam muito no papel de uma desenvolvedora sênior, que deve liderar tecnicamente e guiar o time.
@@ -237,8 +212,8 @@ const ResumeCandidate = ({params: {idUser: id}} : IParams) => {
         name : "Desenvolvedor React Sênior"
     }
 
-    const levels: { [key: number]: string } = {
-    [EProficiencyLevel.Benniger]: "Básico",
+    const levels: { [key: string]: string } = {
+    [EProficiencyLevel.Beginner]: "Básico",
     [EProficiencyLevel.Intermediate]: "Intermediário",
     [EProficiencyLevel.Advanced]: "Avançado",
     [EProficiencyLevel.Fluent]: "Fluente",
