@@ -7,7 +7,9 @@ interface IParams {
   params: {id : string}
 }
 
-const EditVacancy = async ({params: {id}} : IParams) => {
+const EditVacancy = async ({params} : any) => {
+
+  const {id} = await params;
 
   return (
     <>

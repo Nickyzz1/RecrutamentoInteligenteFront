@@ -135,7 +135,7 @@ const manageAplication = () => {
                             status={item.canApply ? "Ativa" : "Inativa"}
                             adress={""}
                             description={item.description}
-                            onClick={() => router.push(`/vacancydetails/${item.id}`)}
+                            onClick={() => router.push(`${ROUTES.viewCandidates}/${item.id}`)}
                         ></Card>
                     ))}
                 </div>

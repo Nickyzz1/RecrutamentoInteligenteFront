@@ -11,6 +11,9 @@ const nextConfig = {
         {
           source : '/homeAdmin',
           destination: '/homeAdmin'
+        }, {
+          source: '/resume',
+          destination: '/resume'
         },
          {
           source : '/',

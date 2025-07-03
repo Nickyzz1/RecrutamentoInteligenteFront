@@ -4,9 +4,10 @@ import Image from "next/image";
 
 // imports internos
 import { HeaderLogged } from "@/components/headerUser/page";
-import { Card } from "@/components/card/page";
 import lupa from "@/assets/lupa.png"
 import { APIURL } from "@/constants/api";
+import { Card } from "@/components/vacancyCard/page";
+import { useRouter } from "next/navigation";
 
 interface IVacancyData {
     "id" : number,
@@ -18,6 +19,8 @@ interface IVacancyData {
 }
 
 export default function Start() {
+
+    const router = useRouter()
 
     const [vacancies, setVacancies] = useState<IVacancyData[]>([])
     const [title, setTitle] = useState<string>("")
@@ -62,7 +65,16 @@ export default function Start() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 flex-wrap gap-10 justify-center py-6">
                         {vacancies.map((item, index) => (
-                            <Card key={index} skills={item.skills} date={new Date(item.createdAt)} title={item.title} status={item.canApply ? "Ativa" : "Inativa"} adress={""} description={item.description}></Card>
+                            <Card
+                                key={index}
+                                skills={item.skills}
+                                date={new Date(item.createdAt)}
+                                title={item.title}
+                                status={item.canApply ? "Ativa" : "Inativa"}
+                                adress={""}
+                                description={item.description}
+                                onClick={() => router.push(`/vacancydetails/${item.id}`)}
+                            ></Card>
                         ))}
                     </div>
                 </div>

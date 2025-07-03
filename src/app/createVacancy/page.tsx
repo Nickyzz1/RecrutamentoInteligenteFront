@@ -13,6 +13,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import {Button, Checkbox, Divider, FormControl, InputLabel, ListItemText, MenuItem, Modal, Select, TextField, Typography } from "@mui/material"
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 // icons
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
@@ -38,6 +40,11 @@ interface ILanguage {
     "level": string
 }
 
+interface IStep {
+    "step": string,
+    "date": Date
+}
+
 const createVacancy = () => {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState("Escreva uma descrição aqui!")
@@ -48,6 +55,7 @@ const createVacancy = () => {
     const [workStart, setWorkStart] = useState<Dayjs>(dayjs(""));
     const [workEnd, setWorkEnd] = useState<Dayjs>(dayjs(""));
     const [stepValue, setStepValue] = useState('')
+    const [date, setDate] = useState(dayjs(""))
 
     const [education, setEducation] = useState('')
     const [level, setLevel] = useState('')
@@ -57,7 +65,7 @@ const createVacancy = () => {
     const [languageLevel, setLanguageLevel] = useState('')
     const [skip, setSkip] = useState(false)
 
-    const [listSteps, setListSteps] = useState<string[]>([])
+    const [listSteps, setListSteps] = useState<IStep[]>([])
     const [listResponsabilities, setListResponsabilities] = useState<string[]>([])
     const [listRequeriments, setListRequiriments] = useState<string[]>([])
     const [listBenefits, setListBenefits] = useState<string[]>([])
@@ -199,7 +207,6 @@ const createVacancy = () => {
         })
     }
 
-
     const workDaysOptions = [
         { label: 'Segunda', value: 1 },
         { label: 'Terça', value: 2 },
@@ -209,6 +216,18 @@ const createVacancy = () => {
         { label: 'Sábado', value: 32 },
         { label: 'Domingo', value: 64 },
     ];
+
+    const addSteps = () => {
+        if (stepValue.trim() !== '' && date.toString() !== '') {
+            let step: IStep = {
+                step: stepValue,
+                date: date.toDate()
+            };
+            setListSteps([...listSteps, step])
+            setEducation('')
+            setLevel('')
+        }
+    }
 
     const addEducation = () => {
         if (education.trim() !== '' && level.trim() !== '') {
@@ -264,18 +283,17 @@ const createVacancy = () => {
     // ------- Dados da segunda etapa
     interface IVacancySecondData {
 
-        "Etapas_da_Vaga": string[],
-        "Responsabilidades_e_atribuições": string[],
-        "Requisitos": string[],
-        "Benefícios": string[],
-        "Habilidades": string[],
+        Etapas_da_Vaga: IStep[],
+        Responsabilidades_e_atribuições: string[],
+        Requisitos: string[],
+        Benefícios: string[],
+        Habilidades: string[],
     }
 
     interface IProfileData {
         educations: IEducation[],
         experiences: IExperience[],
         languages: ILanguage[],
-        skills:  string[]
     }
 
     const firstPageData: IVacancyFirstData = {
@@ -300,30 +318,17 @@ const createVacancy = () => {
         educations: listEducation,
         experiences: listExperience,
         languages: listLanguages,
-        skills: listSkills
     }
 
-    const removeFieldEducation = (index: number) => {
-        setListEducation(listEducation.filter((item, idx) => idx != index))
-    }
-    
-    const removeFieldExperience = (index: number) => {
-        setListExperience(listExperience.filter((item, idx) => idx != index))
-    }
-    
-    const removeFieldLanguage = (index: number) => {
-        setListlanguages(listLanguages.filter((item, idx) => idx != index))
-    }
-    
-    const removeFieldSkills = (index: number) => {
-        setListSkills(listSkills.filter((item, idx) => idx != index))
+    function removeItem<T>(
+        index: number,
+        list: T[],
+        setList: React.Dispatch<React.SetStateAction<T[]>>
+      ) {
+        const updatedList = list.filter((_, i) => i !== index);
+        setList(updatedList);
     }
 
-    const request = () => {
-        // faça a requisição de post aqui com a  firstPageData para criar  avga, secondPageData mais detalhes e thirdPageData para o perfil
-    }
-
- 
     return (
         <>
             <HeaderLoggedAdmin />
@@ -436,16 +441,28 @@ const createVacancy = () => {
                         <div className="bg-white flex flex-col max-w-[1200px] w-4/5 rounded-xl shadow p-6 word gap-6">
                             {/* etapas da vaga */}
                             <div className='flex flex-col gap-3'>
-                                <div className='flex flex-col gap-3'>
+                                
+                                <div className='flex w-full flex-col gap-3'>
                                     <h2 className="font-semibold">Etapas da vaga</h2>
-                                    <TextField value={stepValue} id="outlined-basic" label="ex: Inscrições" variant="outlined"
+                                    <div className='flex items-center md:flex-row flex-col gap-3'>
+                                        <TextField value={stepValue} sx={{ marginTop: "8px", width: "100%" }} id="outlined-basic" label="ex: Inscrições" variant="outlined"
                                         onChange={(e) => setStepValue(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))}
-                                        onKeyDown={(e) => {
-                                            if (e.key == 'Enter' && stepValue.trim() !== '') {
-                                                setListSteps((prev) => [...prev, stepValue.trim()])
-                                                setStepValue('')
-                                            }
-                                        }} />
+                                        />
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} >
+                                            <DemoContainer components={['DatePicker']} sx={{ width: "100%" }}>
+                                                <DatePicker onChange={(newValue) => setDate(newValue ? newValue : dayjs())}
+                                                value={date} 
+                                                label="ex:12/12/2012"/>
+                                            </DemoContainer>
+                                        </LocalizationProvider>
+
+                                        <div className='hidden md:flex items-center'>
+                                            <IconButton onClick={() => addSteps()} >
+                                                <AddCircleIcon fontSize='large' color='success' />
+                                            </IconButton>
+                                        </div>
+
+                                    </div>
                                 </div>
 
                                 <div className='flex w-full flex-col gap-3 '>
@@ -453,9 +470,9 @@ const createVacancy = () => {
                                         return (
                                             <div key={index} className='flex w-full gap-3 items-center'>
                                                 <p className='rounded-full w-6 h-6 text-white flex items-center justify-center bg-[#0AA851FF] p-2'>{index + 1}</p>
-                                                <p className='w-full m-2'>{i}</p>
+                                                <p className='w-full m-2'>{i.step} - {i.date.toString()}</p>
                                                 <div className='flex w-full justify-end'>
-                                                    <IconButton onClick={() => setIsDeleteModalOpen(true)} className=''><DeleteIcon color='error' /></IconButton>
+                                                    <IconButton onClick={() => removeItem(index, listSteps, setListSteps)} className=''><DeleteIcon color='error' /></IconButton>
                                                 </div>
                                             </div>
                                         )
@@ -480,7 +497,7 @@ const createVacancy = () => {
                                                 <p className='rounded-full w-6 h-6 text-white flex items-center justify-center bg-[#0AA851FF] p-2'>{index + 1}</p>
                                                 <p className='w-full m-2'>{i}</p>
                                                 <div className='flex w-full justify-end'>
-                                                    <IconButton onClick={() => setIsDeleteModalOpen(true)} className=''><DeleteIcon color='error' /></IconButton>
+                                                    <IconButton onClick={() => removeItem(index, listResponsabilities, setListResponsabilities)} className=''><DeleteIcon color='error' /></IconButton>
                                                 </div>
                                             </div>
                                         )
@@ -505,7 +522,7 @@ const createVacancy = () => {
                                                 <p className='rounded-full w-6 h-6 text-white flex items-center justify-center bg-[#0AA851FF] p-2'>{index + 1}</p>
                                                 <p className='w-full m-2'>{i}</p>
                                                 <div className='flex w-full justify-end'>
-                                                    <IconButton onClick={() => setIsDeleteModalOpen(true)} className=''><DeleteIcon color='error' /></IconButton>
+                                                    <IconButton onClick={() => removeItem(index, listRequeriments, setListRequiriments)} className=''><DeleteIcon color='error' /></IconButton>
                                                 </div>
                                             </div>
                                         )
@@ -529,7 +546,7 @@ const createVacancy = () => {
                                             <div key={index} className='flex gap-3 items-center'>
                                                 <div className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >
                                                     <p >{i}</p>
-                                                    <IconButton onClick={() => setIsDeleteModalOpen(true)} className=''><HighlightOffIcon /></IconButton>
+                                                    <IconButton onClick={() => removeItem(index, listBenefits, setListBenefits)} className=''><HighlightOffIcon /></IconButton>
                                                 </div>
                                             </div>
                                         )
@@ -553,7 +570,7 @@ const createVacancy = () => {
                                             <div key={index} className='flex gap-3 items-center'>
                                                 <div className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >
                                                     <p >{i}</p>
-                                                    <IconButton onClick={() => setIsDeleteModalOpen(true)} className=''><HighlightOffIcon /></IconButton>
+                                                    <IconButton onClick={() => removeItem(index, listSkills, setListSkills)} className=''><HighlightOffIcon /></IconButton>
                                                 </div>
                                             </div>
                                         )
@@ -638,13 +655,13 @@ const createVacancy = () => {
                                         <div className='flex gap-3 items-center'>
                                             <div className='bg-green-800 rounded-full h-3 w-3'></div>
                                             <p>{i.name} - {i.type}</p>
-                                            <IconButton onClick={() => removeFieldEducation(index)} className=''><HighlightOffIcon /></IconButton>
+                                            <IconButton onClick={() => removeItem(index, listEducation, setListEducation)} className=''><HighlightOffIcon /></IconButton>
                                         </div>
                                     </div>
                             )
                         })}
 
-                        <Divider />
+                        
 
                         {/* Experiencia busca cargo, categoria: anos, tempo */}
                         <h2 className="font-semibold">Experiências</h2>
@@ -682,14 +699,14 @@ const createVacancy = () => {
                                     <div className='flex gap-3 items-center'>
                                         <div className='bg-green-800 rounded-full h-3 w-3'></div>
                                         <p>{i.name} - {i.time}</p>
-                                        <IconButton onClick={() => removeFieldEducation(index)} className=''><HighlightOffIcon /></IconButton>
+                                        <IconButton onClick={() => removeItem(index, listExperience, setListExperience)} className=''><HighlightOffIcon /></IconButton>
                                     </div>
                                 </div>
                                 )
                             })}
                         </div>
 
-                        <Divider />
+                       
 
                         {/* idiomas e profeiencia */}
 
@@ -740,18 +757,18 @@ const createVacancy = () => {
                                     <div className='flex gap-3 items-center'>
                                         <div className='bg-green-800 rounded-full h-3 w-3'></div>
                                         <p>{i.name} - {i.level}</p>
-                                        <IconButton onClick={() => removeFieldEducation(index)} className=''><HighlightOffIcon /></IconButton>
+                                        <IconButton onClick={() => removeItem(index, listLanguages, setListlanguages)} className=''><HighlightOffIcon /></IconButton>
                                     </div>
                                </div>
                            )
                         })}
                         </div>    
 
-                        <Divider />
+                        {/* <Divider /> */}
 
                         {/* Habilidades relevantes */}
                         <div className='flex flex-col gap-3'>
-                            <h2 className="font-semibold">Habilidades relevantes</h2>
+                            {/* <h2 className="font-semibold">Habilidades relevantes</h2>
                             <TextField value={skill} id="outlined-basic" label="ex: Líderar equipe" variant="outlined"
                                 onChange={(e) => setSkill(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))}
                                 onKeyDown={(e) => {
@@ -771,7 +788,7 @@ const createVacancy = () => {
                                         </div>
                                     )
                                 })}
-                            </div>
+                            </div> */}
 
                             <div className='flex items-center gap-3 mb-3'>
                                 <Checkbox onChange={() => skip == true? setSkip(false): setSkip(true)} {...label} />
@@ -782,7 +799,10 @@ const createVacancy = () => {
                                     <ArrowBackIcon />
                                     <p>Anterior</p>
                                 </Button>
-                                <Button disabled={Object.keys(thirdPageData).length === 0 || skip == false} onClick={() => create()} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{ backgroundColor: '#0AA851FF' }}>
+                                <Button disabled={!skip &&
+                                    thirdPageData.educations.length === 0 &&
+                                    thirdPageData.experiences.length === 0 &&
+                                    thirdPageData.languages.length === 0} onClick={() => create()} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{ backgroundColor: '#0AA851FF' }}>
                                     <p>Finalizar</p>
                                     <ArrowForwardIcon />
                                 </Button>

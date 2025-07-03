@@ -14,9 +14,27 @@ import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRen
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 import { APIURL } from "@/constants/api";
-import { IconButton } from "@mui/material";
+import { Box, Button, IconButton, Modal, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
+
+const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '90vw',
+    maxWidth: 400,
+    maxHeight: '90vh',
+    bgcolor: 'background.paper',
+    borderRadius: 5,
+    boxShadow: 10,
+    p: 3,
+    overflowY: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 1,
+};
 
 interface UserProfile {
     name : string,
@@ -29,6 +47,7 @@ interface UserProfile {
 export default function Start() {
 
     const [user, setUser] = useState<UserProfile | null>(null)
+    const [modalInterest, setModalInterest]  = useState(true)
     const router = useRouter()
 
     const logout = () => {
@@ -134,12 +153,12 @@ export default function Start() {
                         <div className="bg-[#036D3C] w-full h-[2px] mb-5" />
                         <div className="flex flex-col gap-4">
                             <div className="flex items-center gap-3">
-                                <Image src={_email} alt="email" className="w-6 h-6 object-contain" />
-                                <p className="text-[#666666] text-xl">E-mail: {user?.email}</p>
+                                <Image src={email} alt="email" className="w-6 h-6 object-contain" />
+                                <p className="text-[#666666] text-xl">{user?.email}</p>
                             </div>
                             <div className="flex items-center gap-3">
                                 <Image src={fone} alt="telefone" className="w-6 h-6 object-contain" />
-                                <p className="text-[#666666] text-xl">Tel: {user?.phone}</p>
+                                <p className="text-[#666666] text-xl">{user?.phone}</p>
                             </div>
                         </div>
                     </div>
@@ -147,16 +166,20 @@ export default function Start() {
                     {/* Lado Direito */}
                     <div className="flex flex-col gap-8 w-full flex-1">
                         <div className="shadow-[0px_0px_5px_1px_rgba(0,_0,_0,_0.2)] rounded-[12px] p-6 bg-white flex justify-between items-center">
-                            <p className="text-[#036D3C] font-bold text-xl">Editar currículo</p>
-                            <Image src={editar} alt="editar" className="w-6 h-6 object-contain" />
+                            <p className="text-[#036D3C] font-semibold text-lg">Editar currículo</p>
+                            <IconButton onClick={() => openModal()}>
+                                <DriveFileRenameOutlineOutlinedIcon fontSize="medium" color="success" />
+                            </IconButton>
                         </div>
 
                         <div className="shadow-[0px_0px_5px_1px_rgba(0,_0,_0,_0.2)] rounded-[12px] p-6 bg-white flex flex-col gap-10 flex-grow">
 
                             <div>
                                 <div className="flex justify-between items-center mb-3">
-                                    <p className="text-[#036D3C] font-bold text-lg">Interesses</p>
-                                    <Image src={editar} alt="editar" className="w-6 h-6 object-contain" />
+                                    <p className="text-[#036D3C] font-semibold text-lg">Interesses</p>
+                                    <IconButton onClick={() => setModalInterest(true)}>
+                                        <DriveFileRenameOutlineOutlinedIcon fontSize="medium" color="success" />
+                                    </IconButton>
                                 </div>
                                 <div className="flex flex-wrap gap-3">
                                     {user?.interests.map((item, index) => (
@@ -167,7 +190,7 @@ export default function Start() {
                                 </div>
                             </div>
                             <div className="flex items-center flex-col gap-2 text-center mb-6">
-                                <p className="text-3xl font-bold text-[#036D3C]">{user?.name}</p>
+                                
                                 {/* <p className="text-xl text-[#666666] font-semibold">Suport para rollout TI</p> */}
                             </div>
                             <div className="bg-[#036D3C] w-full h-[2px] mb-5" />
@@ -271,6 +294,27 @@ export default function Start() {
                                 Salvar
                             </button>
                         </div>
+
+                        {/* modal adc interests */}
+                        {/* modal para excluir */}
+                        <Modal
+                            open={modalInterest}
+                            onClose={() => setModalInterest(false)}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description">
+                            <Box sx={style}>
+
+                                <Typography id="modal-modal-title" variant="h6" component="h2">
+                                    Adicione um novo interesse
+                                </Typography>
+
+                                <div className="flex items-center justify-center flex-row gap-3 mt-4">
+                                    <Button sx={{width: 100}} onClick={() => setModalInterest(false)} variant="contained" color="primary">Cancelar</Button>
+                                    <Button sx={{width: 100}} variant="contained" color="error">Adicionar</Button>
+                                </div>
+                            </Box>
+                        </Modal>
+
                     </div>
                 </div>
             )}
