@@ -24,6 +24,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { APIURL } from '@/constants/api';
 import { EEducationType, EProficiencyLevel } from '@/constants/enums';
+import { ROUTES } from '@/constants/routes';
 
 interface IEducation {
     "name": string,
@@ -80,8 +81,7 @@ const createVacancy = () => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     // controla a página de iniciação
     const [page, setPage] = useState(3)
-    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
+    const label = { inputProps: { 'aria-label': 'Checkbox demo' }};
 
     function create()
     {
@@ -204,6 +204,7 @@ const createVacancy = () => {
                 .then(data => console.log(data))
                 .catch(error => console.log(error))
             })
+            router.push(ROUTES.homeAdmin)
         })
     }
 
@@ -786,7 +787,7 @@ const createVacancy = () => {
                                 <Button disabled={!skip && 
                                     thirdPageData.educations.length === 0 &&
                                     thirdPageData.experiences.length === 0 &&
-                                    thirdPageData.languages.length === 0} onClick={() => setPage(3)} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{ backgroundColor: '#0AA851FF' }}>
+                                    thirdPageData.languages.length === 0} onClick={() => create()} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{ backgroundColor: '#0AA851FF' }}>
                                     <p>Finalizar</p>
                                     <ArrowForwardIcon />
                                 </Button>
