@@ -20,7 +20,6 @@ interface CardProps {
 
 export const Card: React.FC<CardProps> = ({ title, status, adress, description, date, skills }) => {
     const router = useRouter();
-
     return (
         <>
             <div className="shadow-[0px_0px_5px_1px_rgba(0,_0,_0,_0.2)] transition-all duration-500 hover:shadow-[0px_0px_5px_1px_rgba(48,_160,_64,0.7)] hover:scale-101 rounded-lg bg-white p-8 w-full flex flex-col gap-5 ">
