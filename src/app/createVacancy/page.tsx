@@ -24,6 +24,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { APIURL } from '@/constants/api';
 import { EEducationType, EProficiencyLevel } from '@/constants/enums';
+import { ROUTES } from '@/constants/routes';
 
 interface IEducation {
     "name": string,
@@ -80,8 +81,7 @@ const createVacancy = () => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     // controla a página de iniciação
     const [page, setPage] = useState(1)
-    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
+    const label = { inputProps: { 'aria-label': 'Checkbox demo' }};
 
     function create()
     {
@@ -204,6 +204,7 @@ const createVacancy = () => {
                 .then(data => console.log(data))
                 .catch(error => console.log(error))
             })
+            router.push(ROUTES.homeAdmin)
         })
     }
 
@@ -651,13 +652,17 @@ const createVacancy = () => {
                         </div>
                         {listEducation.map((i, index) => {
                             return (
-                                    <div key={index} className='flex flex-col gap-3'>
-                                        <div className='flex gap-3 items-center'>
+                                <div key={index} className='flex flex-col gap-3'>
+                                    <div className='flex items-center'>
+                                        <div className='flex w-full gap-3 items-center'>
                                             <div className='bg-green-800 rounded-full h-3 w-3'></div>
                                             <p>{i.name} - {i.type}</p>
-                                            <IconButton onClick={() => removeItem(index, listEducation, setListEducation)} className=''><HighlightOffIcon /></IconButton>
+                                        </div>
+                                        <div className='flex w-full justify-end mr-15'>
+                                            <IconButton onClick={() => removeItem(index, listEducation, setListEducation)}><DeleteIcon color='error' /></IconButton>
                                         </div>
                                     </div>
+                                </div>
                             )
                         })}
 
@@ -696,17 +701,19 @@ const createVacancy = () => {
                             {listExperience.map((i, index) => {
                                 return (
                                     <div key={index} className='flex flex-col gap-3'>
-                                    <div className='flex gap-3 items-center'>
-                                        <div className='bg-green-800 rounded-full h-3 w-3'></div>
-                                        <p>{i.name} - {i.time}</p>
-                                        <IconButton onClick={() => removeItem(index, listExperience, setListExperience)} className=''><HighlightOffIcon /></IconButton>
+                                    <div className='flex items-center'>
+                                        <div className='flex w-full gap-3 items-center'>
+                                            <div className='bg-green-800 rounded-full h-3 w-3'></div>
+                                            <p>{i.name} - {i.time}</p>
+                                        </div>
+                                         <div className='flex w-full justify-end mr-15'>
+                                            <IconButton onClick={() => removeItem(index, listExperience, setListExperience)} className=''><DeleteIcon color='error' /></IconButton>
+                                        </div>
                                     </div>
                                 </div>
                                 )
                             })}
                         </div>
-
-                       
 
                         {/* idiomas e profeiencia */}
 
@@ -755,41 +762,19 @@ const createVacancy = () => {
                            return (
                                <div key={index} className='flex flex-col gap-3'>
                                     <div className='flex gap-3 items-center'>
-                                        <div className='bg-green-800 rounded-full h-3 w-3'></div>
-                                        <p>{i.name} - {i.level}</p>
-                                        <IconButton onClick={() => removeItem(index, listLanguages, setListlanguages)} className=''><HighlightOffIcon /></IconButton>
+                                        <div className='flex gap-3 w-full items-center'>
+                                            <div className='bg-green-800 rounded-full h-3 w-3'></div>
+                                            <p className='flex'>{i.name} - {i.level}</p>
+                                        </div>
+                                        <div className='flex w-full justify-end mr-15'>
+                                            <IconButton onClick={() => removeItem(index, listLanguages, setListlanguages)} className=''><DeleteIcon color='error' /></IconButton>
+                                        </div>
                                     </div>
                                </div>
                            )
                         })}
                         </div>    
-
-                        {/* <Divider /> */}
-
-                        {/* Habilidades relevantes */}
                         <div className='flex flex-col gap-3'>
-                            {/* <h2 className="font-semibold">Habilidades relevantes</h2>
-                            <TextField value={skill} id="outlined-basic" label="ex: Líderar equipe" variant="outlined"
-                                onChange={(e) => setSkill(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))}
-                                onKeyDown={(e) => {
-                                    if (e.key == 'Enter' && skill.trim() !== '') {
-                                        setListSkills((prev) => [...prev, skill.trim()])
-                                        setSkill('')
-                                    }
-                                }} />
-                            <div className='flex wrap flex-wrap gap-3 mt-3'>
-                                {listSkills.map((i, index) => {
-                                    return (
-                                        <div key={index} className='flex gap-3 items-center'>
-                                            <div className='border border-green-600 bg-green-100 text-black px-2 rounded-full flex items-center' >
-                                                <p >{i}</p>
-                                                <IconButton onClick={() => removeFieldSkills(index)} className=''><HighlightOffIcon /></IconButton>
-                                            </div>
-                                        </div>
-                                    )
-                                })}
-                            </div> */}
-
                             <div className='flex items-center gap-3 mb-3'>
                                 <Checkbox onChange={() => skip == true? setSkip(false): setSkip(true)} {...label} />
                                 <p>Pular criação de perfil</p>
