@@ -83,6 +83,14 @@ const Resume = () => {
                             endDate : item.endDate,
                         })
                     })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
                 }else{
                     fetch(`${APIURL}/resume/experience/${item.id}`, {
                         method: "PATCH",
@@ -99,6 +107,14 @@ const Resume = () => {
                             endDate : item.endDate,
                         })
                     })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
                 }
             })
             listExperience.forEach((item) => {
@@ -119,6 +135,14 @@ const Resume = () => {
                             description : item.description,
                         })
                     })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
                 }else{
                     fetch(`${APIURL}/resume/experience/${item.id}`, {
                         method: "PATCH",
@@ -135,6 +159,14 @@ const Resume = () => {
                             description : item.description,
                         })
                     })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
                 }
             })
             listSkills.forEach((item) => {
@@ -150,6 +182,14 @@ const Resume = () => {
                             name : item.name
                         })
                     })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
                 }else{
                     fetch(`${APIURL}/resume/skill/${item.id}`, {
                         method: "PATCH",
@@ -161,6 +201,14 @@ const Resume = () => {
                             name : item.name
                         })
                     })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
                 }
             })
             listLanguages.forEach((item) => {
@@ -177,6 +225,14 @@ const Resume = () => {
                             level: item.level
                         })
                     })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
                 }else{
                     fetch(`${APIURL}/resume/experience/${item.id}`, {
                         method: "PATCH",
@@ -189,6 +245,14 @@ const Resume = () => {
                             level: item.level
                         })
                     })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
                 }
             })
         })

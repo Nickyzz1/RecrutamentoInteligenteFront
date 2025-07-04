@@ -7,6 +7,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
+import { APIURL } from "@/constants/api";
 
 
 interface Isla {
@@ -38,7 +39,23 @@ const EditDelete = ({id} : Isla) =>
 
     const handleRemove = () => {
         setIsDeleteModalOpen(false);
-        // fazer requisição para deletar vaga aqui
+
+        fetch(`${APIURL}/resume/vacancy/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type" : "application/json",
+                "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+            }
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data.message);
+            console.log(data.value)
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+
         console.log("Vaga excluída");
     }
 
