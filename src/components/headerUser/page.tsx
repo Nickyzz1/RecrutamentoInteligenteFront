@@ -30,7 +30,7 @@ export const HeaderLogged = () => {
 
             <div className="flex w-full justify-end gap-8">
                 <Link href={ROUTES.home} className="hidden sm:flex text-black hover:text-[#036d3c]">Ínicio</Link>
-                <Link href={ROUTES.vacancydetails} className="hidden sm:flex text-black hover:text-[#036d3c]">Minhas Vagas</Link>
+                <Link href={ROUTES.viewCandidatures} className="hidden sm:flex text-black hover:text-[#036d3c]">Minhas Vagas</Link>
                 <Link href={ROUTES.profile} className="hidden sm:flex text-black hover:text-[#036d3c]">Perfil</Link>
 
             </div>
