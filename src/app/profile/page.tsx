@@ -1,4 +1,5 @@
 'use client'
+"use client"
 import Image from "next/image";
 
 import { HeaderLogged } from "@/components/headerUser/page";
@@ -7,13 +8,14 @@ import sair from "@/assets/sair.png"
 import email from "@/assets/emailgreen.png"
 import fone from "@/assets/phonegreen.png"
 import chapeu from "@/assets/chapeu.png"
-import pessoa from "@/assets/profile.png"
+import pessoa from "@/assets/primo.jpg"
 
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import { useState } from "react";
+import { APIURL } from "@/constants/api";
 
 
-export default function Start() {
+export default async function Start() {
 
     const [modal, setModal] = useState(false);
     const [bio, setBio] = useState<string>("");
@@ -27,6 +29,22 @@ export default function Start() {
     const openModal = () => {
         setModal(true);
     }
+
+
+    const _user = localStorage.getItem("UserData")
+    const userData = JSON.parse(_user != null ? _user : "")
+
+    const data = await (await fetch(`${APIURL}/user/${userData.Id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type" : "application/json",
+        "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+      },
+    })).json()
+
+    console.log(data.message)
+
+    const user = data.value
 
     return (
         <>
@@ -49,23 +67,23 @@ export default function Start() {
                             </div>
                         </div>
                         <div className="flex items-center flex-col gap-2 text-center mb-6">
-                            <p className="text-3xl font-bold text-[#036D3C]">Adriana Alves</p>
-                            <p className="text-xl text-[#666666] font-semibold">Suport para rollout TI</p>
+                            <p className="text-3xl font-bold text-[#036D3C]">{user.name}</p>
+                            {/* <p className="text-xl text-[#666666] font-semibold">Suport para rollout TI</p> */}
                         </div>
                         <div className="bg-[#036D3C] w-full h-[2px] mb-5" />
                         <div className="flex flex-col gap-4">
                             <div className="flex items-center gap-3">
                                 <Image src={email} alt="email" className="w-6 h-6 object-contain" />
-                                <p className="text-[#666666] text-xl">E-mail: adriana@gmail.com</p>
+                                <p className="text-[#666666] text-xl">E-mail: {user.email}</p>
                             </div>
                             <div className="flex items-center gap-3">
                                 <Image src={fone} alt="telefone" className="w-6 h-6 object-contain" />
-                                <p className="text-[#666666] text-xl">Tel: 41 9 9090-9090</p>
+                                <p className="text-[#666666] text-xl">{user.phone == null ? '' : `Tel: ${user.phone}`}</p>
                             </div>
-                            <div className="flex items-center gap-3">
+                            {/* <div className="flex items-center gap-3">
                                 <Image src={chapeu} alt="formação" className="w-6 h-6 object-contain" />
                                 <p className="text-[#666666] text-xl">Engenharia de software</p>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 
@@ -84,7 +102,7 @@ export default function Start() {
                                     <Image src={editar} alt="editar" className="w-6 h-6 object-contain" />
                                 </div>
                                 <div className="flex flex-wrap gap-3">
-                                    {["Liderança", "Comunicação", "TI", "Automação", "Gerencia"].map((item, index) => (
+                                    {user.interests.map((item : any, index : number) => (
                                         <span key={index} className="bg-[#036D3C] text-white px-5 py-2 rounded-full text-sm font-medium shadow-sm">
                                             {item}
                                         </span>
@@ -95,10 +113,7 @@ export default function Start() {
                             <div>
                                 <p className="text-[#036D3C] font-bold text-lg mb-2">Biografia</p>
                                 <p className="text-base text-[#333] leading-relaxed">
-                                    Maecenas a nulla augue. Phasellus accumsan vulputate justo, ac ultrices lectus fringilla ac. 
-                                    Nunc mattis nulla non condimentum congue. Sed tempus pharetra urna. Nam accumsan erat et ipsum sodales tincidunt.
-                                    Nulla sed pulvinar ex, sed auctor tellus. Aliquam vel tincidunt nibh. Integer vestibulum neque at nibh hendrerit, 
-                                    eu sodales sem egestas. Donec vehicula dui sit amet elementum dictum.
+                                    {user.bio}
                                 </p>
                             </div>
                         </div>
