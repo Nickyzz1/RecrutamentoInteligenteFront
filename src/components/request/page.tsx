@@ -338,11 +338,9 @@ export function SendCandidatureRequest({id} : {id : string}){
     return(
         <div className="min-h-screen flex flex-col">
             <HeaderLogged />
-            <div className="flex flex-col flex-grow bg-[#F9FAFB] pt-8 px-16">
-                <div className="flex flex-row gap-4 items-center">
-                    <Image src={back} alt="seta" className="scale-75"></Image>
-                    <p className="font-semibold text-[#909192]">Voltar</p>
-                </div>
+            <GoBack/>
+            <div className="flex flex-col flex-grow bg-[#F9FAFB]">
+               
                 <div className="flex flex-col items-center w-full">
                     <div className="flex flex-col bg-white border-[1px] border-gray-200 p-10 px-12 gap-7 max-w-[1000px] w-5/6 rounded-2xl">
                         <p className="text-3xl font-bold">{vacancy ? vacancy.title : ""}</p>

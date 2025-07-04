@@ -10,6 +10,7 @@ import { notFound, useRouter } from "next/navigation";
 import { EEducationType, EProficiencyLevel } from '@/constants/enums';
 import { APIURL } from "@/constants/api";
 import { ROUTES } from "@/constants/routes";
+import Link from "next/link";
 
 // Interface da vaga (opcional, pode estar em um arquivo separado)
 interface IVacancy {
@@ -96,8 +97,6 @@ const VacancyPage = async ({params} : any) => {
 
   const data = await getVacancyById(id);
 
-  const router = useRouter()
-
   // if (!data) return notFound(); 
 
   const vacancy: IVacancy | null = data;
@@ -140,7 +139,7 @@ const VacancyPage = async ({params} : any) => {
 
         <div className="flex flex-wrap flex-col md:flex-row bg-white border-1 rounded-2xl border-gray-200 p-7 gap-9">
           <div className="flex flex-col gap-2">
-            <h1 className="text-xl font-semibold">{vacancy ? vacancy.title : ""}</h1>
+            <h1 className="text-xl font-semibold">{vacancy ? vacancy.title : "Sem título"}</h1>
             <div className="flex flex-wrap gap-2">
               <CorporateFareIcon />
               <p className="font-xs text-gray-600">Darede à nuvem</p>
@@ -152,14 +151,15 @@ const VacancyPage = async ({params} : any) => {
             </div>
           </div>
           <div className="ml-auto w-full md:w-auto flex items-center">
-            <Button
-              variant="contained"
-              sx={{ backgroundColor: "#036D3C", width: "100%", maxWidth: "700px" }}
-              disabled={vacancy ? !vacancy.canApply : true}
-              onClick={() => router.push(`${ROUTES.sendcandidature}/${id}`)}
-            >
-              Candidate-se
-            </Button>
+            <Link href={`${ROUTES.sendcandidature}/${id}`}>
+              <Button
+                variant="contained"
+                sx={{ backgroundColor: "#036D3C", width: "100%", maxWidth: "700px" }}
+          
+              >
+                Candidate-se
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -181,7 +181,7 @@ const VacancyPage = async ({params} : any) => {
               </div>
               <div className="bg-[#efffef] flex flex-wrap gap-4 rounded-r-sm">
                 <div className="bg-[#60a860] w-2 "></div>
-                <p className="m-2 flex flex-wrap">{vacancy ? vacancy.description : ""}</p>
+                <p className="m-2 flex flex-wrap">{vacancy ? vacancy.description : "Não há detalhes ainda."}</p>
               </div>
             </div>
 
@@ -189,19 +189,23 @@ const VacancyPage = async ({params} : any) => {
             <div className="flex flex-col bg-white border-1 rounded-2xl border-gray-200 p-7 gap-9">
               <h2 className="text-xl font-semibold">Etapas do processo</h2>
               <Stepper activeStep={activeStep} orientation="vertical">
-                {(vacancy ? vacancy.stages : []).map((step) => (
-                  <Step key={step.id}>
-                    <StepLabel StepIconComponent={CustomStepIcon}>
-                      {step.description}
-                    </StepLabel>
-                    <StepContent>
-                      <Typography variant="caption">
-                        {step.startDate.toLocaleDateString()} - {step.endDate.toLocaleDateString()}
-                      </Typography>
-                      <Box sx={{ mb: 2, backgroundColor: "#036D3C" }}></Box>
-                    </StepContent>
-                  </Step>
-                ))}
+                {(vacancy?.stages ?? []).length === 0 ? (
+                  <p>Nenhuma etapa cadastrada</p>
+                ) : (
+                  (vacancy?.stages ?? []).map((step) => (
+                    <Step key={step.id}>
+                      <StepLabel StepIconComponent={CustomStepIcon}>
+                        {step.description}
+                      </StepLabel>
+                      <StepContent>
+                        <Typography variant="caption">
+                          {new Date(step.startDate).toLocaleDateString()} - {new Date(step.endDate).toLocaleDateString()}
+                        </Typography>
+                        <Box sx={{ mb: 2, backgroundColor: "#036D3C" }} />
+                      </StepContent>
+                    </Step>
+                  ))
+                )}
               </Stepper>
             </div>
           </div>
