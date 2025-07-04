@@ -56,18 +56,19 @@ export default function Start() {
         router.push(ROUTES.login);
     };
 
+    
     useEffect(() => {
         const _user = localStorage.getItem("UserData");
         if (!_user) return;
-
+        
         const userData = JSON.parse(_user);
-
+        
         fetch(`${APIURL}/user/${userData.Id}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("AUTH")}`,
-        },
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("AUTH")}`,
+            },
         })
         .then((res) => res.json())
         .then((data) => {
@@ -78,15 +79,15 @@ export default function Start() {
             console.error("Erro ao buscar usuário:", err);
         });
     }, []);
-
+    
     const [modal, setModal] = useState(false);
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [phone, setPhone] = useState<string>("")
     const [bio, setBio] = useState("")
     const [interests, setInterests] = useState<string[]>([])
-
-
+    console.log(interests)
+    
     const closeModal = () => {
         setModal(false);
     }
@@ -95,9 +96,9 @@ export default function Start() {
         const _user = localStorage.getItem("UserData")
         const userData = JSON.parse(_user != null ? _user : "")
         fetch(`${APIURL}/user/profile/${userData.Id}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type" : "application/json",
+            method: "PATCH",
+            headers: {
+                "Content-Type" : "application/json",
             "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
           },
           body: JSON.stringify({
@@ -158,7 +159,7 @@ export default function Start() {
                         <div className="bg-[#036D3C] w-full h-[2px] mb-5" />
                         <div className="flex flex-col gap-4">
                             <div className="flex items-center gap-3">
-                                <Image src={email} alt="email" className="w-6 h-6 object-contain" />
+                                <Image src={_email} alt="email" className="w-6 h-6 object-contain" />
                                 <p className="text-[#666666] text-xl">{user?.email}</p>
                             </div>
                             <div className="flex items-center gap-3">
@@ -188,15 +189,23 @@ export default function Start() {
                                 </div>
                                 <div className="flex flex-wrap gap-3">
                                     {user?.interests.map((item, index) => (
-                                        <span key={index} className="bg-[#036D3C] text-white px-5 py-2 rounded-full text-sm font-medium shadow-sm">
-                                            {item}
-                                        </span>
+                                        interests.length == 0 ? (
+                                            (
+                                                <div className="flex w-full items-center justify center">
+                                                    <p>Adicione novos interesses e eles irão aparecer aqui</p>
+                                                </div>
+                                            )
+                                        ) : (
+                                            <span key={index} className="bg-[#036D3C] text-white px-5 py-2 rounded-full text-sm font-medium shadow-sm">
+                                                {item}
+                                            </span> 
+                                        )
                                     ))}
                                 </div>
                             </div>
                             <div className="flex items-center flex-col gap-2 text-center mb-6">
                                 
-                                {/* <p className="text-xl text-[#666666] font-semibold">Suport para rollout TI</p> */}
+                            {/* <p className="text-xl text-[#666666] font-semibold">Suport para rollout TI</p> */}
                             </div>
                             <div className="bg-[#036D3C] w-full h-[2px] mb-5" />
                             <div className="flex flex-col gap-4">
