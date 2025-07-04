@@ -36,15 +36,25 @@ const style = {
     gap: 1,
 };
 
+interface Interest
+{
+    id : number,
+    name : string
+}
+
 interface UserProfile {
     name : string,
     email : string,
     phone : string | null,
-    interests : string[],
+    interests : Interest[],
     bio : string
 }
 
 export default function Start() {
+
+    function addInterest() {
+        
+    }
 
     const [user, setUser] = useState<UserProfile | null>(null)
     const [modalInterest, setModalInterest]  = useState(true)
@@ -84,7 +94,7 @@ export default function Start() {
     const [email, setEmail] = useState("")
     const [phone, setPhone] = useState<string>("")
     const [bio, setBio] = useState("")
-    const [interests, setInterests] = useState<string[]>([])
+    const [interests, setInterests] = useState<Interest[]>([])
 
 
     const closeModal = () => {
@@ -187,9 +197,9 @@ export default function Start() {
                                     </IconButton>
                                 </div>
                                 <div className="flex flex-wrap gap-3">
-                                    {user?.interests.map((item, index) => (
-                                        <span key={index} className="bg-[#036D3C] text-white px-5 py-2 rounded-full text-sm font-medium shadow-sm">
-                                            {item}
+                                    {(user ? user.interests : []).map((item) => (
+                                        <span key={item.id} className="bg-[#036D3C] text-white px-5 py-2 rounded-full text-sm font-medium shadow-sm">
+                                            {item.name}
                                         </span>
                                     ))}
                                 </div>
@@ -314,7 +324,7 @@ export default function Start() {
                                 </Typography>
 
                                 <div className="flex items-center justify-center flex-row gap-3 mt-4">
-                                    <Button sx={{width: 100}} onClick={() => setModalInterest(false)} variant="contained" color="primary">Cancelar</Button>
+                                    <Button sx={{width: 100}} onClick={() => addInterest()} variant="contained" color="primary">Cancelar</Button>
                                     <Button sx={{width: 100}} variant="contained" color="error">Adicionar</Button>
                                 </div>
                             </Box>

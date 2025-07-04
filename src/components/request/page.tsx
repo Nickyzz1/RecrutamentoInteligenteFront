@@ -297,6 +297,31 @@ export function ApplicationRequest({id} : {id : string})
 }
 
 export function SendCandidatureRequest({id} : {id : string}){
+
+    const [note, setNote] = useState<string>("")
+
+    function send()
+    {
+        fetch(`${APIURL}/application`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("AUTH")}`,
+        },
+        body: JSON.stringify({
+            note : note,
+            vacancyId : id
+        })
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data.message);
+        })
+        .catch((err) => {
+            console.error("Erro ao se candidatar:", err);
+        });
+    }
+
     return(
         <div className="min-h-screen flex flex-col">
             <HeaderLogged />
@@ -322,9 +347,9 @@ export function SendCandidatureRequest({id} : {id : string}){
                         </div>
                         <div className="flex flex-col gap-2">
                             <p className="text-[#909192]">Descreva sua motivação</p>
-                            <textarea className="bg-white border-[1px] border-gray-200 p-5 px-6 h-60 rounded-2xl resize-none" />
+                            <textarea className="bg-white border-[1px] border-gray-200 p-5 px-6 h-60 rounded-2xl resize-none" value={note} onChange={(e) => setNote(e.target.value)}/>
                         </div>
-                        <Link href={`${ROUTES.vacancydetails}/${id}`} className="bg-[#036D3C] text-white p-2 flex justify-center items-center rounded-xl">Candidatar-se</Link>
+                        <Button onClick={send} className="bg-[#036D3C] text-white p-2 flex justify-center items-center rounded-xl">Candidatar-se</Button>
                     </div>
                 </div>
             </div>

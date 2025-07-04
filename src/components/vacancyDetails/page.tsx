@@ -10,42 +10,32 @@ import StepLabel from '@mui/material/StepLabel';
 
 
 import { Box, Button, ButtonGroup, Divider, StepContent, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { APIURL } from "@/constants/api";
+import Link from "next/link";
+import { ROUTES } from "@/constants/routes";
 const VacancyDetails = ({id} : {id : string}) => {
 
-    const data = {
+    const [data, setData] = useState<any | null>(null)
 
-        title : 'Desenvolvedor React Sênior',
-        creationDate: '05/02/2025',
-        description: 'Estamos em busca de um(a) Desenvolvedor(a) Front-end Sênior com expertise em React.js para atuar em projetos de alta complexidade, contribuindo para a construção de interfaces modernas, escaláveis e com foco em performance. Se você é apaixonado(a) por tecnologia, tem pensamento crítico, atenção aos detalhes e quer fazer parte de um time colaborativo, essa vaga é pra você!',
-        requisits: ['Ter experiência com React por mais de 4 anos', 'Ter formação superior em Ciencia da computação, Analise e desenvolvimento de sistemas, ou áreas afins', 'Possuir github atualizado'],
-        benefits:['Assistência médica','PLR','Plano odontológico','Vale mercado', 'Vale combustível'],
-        responsabilities:['Realizar versionamento de código', 'Desenvolver telas'],
-        steps : [
-            {
-                label :'Incrições',
-                startDate : '12/05/25',
-                endDate : '22/05/2025'
-            },
-            {
-                label :'Analise de candidatos',
-                startDate : '12/05/25',
-                endDate : '22/05/2025'
-            },
-            {
-                label :'Dinâmicas',
-                startDate : '12/05/25',
-                endDate : '22/05/2025'
-            },
-            {
-                label :'Entrevistas',
-                startDate : '12/05/25',
-                endDate : '22/05/2025'
-            },
-        ]
-    }
+    useEffect(() => {
 
-    
+        fetch(`${APIURL}/vacancy/${id}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("AUTH")}`,
+        }
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data.message);
+            setData(data.value)
+        })
+        .catch((err) => {
+            console.error("Erro ao buscar vaga:", err);
+        });
+    }, [])
 
     const CustomStepIcon = (props : any) => {
         const { active, completed, className } = props;
@@ -99,9 +89,9 @@ const VacancyDetails = ({id} : {id : string}) => {
                         </div>
                     </div>
                     <div className="ml-auto w-full md:w-auto flex items-center">
-                    <Button variant="contained" sx={{ backgroundColor: '#036D3C', width: '100%', maxWidth: '700px' }}>
+                    <Link style={{ backgroundColor: '#036D3C', width: '100%', maxWidth: '700px' }} href={`${ROUTES.sendcandidature}/${id}`}>
                         Candidate-se
-                    </Button>
+                    </Link>
                     </div>
                 </div>
 
@@ -118,7 +108,7 @@ const VacancyDetails = ({id} : {id : string}) => {
                             </div>
                             <div className="bg-[#efffef] flex flex-wrap gap-4 rounded-r-sm">
                                 <div className="bg-[#60a860] w-2 "></div>
-                                <p className="m-2 flex flex-wrap">{data.description}</p>
+                                <p className="m-2 flex flex-wrap">{data ? data.description : ""}</p>
                             </div>
                         </div>
                         {/* Etapas do  processo */}
@@ -126,7 +116,7 @@ const VacancyDetails = ({id} : {id : string}) => {
                             <h2 className="text-xl font-semibold">Etapas do processo</h2>
                             <div className="flex flex-wrap  rounded-xl">
                             <Stepper activeStep={activeStep} orientation="vertical">
-                                {data.steps.map((step, index) => (
+                                {(data ? data.steps : []).map((step : any, index : number) => (
                                     <Step key={index}>
                                     <StepLabel
                                         StepIconComponent={CustomStepIcon}

@@ -6,9 +6,10 @@ import { Box, Button, Divider, StepContent, Typography } from "@mui/material";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { EEducationType, EProficiencyLevel } from '@/constants/enums';
 import { APIURL } from "@/constants/api";
+import { ROUTES } from "@/constants/routes";
 
 // Interface da vaga (opcional, pode estar em um arquivo separado)
 interface IVacancy {
@@ -95,9 +96,11 @@ const VacancyPage = async ({ params }: Props) => {
 
   const data = await getVacancyById(id);
 
+  const router = useRouter()
+
   // if (!data) return notFound(); 
 
-  const vacancy: IVacancy = data;
+  const vacancy: IVacancy | null = data;
   const activeStep = 2;
 
   const CustomStepIcon = (props: any) => {
@@ -137,7 +140,7 @@ const VacancyPage = async ({ params }: Props) => {
 
         <div className="flex flex-wrap flex-col md:flex-row bg-white border-1 rounded-2xl border-gray-200 p-7 gap-9">
           <div className="flex flex-col gap-2">
-            <h1 className="text-xl font-semibold">{vacancy.title}</h1>
+            <h1 className="text-xl font-semibold">{vacancy ? vacancy.title : ""}</h1>
             <div className="flex flex-wrap gap-2">
               <CorporateFareIcon />
               <p className="font-xs text-gray-600">Darede à nuvem</p>
@@ -152,7 +155,8 @@ const VacancyPage = async ({ params }: Props) => {
             <Button
               variant="contained"
               sx={{ backgroundColor: "#036D3C", width: "100%", maxWidth: "700px" }}
-              disabled={!vacancy.canApply}
+              disabled={vacancy ? !vacancy.canApply : true}
+              onClick={() => router.push(`${ROUTES.sendcandidature}/${id}`)}
             >
               Candidate-se
             </Button>
@@ -177,7 +181,7 @@ const VacancyPage = async ({ params }: Props) => {
               </div>
               <div className="bg-[#efffef] flex flex-wrap gap-4 rounded-r-sm">
                 <div className="bg-[#60a860] w-2 "></div>
-                <p className="m-2 flex flex-wrap">{vacancy.description}</p>
+                <p className="m-2 flex flex-wrap">{vacancy ? vacancy.description : ""}</p>
               </div>
             </div>
 
@@ -185,14 +189,14 @@ const VacancyPage = async ({ params }: Props) => {
             <div className="flex flex-col bg-white border-1 rounded-2xl border-gray-200 p-7 gap-9">
               <h2 className="text-xl font-semibold">Etapas do processo</h2>
               <Stepper activeStep={activeStep} orientation="vertical">
-                {vacancy.stages.map((step) => (
+                {(vacancy ? vacancy.stages : []).map((step) => (
                   <Step key={step.id}>
                     <StepLabel StepIconComponent={CustomStepIcon}>
                       {step.description}
                     </StepLabel>
                     <StepContent>
                       <Typography variant="caption">
-                        {step.startDate} - {step.endDate}
+                        {step.startDate.toLocaleDateString()} - {step.endDate.toLocaleDateString()}
                       </Typography>
                       <Box sx={{ mb: 2, backgroundColor: "#036D3C" }}></Box>
                     </StepContent>
@@ -208,7 +212,7 @@ const VacancyPage = async ({ params }: Props) => {
               <h1 className="text-xl font-semibold">Informações da vaga</h1>
               <div className="flex flex-col gap-3">
                 <h2 className="text-sm text-gray-500">Data de publicação</h2>
-                <p>{new Date(vacancy.createdAt).toLocaleDateString()}</p>
+                <p>{new Date(vacancy ? vacancy.createdAt : "").toLocaleDateString()}</p>
                 <Divider />
               </div>
               <div className="flex flex-col gap-3">
