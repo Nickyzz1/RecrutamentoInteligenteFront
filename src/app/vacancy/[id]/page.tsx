@@ -88,16 +88,16 @@ const getVacancyById = async (id: string): Promise<IVacancy | null> => {
 };
 
 const VacancyPage = async ({ params }: Props) => {
-  const id = params.id; // ← ISSO SÓ FUNCIONA ASSIM DENTRO DE async FUNCTION   
+  const {id} = await params;
 
-  console.log("🔍 PARAMS:", params);
-  console.log("📦 ID:", id);
+  console.log("PARAMS:", params);
+  console.log("ID:", id);
 
   const data = await getVacancyById(id);
 
-  if (!data) return notFound(); // <- sai da função aqui se for null
+  // if (!data) return notFound(); 
 
-  const vacancy: IVacancy = data; // <- aqui o TypeScript sabe que não é mais null
+  const vacancy: IVacancy = data;
   const activeStep = 2;
 
   const CustomStepIcon = (props: any) => {

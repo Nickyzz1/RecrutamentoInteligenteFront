@@ -14,6 +14,7 @@ import { useState } from "react";
 const Resume = () => {
 
     interface IExperience {
+        id: number | null,
         role: string,
         company: string,
         local: string,
@@ -23,6 +24,7 @@ const Resume = () => {
     }
 
     interface IEducation {
+        id: number | null,
         instituition: string,
         degree: string,
         course: string,
@@ -53,6 +55,7 @@ const Resume = () => {
     const [listSkills, setListSkills] = useState<string[]>([])
 
     const ObjExperience: IExperience = {
+        "id": null,
         "role": role,
         "company": company,
         "description": description,
@@ -62,6 +65,7 @@ const Resume = () => {
     }
 
     const ObjEducation: IEducation = {
+        "id": null,
         "course": course,
         "degree": degree,
         "instituition": instituition,
@@ -93,10 +97,10 @@ const Resume = () => {
 
     return (
         <>
-            <div className="bg-[#d2d3d4] overflow-x-hidden">
+            <div className="bg-[#eeeeee] overflow-x-hidden">
                 <HeaderLogged />
                 <GoBack />
-                <div className="min-h-screen overflow-x-hidden flex flex-col bg-[#d2d3d4] items-center pb-6">
+                <div className="min-h-screen overflow-x-hidden flex flex-col bg-[#eeeeee] items-center pb-6">
                     {/* infos pessoais */}
                     <div className="bg-white flex flex-col max-w-[1200px] w-4/5 rounded-xl shadow p-6 word gap-6 ">
                         <h1 className="font-bold text-2xl">Meu currículo</h1>
@@ -312,13 +316,13 @@ const Resume = () => {
                             rows={4}
                 
                             />
-                            <Button
+                        <Button
                             variant="contained"
                             color="success"
                             onClick={() => addItem(setListSkills, skill)}
                             >
                             Finalizar
-                            </Button>
+                        </Button>
                         </div>
                         {/* separador */}
                     </div>
