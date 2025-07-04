@@ -6,7 +6,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import {Box, Button, Checkbox, ListItemText, MenuItem, Modal, Select, TextField, Typography } from "@mui/material"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -14,6 +14,8 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
+import { APIURL } from '@/constants/api';
+import { EEducationType, EProficiencyLevel } from '@/constants/enums';
 
 type EditVacancyProps = {
     id: string;
@@ -21,21 +23,18 @@ type EditVacancyProps = {
 
 const EditVacancyComponent = ({ id }: EditVacancyProps) => {
 
-    enum EProficiencyLevel
-    {
-        Beginner = 0,
-        Intermediate = 1,
-        Advanced = 2,
-        Fluent = 3
+    const updateFirstPage = () => {
+        // fazer requsição para update das info da primeira página aqui
     }
 
-    enum EEducationType
-    {
-        BasicEducation = 0,
-        TechnicalCourse = 1,
-        Graduation = 2,
-        PostGraduation = 3
+    const updateSecondPage = () => {
+        // fazer requsição para update das info da segunda página aqui
     }
+
+    const updateProfilePage = () => {
+        // fazer requsição para update das info da página do perfil do candidato aqui
+    }
+    
 
     interface IFullData {
         "id" : number,
@@ -48,15 +47,15 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
         "canApply" : boolean,
         "requirements" : {
             "id" : number,
-            "title" : string
+            "name" : string
         }[],
         "benefits" : {
             "id" : number,
-            "title" : string
+            "name" : string
         }[],
         "assignments" : {
             "id" : number,
-            "title" : string
+            "name" : string
         }[],
         "stages" : {
             "id" : number,
@@ -89,97 +88,56 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
         }[],
     }
 
-    // ------- fazer requisição get para conseguir dados da vaga
-    
-    const mockData : IFullData = {
-        "id": 101,
-        "title": "Desenvolvedor Frontend Pleno",
-        "description": "Buscamos um desenvolvedor frontend para integrar nosso time de tecnologia, com foco em aplicações web escaláveis utilizando React.",
-        "workDays": 15,
-        "workStart": "2025-07-01T09:00:00Z",
-        "workEnd": "2025-07-01T18:00:00Z",
-        "createdAt": "2025-06-10T12:00:00Z",
-        "canApply": true,
-        "requirements": [
-            { "id": 1, "title": "Experiência com React.js" },
-            { "id": 2, "title": "Conhecimentos sólidos em HTML, CSS e JavaScript" },
-            { "id": 3, "title": "Versionamento com Git" }
-        ],
-        "benefits": [
-            { "id": 1, "title": "Vale Refeição" },
-            { "id": 2, "title": "Plano de Saúde" },
-            { "id": 3, "title": "Auxílio Home Office" }
-        ],
-        "assignments": [
-            { "id": 1, "title": "Desenvolver interfaces responsivas com React" },
-            { "id": 2, "title": "Integrar APIs REST" },
-            { "id": 3, "title": "Escrever testes unitários com Jest" }
-        ],
-        "stages": [
-            {
-            "id": 1,
-            "description": "Triagem de currículos",
-            "startDate": "2025-06-15T00:00:00Z",
-            "endDate": "2025-06-22T23:59:59Z"
-        },
-        {
-            "id": 2,
-            "description": "Entrevista técnica",
-            "startDate": "2025-06-23T00:00:00Z",
-            "endDate": "2025-06-27T23:59:59Z"
-        },
-        {
-            "id": 3,
-            "description": "Entrevista com gestor",
-            "startDate": "2025-06-28T00:00:00Z",
-            "endDate": "2025-06-30T23:59:59Z"
-        }
-        ],
-        "desiredExperiences": [
-            { "id": 1, "name": "Desenvolvimento com React", "time": 24, "required": true },
-            { "id": 2, "name": "Integração com APIs REST", "time": 12, "required": false }
-        ],
-        "desiredEducations": [
-            { "id": 1, "name": "Ciência da Computação", "type": 3, "required": true },
-            { "id": 2, "name": "Cursos de extensão em Frontend", "type": 2, "required": false }
-        ],
-        "desiredLanguages": [
-            { "id": 1, "name": "Inglês", "level": 2, "required": true },
-            { "id": 2, "name": "Espanhol", "level": 1, "required": false }
-        ],
-        "desiredSkills": [
-            { "id": 1, "name": "React.js", "required": true },
-            { "id": 2, "name": "TypeScript", "required": true },
-            { "id": 3, "name": "Git", "required": true },
-            { "id": 4, "name": "Jest", "required": false },
-            { "id": 5, "name": "Figma", "required": false }
-        ]
-    }
-
     // ------- para processar json no front
     const getWorkDaysArray = (workDaysSum: number) => {
         const daysEnum = [1, 2, 4, 8, 16, 32, 64]; // Segunda a Domingo
         return daysEnum.filter(day => (workDaysSum & day) === day);
     };
-    
-    
+
     const [title, setTitle] = useState('')
-    const [description, setDescription] = useState(mockData.description)
+    const [description, setDescription] = useState("")
     const [benefit, setBenefit] = useState('')
     const [requirement, setRequirement] = useState('')
     const [responsability, setResponsability] = useState('')
     const [skill, setSkill] = useState('')
-    const [workStart, setWorkStart] = useState<Dayjs>(dayjs(mockData.workStart));
-    const [workEnd, setWorkEnd] = useState<Dayjs>(dayjs(mockData.workEnd));
+    const [workStart, setWorkStart] = useState<Dayjs>(dayjs(new Date()));
+    const [workEnd, setWorkEnd] = useState<Dayjs>(dayjs(new Date()));
     const [stepValue, setStepValue] = useState('')
     
-    const [listSteps, setListSteps] = useState<string[]>(mockData.stages.map(i => i.description))
-    const [listResponsabilities, setListResponsabilities] = useState<string[]>(mockData.assignments.map(item => item.title))
-    const [listRequeriments, setListRequiriments] = useState<string[]>(mockData.requirements.map(i => i.title))
-    const [listBenefits, setListBenefits] = useState<string[]>(mockData.benefits.map(i => i.title))
-    const [listSkills, setListSkills] = useState<string[]>(mockData.desiredSkills.map(i => i.name))
-    const [selectedWorkDays, setSelectedWorkDays] = useState<number[]>(getWorkDaysArray(mockData.workDays));
+    const [listSteps, setListSteps] = useState<string[]>([])
+    const [listResponsabilities, setListResponsabilities] = useState<string[]>([])
+    const [listRequeriments, setListRequiriments] = useState<string[]>([])
+    const [listBenefits, setListBenefits] = useState<string[]>([])
+    const [listSkills, setListSkills] = useState<string[]>([])
+    const [selectedWorkDays, setSelectedWorkDays] = useState<number[]>([])
     const [page, setPage] = useState(2)
+
+    // ------- fazer requisição get para conseguir dados da vaga
+
+    useEffect(() => {
+        fetch(`${APIURL}/vacancy/complete/${id}`, {
+            method: "GET",
+            headers: {
+                "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+            }
+        })
+        .then(response => response.json())
+        .then((data) => {
+            console.log(data.message)
+
+            const value : IFullData = data.value
+            setTitle(value.title)
+            setDescription(value.description)
+            setWorkStart(dayjs(value.workStart))
+            setWorkEnd(dayjs(value.workEnd))
+            setListSteps(value.stages.map(stage => stage.description))
+            setListSkills(value.desiredSkills.map(skill => skill.name))
+            setListBenefits(value.benefits.map(benefit => benefit.name))
+            setListRequiriments(value.requirements.map(requirement => requirement.name))
+            setListResponsabilities(value.assignments.map(assignment => assignment.name))
+            setSelectedWorkDays(getWorkDaysArray(value.workDays))
+        })
+    }, [])
 
     // ------- processando data
 
@@ -296,12 +254,12 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
         {page === 1 && (
             // header
             <div className="bg-white flex flex-col max-w-[1200px] w-4/5 rounded-xl shadow p-6 word gap-6">
-                <h1 className="text-2xl font-semibold">{mockData.title}</h1>
+                <h1 className="text-2xl font-semibold">{title}</h1>
                 <h2>Edite as informações da vaga</h2>
 
                 <div className='flex flex-col gap-3'>
                     <h2 className="font-semibold">Título da vaga</h2>
-                    <TextField onChange={(e) => setTitle(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))} value={mockData.title} id="outlined-basic" label="ex: Assistente de RH" variant="outlined" />
+                    <TextField onChange={(e) => setTitle(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))} value={title} id="outlined-basic" label="ex: Assistente de RH" variant="outlined" />
                 </div>
 
                 <h2 className="font-semibold">Horário de trabalho</h2>
