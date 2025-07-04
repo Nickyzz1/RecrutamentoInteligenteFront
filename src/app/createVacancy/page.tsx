@@ -784,7 +784,7 @@ const createVacancy = () => {
                                     <ArrowBackIcon />
                                     <p>Anterior</p>
                                 </Button>
-                                <Button disabled={!skip && 
+                                <Button disabled={!skip &&
                                     thirdPageData.educations.length === 0 &&
                                     thirdPageData.experiences.length === 0 &&
                                     thirdPageData.languages.length === 0} onClick={() => create()} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{ backgroundColor: '#0AA851FF' }}>

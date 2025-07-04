@@ -151,20 +151,20 @@ const VacancyTb = ({id} : IParams) => {
                     <TableCell>
                     {/* onClick={() => router.push(`/vacancydetails/${vacancy.id}`)} */}
                     <Button
-                    onClick={() => viewResume(item.id.toString()) }
-                      variant="outlined"                      
-                      sx={{
-                        borderColor: 'green',
-                        color: 'green',
-                        '&:hover': {
-                          backgroundColor: 'rgba(0, 128, 0, 0.1)', // verde clarinho no fundo ao hover
+                      onClick={() => viewResume(item.id.toString()) }
+                        variant="outlined"                      
+                        sx={{
                           borderColor: 'green',
                           color: 'green',
+                          '&:hover': {
+                            backgroundColor: 'rgba(0, 128, 0, 0.1)', // verde clarinho no fundo ao hover
+                            borderColor: 'green',
+                            color: 'green',
+                            transition: 'all 0.3s ease',
+                          },
                           transition: 'all 0.3s ease',
-                        },
-                        transition: 'all 0.3s ease',
-                      }}
-                    >
+                        }}
+                      >
                       Ver
                     </Button>
                     </TableCell>

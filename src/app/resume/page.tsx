@@ -32,6 +32,11 @@ const Resume = () => {
         endDate: Date
     }
 
+    function create()
+    {
+        
+    }
+
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [email, setEmail] = useState('')

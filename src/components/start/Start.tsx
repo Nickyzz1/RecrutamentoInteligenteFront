@@ -23,12 +23,12 @@ export default function Start() {
     const [title, setTitle] = useState<string>("")
 
     useEffect(() => {
-    fetch(`${APIURL}/vacancy?${title !== "" ? `title=${title}&` : ""}`, {
-        method: "GET",
-        headers: {
-        "Authorization": `Bearer ${localStorage.getItem("AUTH")}`
-        }
-    })
+        fetch(`${APIURL}/vacancy?${title !== "" ? `title=${title}&` : ""}`, {
+            method: "GET",
+            headers: {
+            "Authorization": `Bearer ${localStorage.getItem("AUTH")}`
+            }
+        })
         .then(response => response.json())
         .then(data => {
         console.log("📦 Dados recebidos do fetch:", data);
