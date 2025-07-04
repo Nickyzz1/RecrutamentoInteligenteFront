@@ -10,6 +10,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import DeleteIcon from '@mui/icons-material/Delete';
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
+import { EEducationStatus, EEducationType, EProficiencyLevel } from "@/constants/enums";
+import { APIURL } from "@/constants/api";
 
 const Resume = () => {
 
@@ -17,7 +19,7 @@ const Resume = () => {
         id: number | null,
         role: string,
         company: string,
-        local: string,
+        location: string,
         startDate: Date,
         endDate: Date,
         description: string
@@ -26,15 +28,234 @@ const Resume = () => {
     interface IEducation {
         id: number | null,
         instituition: string,
-        degree: string,
+        type: EEducationType,
         course: string,
         startDate: Date,
         endDate: Date
     }
 
+    interface ILanguage {
+        id: number | null,
+        name : string,
+        level : EProficiencyLevel
+    }
+
+    interface ISkill {
+        id : number | null,
+        name : string
+    }
+
     function create()
     {
-        
+        const _user = localStorage.getItem("UserData")
+        const userData = JSON.parse(_user != null ? _user : "")
+        fetch(`${APIURL}/user/profile/${userData.Id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type" : "application/json",
+                "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+            },
+            body: JSON.stringify({
+                name: name == "" ? null : name,
+                email: email == "" ? null : email,
+                phone: phone == "" ? null : phone,
+                address: adress == "" ? null : adress
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message)
+            listEducation.forEach((item) => {
+                if(item.id == null){
+                    fetch(`${APIURL}/resume/education`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type" : "application/json",
+                            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+                        },
+                        body: JSON.stringify({
+                            userId : userData.Id,
+                            status : EEducationStatus.Complete,
+                            instituition : item.instituition,
+                            type : item.type,
+                            course : item.course,
+                            startDate : item.startDate,
+                            endDate : item.endDate,
+                        })
+                    })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
+                }else{
+                    fetch(`${APIURL}/resume/experience/${item.id}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type" : "application/json",
+                            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+                        },
+                        body: JSON.stringify({
+                            status : EEducationStatus.Complete,
+                            instituition : item.instituition,
+                            type : item.type,
+                            course : item.course,
+                            startDate : item.startDate,
+                            endDate : item.endDate,
+                        })
+                    })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
+                }
+            })
+            listExperience.forEach((item) => {
+                if(item.id == null){
+                    fetch(`${APIURL}/resume/experience`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type" : "application/json",
+                            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+                        },
+                        body: JSON.stringify({
+                            userId : userData.Id,
+                            role : item.role,
+                            company : item.company,
+                            location : item.location,
+                            startDate : item.startDate,
+                            endDate : item.endDate,
+                            description : item.description,
+                        })
+                    })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
+                }else{
+                    fetch(`${APIURL}/resume/experience/${item.id}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type" : "application/json",
+                            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+                        },
+                        body: JSON.stringify({
+                            role : item.role,
+                            company : item.company,
+                            location : item.location,
+                            startDate : item.startDate,
+                            endDate : item.endDate,
+                            description : item.description,
+                        })
+                    })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
+                }
+            })
+            listSkills.forEach((item) => {
+                if(item.id == null){
+                    fetch(`${APIURL}/resume/skill`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type" : "application/json",
+                            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+                        },
+                        body: JSON.stringify({
+                            userId : userData.Id,
+                            name : item.name
+                        })
+                    })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
+                }else{
+                    fetch(`${APIURL}/resume/skill/${item.id}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type" : "application/json",
+                            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+                        },
+                        body: JSON.stringify({
+                            name : item.name
+                        })
+                    })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
+                }
+            })
+            listLanguages.forEach((item) => {
+                if(item.id == null){
+                    fetch(`${APIURL}/resume/language`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type" : "application/json",
+                            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+                        },
+                        body: JSON.stringify({
+                            userId : userData.Id,
+                            name : item.name,
+                            level: item.level
+                        })
+                    })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
+                }else{
+                    fetch(`${APIURL}/resume/experience/${item.id}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type" : "application/json",
+                            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+                        },
+                        body: JSON.stringify({
+                            name : item.name,
+                            level: item.level
+                        })
+                    })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data.message);
+                        console.log(data.value)
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
+                }
+            })
+        })
     }
 
     const [name, setName] = useState('')
@@ -49,22 +270,25 @@ const Resume = () => {
     const [endDate, setEndDate] = useState(dayjs(""))
     const [description, setDescription] = useState('Descreva suas atividades...')
     const [instituition, setInstituition] = useState('')
-    const [degree, setDegree] = useState('')
+    const [degree, setDegree] = useState<EEducationType>(EEducationType.BasicEducation)
+    const [level, setLevel] = useState<EProficiencyLevel>(EProficiencyLevel.Beginner)
     const [startDateCourse, setStartDateCourse] = useState(dayjs(''))
     const [endDateCourse, setEndDateCourse] = useState(dayjs(''))
     const [course, setCourse] = useState('')
-    const [skill, setSkill] = useState('')
+    const [skill, setSkill] = useState<string>('')
+    const [language, setLanguage] = useState<string>('')
     // lists
     const [listExperience, setListExperience] = useState<IExperience[]>([]);
     const [listEducation, setListEducation] = useState<IEducation[]>([])
-    const [listSkills, setListSkills] = useState<string[]>([])
+    const [listSkills, setListSkills] = useState<ISkill[]>([])
+    const [listLanguages, setListLanguages] = useState<ILanguage[]>([])
 
     const ObjExperience: IExperience = {
         "id": null,
         "role": role,
         "company": company,
         "description": description,
-        "local": local,
+        "location": local,
         "startDate": startDate.toDate(),
         "endDate": endDate.toDate()
     }
@@ -72,7 +296,7 @@ const Resume = () => {
     const ObjEducation: IEducation = {
         "id": null,
         "course": course,
-        "degree": degree,
+        "type": degree,
         "instituition": instituition,
         "startDate": startDate.toDate(),
         "endDate": endDate.toDate()
@@ -221,10 +445,10 @@ const Resume = () => {
                                             label="Age"
                                             onChange={(e) => setDegree(e.target.value)}
                                         >
-                                            <MenuItem value={"Básico"}>Básico</MenuItem>
-                                            <MenuItem value={"Técnico"}>Técnico</MenuItem>
-                                            <MenuItem value={"Ensino superior"}>Ensino superior</MenuItem>
-                                            <MenuItem value={"Pós-Graduação"}>Pós-Graduação</MenuItem>
+                                            <MenuItem value={EEducationType.BasicEducation}>Básico</MenuItem>
+                                            <MenuItem value={EEducationType.TechnicalCourse}>Técnico</MenuItem>
+                                            <MenuItem value={EEducationType.Graduation}>Ensino superior</MenuItem>
+                                            <MenuItem value={EEducationType.PostGraduation}>Pós-Graduação</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </div>
@@ -267,7 +491,7 @@ const Resume = () => {
                                     return (
                                         <div className="flex gap-3 items-center" key={index} >
                                             <div className="w-3 h-3 rounded-full"></div>
-                                            <p>{i.course} - {i.instituition} - {i.degree} de: {i.startDate.toString().substring(0, 15)} até {i.endDate.toString().substring(0, 15)}</p>
+                                            <p>{i.course} - {i.instituition} - {i.type} de: {i.startDate.toString().substring(0, 15)} até {i.endDate.toString().substring(0, 15)}</p>
                                             <div className='flex w-full justify-end mr-15'>
                                                 <IconButton onClick={() => removeItem(index, listExperience, setListExperience)} className=''><DeleteIcon color='error' /></IconButton>
                                             </div>
@@ -282,22 +506,22 @@ const Resume = () => {
                             <Button
                                 variant="contained"
                                 color="success"
-                                onClick={() => addItem(setListSkills, skill)}
+                                onClick={() => addItem(setListSkills, {id : null, name: skill} as ISkill)}
                             >
                                 Adicionar habilidade
                             </Button>
                         </div>
                         {/* idiomas */}
                         <div className="flex flex-col md:flex-row items-center gap-3 w-full">
-                            <TextField sx={{marginTop:4.5}} value={skill} onChange={(e) => setSkill(e.target.value)} fullWidth id="outlined-basic" label="habilidade" variant="outlined" />
+                            <TextField sx={{marginTop:4.5}} value={language} onChange={(e) => setLanguage(e.target.value)} fullWidth id="outlined-basic" label="idioma" variant="outlined" />
                             <FormControl sx={{marginTop: 4.5}} fullWidth>
                                 <InputLabel id="demo-simple-select-label">Grau</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={degree}
+                                    value={level}
                                     label="Age"
-                                    onChange={(e) => setDegree(e.target.value)}
+                                    onChange={(e) => setLevel(e.target.value)}
                                 >
                                     <MenuItem value={"Beginner"}>Básico</MenuItem>
                                     <MenuItem value={"Intermediate"}>Intermediário</MenuItem>
@@ -309,9 +533,9 @@ const Resume = () => {
                         <Button
                             variant="contained"
                             color="success"
-                            onClick={() => addItem(setListSkills, skill)}
+                            onClick={() => addItem(setListLanguages, {id : null, name: language, level: level} as ILanguage)}
                         >
-                            Adicionar habilidade
+                            Adicionar idioma
                         </Button>
                         <div className="flex flex-col w-full gap-6 ">
                             <TextField
@@ -324,7 +548,7 @@ const Resume = () => {
                         <Button
                             variant="contained"
                             color="success"
-                            onClick={() => addItem(setListSkills, skill)}
+                            onClick={() => addItem(setListSkills, {id : null, name: skill} as ISkill)}
                             >
                             Finalizar
                         </Button>

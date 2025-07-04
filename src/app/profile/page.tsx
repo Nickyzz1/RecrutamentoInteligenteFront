@@ -102,33 +102,34 @@ export default function Start() {
     }
 
     const saveChanges = () => {
+        if(user == null){return}
         const _user = localStorage.getItem("UserData")
         const userData = JSON.parse(_user != null ? _user : "")
         fetch(`${APIURL}/user/profile/${userData.Id}`, {
             method: "PATCH",
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("AUTH")}`
-            },
-            body: JSON.stringify({
-                name: name == user?.name ? null : name,
-                email: email == user?.email ? null : email,
-                bio: bio == user?.bio ? null : bio,
-                phone: phone == user?.phone ? null : phone
-            })
+                "Content-Type" : "application/json",
+            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+          },
+          body: JSON.stringify({
+            name: name == user.name ? null : name,
+            email: email == user.email ? null : email,
+            bio: bio == user.bio ? null : bio,
+            phone: phone == user.phone ? null : phone
+          })
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.message)
-                setUser({
-                    name: data.value.name,
-                    email: data.value.email,
-                    bio: data.value.bio,
-                    phone: data.value.phone,
-                    interests: user?.interests ? user.interests : [],
-                })
-                setModal(false);
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message)
+            setUser({
+                name: data.value.name,
+                email: data.value.email,
+                bio: data.value.bio,
+                phone: data.value.phone,
+                interests: user.interests ? user.interests : [],
             })
+                setModal(false);
+        })
     }
 
     const openModal = () => {
@@ -167,13 +168,13 @@ export default function Start() {
                             </div>
                         </div>
                         <div className="flex items-center flex-col gap-2 text-center mb-6">
-                            <p className="text-3xl font-bold text-[#036D3C]">{user?.name}</p>
+                            <p className="text-3xl font-bold text-[#036D3C]">{user ? user.name : ""}</p>
                         </div>
                         <div className="bg-[#036D3C] w-full h-[2px] mb-5" />
                         <div className="flex flex-col gap-4">
                             <div className="flex items-center gap-3">
                                 <Image src={_email} alt="email" className="w-6 h-6 object-contain" />
-                                <p className="text-[#666666] text-xl">{user?.email}</p>
+                                <p className="text-[#666666] text-xl">{user ? user.email : ""}</p>
                             </div>
                             <div className="flex items-center gap-3">
                                 <Image src={fone} alt="telefone" className="w-6 h-6 object-contain" />
@@ -225,7 +226,7 @@ export default function Start() {
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-center gap-3">
                                     <Image src={_email} alt="email" className="w-6 h-6 object-contain" />
-                                    <p className="text-[#666666] text-xl">E-mail: {user?.email}</p>
+                                    <p className="text-[#666666] text-xl">E-mail: {user ? user.email : ""}</p>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <Image src={fone} alt="telefone" className="w-6 h-6 object-contain" />
