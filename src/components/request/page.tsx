@@ -298,6 +298,19 @@ export function ApplicationRequest({id} : {id : string})
 
 export function SendCandidatureRequest({id} : {id : string}){
 
+    const [vacancy, setVacancy] = useState<any | null>(null)
+    
+    useEffect(() => {
+        fetch(`${APIURL}/vacancy/${id}`, {
+            method: "GET",
+            headers: {
+                "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => setVacancy(data.value))
+    }, [])
+
     const [note, setNote] = useState<string>("")
 
     function send()
@@ -332,7 +345,7 @@ export function SendCandidatureRequest({id} : {id : string}){
                 </div>
                 <div className="flex flex-col items-center w-full">
                     <div className="flex flex-col bg-white border-[1px] border-gray-200 p-10 px-12 gap-7 max-w-[1000px] w-5/6 rounded-2xl">
-                        <p className="text-3xl font-bold">Desenvolvedor React Senior</p>
+                        <p className="text-3xl font-bold">{vacancy ? vacancy.title : ""}</p>
 
                         <div className="flex flex-col gap-2">
                             <p className="text-[#909192]">Preencha seu currículo para se candidatar a esta vaga</p>

@@ -1,10 +1,11 @@
 "use client"
 
 import { Button, FormControl, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
-import { useState } from "react"; 
+import { useEffect, useState } from "react"; 
 import { ROUTES } from "@/constants/routes";
 import { useParams, useRouter } from "next/navigation";
 import { EApplicationStatus } from "@/constants/enums";
+import { APIURL } from "@/constants/api";
 
 // enum de status
 interface Candidate {
@@ -27,50 +28,6 @@ type DataJSON = {
   status: EApplicationStatus;
 }[];
 
-// ----- fazer requisição para pegar todos os candidatos da vaga
-
-const getCandidates = () => {
-
-}
-
-// mock inicial
-const mockData: DataJSON = [
-  {
-    id: 1,
-    created: "2022-02-20",
-    dismissalStage: {
-      id: 1,
-      description: "a",
-      startDate: "2022-02-20",
-      endDate: "2022-03-20",
-    },
-    candidate: {
-      id: 1,
-      name: "Sabrina Mortean Loures de Souza",
-      email: "sabrina.souza.2754@email.com",
-      phone: "41 99999-9999",
-    },
-    status: EApplicationStatus.ANALISE,
-  },
-  {
-    id: 2,
-    created: "2022-02-20",
-    dismissalStage: {
-      id: 2,
-      description: "a",
-      startDate: "2022-02-20",
-      endDate: "2022-03-20",
-    },
-    candidate: {
-      id: 2,
-      name: "Nicolle Silva",
-      email: "joao@email.com",
-      phone: "41 99999-9999",
-    },
-    status: EApplicationStatus.ANALISE,
-  },
-];
-
 // { [key: number]: string } diz que esse objeto tem chaves numéricas e valores do
 const statusOptions: { [key: string]: string } = {
   [EApplicationStatus.ANALISE]: "Em análise",
@@ -88,18 +45,49 @@ const VacancyTb = ({id} : IParams) => {
 
   const router = useRouter();
 
+  useEffect(() => {
+    fetch(`${APIURL}/vacancy/applications/${id}`, {
+        method: "GET",
+        headers: {
+            "Content-Type" : "application/json",
+            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+        }
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data.message)
+      setData(data.value)
+    })
+  }, [])
+
   const viewResume = (userId : string) => {
     // ----- fazer requisição para ver o currículo com o id da vaga e o id do candidato
     router.push(`${ROUTES.resumeCandidate}/${userId}`)
   }
     
-  const [data, setData] = useState<DataJSON>(mockData);
+  const [data, setData] = useState<DataJSON | null>(null);
 
   // ----- atualiza o status do candidato com base no ID
   const handleChange = (event: SelectChangeEvent<string>, id: number) => {
-    const updatedData = data.map((item) =>
-        item.id === id ? { ...item, status: event.target.value as EApplicationStatus } : item
-        // ----- fazer requisição de update
+    if(data == null) return
+    fetch(`${APIURL}/application/status/${id}`, {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json",
+            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
+        },
+        body: JSON.stringify({
+          status: event.target.value as EApplicationStatus
+        })
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data.message)
+      console.log(data.value)
+    })
+    const updatedData = data.map((item) => {
+      return item.id === id ? { ...item, status: event.target.value as EApplicationStatus } : item
+    }
     );
     setData(updatedData);
   };
@@ -118,7 +106,7 @@ const VacancyTb = ({id} : IParams) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((item) => (
+                {(data ? data : []).map((item) => (
                   <TableRow
                     key={item.id}
                     sx={{

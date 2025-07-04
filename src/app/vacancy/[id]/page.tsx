@@ -88,7 +88,7 @@ const getVacancyById = async (id: string): Promise<IVacancy | null> => {
   }
 };
 
-const VacancyPage = async ({ params }: Props) => {
+const VacancyPage = async ({params} : any) => {
   const {id} = await params;
 
   console.log("PARAMS:", params);
