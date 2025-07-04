@@ -80,7 +80,7 @@ const createVacancy = () => {
     const router = useRouter()
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     // controla a página de iniciação
-    const [page, setPage] = useState(3)
+    const [page, setPage] = useState(1)
     const label = { inputProps: { 'aria-label': 'Checkbox demo' }};
 
     function create()

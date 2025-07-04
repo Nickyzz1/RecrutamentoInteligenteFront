@@ -10,6 +10,7 @@ import { Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
 interface CardProps {
+    id: number,
     title: string;
     status: string;
     adress: string;
@@ -18,7 +19,8 @@ interface CardProps {
     skills: string[];
 }
 
-export const Card: React.FC<CardProps> = ({ title, status, adress, description, date, skills }) => {
+export const Card: React.FC<CardProps> = ({id, title, status, adress, description, date, skills }) => {
+
     const router = useRouter();
     return (
         <>
@@ -55,7 +57,7 @@ export const Card: React.FC<CardProps> = ({ title, status, adress, description, 
                 </div>
                 <div className="flex flex-row justify-between items-center">
                     <p className="text-[#949494]">{date.toLocaleDateString()}</p>
-                    <Button onClick={() => router.push(ROUTES.vacancydetails)} className="flex flex-row gap-2 items-center cursor-pointer ">
+                    <Button onClick={() => router.push(`${ROUTES.vacancy}/${id}`)} className="flex flex-row gap-2 items-center cursor-pointer ">
                         <p className="text-[#036D3C] ">Ver detalhes</p>
                         <Image src={seta} alt="seta" className="w-6"></Image>
                     </Button>

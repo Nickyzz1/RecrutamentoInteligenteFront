@@ -44,37 +44,43 @@ interface UserProfile {
     bio : string
 }
 
-export default async function Start() {
+export default function Start() {
 
     const [user, setUser] = useState<UserProfile | null>(null)
     const [modalInterest, setModalInterest]  = useState(true)
-    const router = useRouter()
+
     const [modal, setModal] = useState(false);
     const [bio, setBio] = useState<string>("");
 
+   const router = useRouter();
+
     const logout = () => {
-        localStorage.removeItem("AUTH")
-        router.push(ROUTES.login)
-    }
+        localStorage.removeItem("AUTH");
+        router.push(ROUTES.login);
+    };
 
     useEffect(() => {
-        const _user = localStorage.getItem("UserData")
-        const userData = JSON.parse(_user != null ? _user : "")
+        const _user = localStorage.getItem("UserData");
+        if (!_user) return;
+
+        const userData = JSON.parse(_user);
 
         fetch(`${APIURL}/user/${userData.Id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type" : "application/json",
-            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
-          },
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("AUTH")}`,
+        },
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message)
-            setUser(data.value)
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data.message);
+            setUser(data.value);
         })
-    },[])
-
+        .catch((err) => {
+            console.error("Erro ao buscar usuário:", err);
+        });
+    }, []);
 
 
     const closeModal = () => {
@@ -85,22 +91,6 @@ export default async function Start() {
     const openModal = () => {
         setModal(true);
     }
-
-
-    const _user = localStorage.getItem("UserData")
-    const userData = JSON.parse(_user != null ? _user : "")
-
-    const data = await (await fetch(`${APIURL}/user/${userData.Id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type" : "application/json",
-        "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
-      },
-    })).json()
-
-    console.log(data.message)
-
-    const user = data.value
 
     return (
         <>
