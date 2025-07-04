@@ -14,5 +14,6 @@ export enum ROUTES {
     createVacancy = '/createVacancy',
     editVacancy = '/editVacancy',
     vacancy = '/vacancy',
-    viewCandidatures = '/viewCandidatures'
+    viewCandidatures = '/viewCandidatures',
+    resumeEdit = '/resumeEdit'
 }

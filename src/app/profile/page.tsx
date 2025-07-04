@@ -14,7 +14,7 @@ import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRen
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 import { APIURL } from "@/constants/api";
-import { Box, Button, IconButton, Modal, Typography } from "@mui/material";
+import { Box, Button, IconButton, Modal, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/constants/routes";
 
@@ -36,18 +36,17 @@ const style = {
     gap: 1,
 };
 
-interface Interest
-{
-    id : number,
-    name : string
+interface Interest {
+    id: number,
+    name: string
 }
 
 interface UserProfile {
-    name : string,
-    email : string,
-    phone : string | null,
-    interests : Interest[],
-    bio : string
+    name: string,
+    email: string,
+    phone: string | null,
+    interests: Interest[],
+    bio: string
 }
 
 export default function Start() {
@@ -57,7 +56,7 @@ export default function Start() {
     }
 
     const [user, setUser] = useState<UserProfile | null>(null)
-    const [modalInterest, setModalInterest]  = useState(true)
+    const [modalInterest, setModalInterest] = useState(false)
 
     const router = useRouter()
 
@@ -66,13 +65,13 @@ export default function Start() {
         router.push(ROUTES.login);
     };
 
-    
+
     useEffect(() => {
         const _user = localStorage.getItem("UserData");
         if (!_user) return;
-        
+
         const userData = JSON.parse(_user);
-        
+
         fetch(`${APIURL}/user/${userData.Id}`, {
             method: "GET",
             headers: {
@@ -80,16 +79,16 @@ export default function Start() {
                 Authorization: `Bearer ${localStorage.getItem("AUTH")}`,
             },
         })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(data.message);
-            setUser(data.value);
-        })
-        .catch((err) => {
-            console.error("Erro ao buscar usuário:", err);
-        });
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data.message);
+                setUser(data.value);
+            })
+            .catch((err) => {
+                console.error("Erro ao buscar usuário:", err);
+            });
     }, []);
-    
+
     const [modal, setModal] = useState(false);
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -101,45 +100,49 @@ export default function Start() {
     const closeModal = () => {
         setModal(false);
     }
-    
+
     const saveChanges = () => {
         const _user = localStorage.getItem("UserData")
         const userData = JSON.parse(_user != null ? _user : "")
         fetch(`${APIURL}/user/profile/${userData.Id}`, {
             method: "PATCH",
             headers: {
-                "Content-Type" : "application/json",
-            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
-          },
-          body: JSON.stringify({
-            name: name == user?.name ? null : name,
-            email: email == user?.email ? null : email,
-            bio: bio == user?.bio ? null : bio,
-            phone: phone == user?.phone ? null : phone
-          })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message)
-            setUser({
-                name: data.value.name,
-                email: data.value.email,
-                bio: data.value.bio,
-                phone: data.value.phone,
-                interests: user?.interests ? user.interests : [],
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("AUTH")}`
+            },
+            body: JSON.stringify({
+                name: name == user?.name ? null : name,
+                email: email == user?.email ? null : email,
+                bio: bio == user?.bio ? null : bio,
+                phone: phone == user?.phone ? null : phone
             })
-            setModal(false);
         })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message)
+                setUser({
+                    name: data.value.name,
+                    email: data.value.email,
+                    bio: data.value.bio,
+                    phone: data.value.phone,
+                    interests: user?.interests ? user.interests : [],
+                })
+                setModal(false);
+            })
     }
 
     const openModal = () => {
-        if(user) {
+        if (user) {
             setName(user.name)
             setEmail(user.email)
             setPhone(user.phone ? user.phone : "")
             setBio(user.bio ? user.bio : "")
         }
         setModal(true);
+    }
+
+    const openModalInterest = () => {
+        setModalInterest(true)
     }
 
     return (
@@ -153,7 +156,7 @@ export default function Start() {
                             <IconButton onClick={logout}>
                                 <LogoutOutlinedIcon fontSize="large" color="success" />
                             </IconButton>
-                         
+
                             <IconButton onClick={() => openModal()}>
                                 <DriveFileRenameOutlineOutlinedIcon fontSize="large" color="success" />
                             </IconButton>
@@ -174,7 +177,7 @@ export default function Start() {
                             </div>
                             <div className="flex items-center gap-3">
                                 <Image src={fone} alt="telefone" className="w-6 h-6 object-contain" />
-                                <p className="text-[#666666] text-xl">{user?.phone}</p>
+                                <p className="text-[#666666] text-xl">{user?.phone ? user.phone : 'Adicione um telefone'}</p>
                             </div>
                         </div>
                     </div>
@@ -183,7 +186,7 @@ export default function Start() {
                     <div className="flex flex-col gap-8 w-full flex-1">
                         <div className="shadow-[0px_0px_5px_1px_rgba(0,_0,_0,_0.2)] rounded-[12px] p-6 bg-white flex justify-between items-center">
                             <p className="text-[#036D3C] font-semibold text-lg">Editar currículo</p>
-                            <IconButton onClick={() => openModal()}>
+                            <IconButton onClick={() => router.push(`${ROUTES.resumeEdit}`)}>
                                 <DriveFileRenameOutlineOutlinedIcon fontSize="medium" color="success" />
                             </IconButton>
                         </div>
@@ -193,30 +196,30 @@ export default function Start() {
                             <div>
                                 <div className="flex justify-between items-center mb-3">
                                     <p className="text-[#036D3C] font-semibold text-lg">Interesses</p>
-                                    <IconButton onClick={() => setModalInterest(true)}>
+                                    <IconButton onClick={openModalInterest}>
                                         <DriveFileRenameOutlineOutlinedIcon fontSize="medium" color="success" />
                                     </IconButton>
                                 </div>
                                 <div className="flex flex-wrap gap-3">
-                                    {(user ? user.interests : []).map((item, index, array) => {
-                                        if(array.length == 0){
-                                            return (
-                                                <div className="flex w-full items-center justify center">
-                                                    <p>Adicione novos interesses e eles irão aparecer aqui</p>
-                                                </div>
-                                            )
-                                        }
-                                        return (
-                                            <span key={item.id} className="bg-[#036D3C] text-white px-5 py-2 rounded-full text-sm font-medium shadow-sm">
-                                                {item.name}
-                                            </span>
-                                        )
-                                    })}
+                                    {
+                                        (user ? user.interests : []).length == 0 ?
+
+                                            <div className="flex w-full items-center justify center">
+                                                <p>Adicione novos interesses e eles irão aparecer aqui</p>
+                                            </div>
+
+                                            : (user ? user.interests : []).map((item, index, array) => {
+                                                return (
+                                                    <span key={item.id} className="bg-[#036D3C] text-white px-5 py-2 rounded-full text-sm font-medium shadow-sm">
+                                                        {item.name}
+                                                    </span>
+                                                )
+                                            })}
                                 </div>
                             </div>
                             <div className="flex items-center flex-col gap-2 text-center mb-6">
-                                
-                            {/* <p className="text-xl text-[#666666] font-semibold">Suport para rollout TI</p> */}
+
+                                {/* <p className="text-xl text-[#666666] font-semibold">Suport para rollout TI</p> */}
                             </div>
                             <div className="bg-[#036D3C] w-full h-[2px] mb-5" />
                             <div className="flex flex-col gap-4">
@@ -226,7 +229,7 @@ export default function Start() {
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <Image src={fone} alt="telefone" className="w-6 h-6 object-contain" />
-                                    <p className="text-[#666666] text-xl">{user?.phone == null ? '' : `Tel: ${user?.phone}`}</p>
+                                    <p className="text-[#666666] text-xl">{user?.phone ? user.phone : 'Adicione um telefone'}</p>
                                 </div>
                                 {/* <div className="flex items-center gap-3">
                                     <Image src={chapeu} alt="formação" className="w-6 h-6 object-contain" />
@@ -235,19 +238,19 @@ export default function Start() {
                             </div>
                         </div>
 
-                            <div>
-                                <p className="text-[#036D3C] font-bold text-lg mb-2">Biografia</p>
-                                <p className="text-base text-[#333] leading-relaxed">
-                                    {user?.bio}
-                                </p>
-                            </div>
+                        <div>
+                            <p className="text-[#036D3C] font-bold text-lg mb-2">Biografia</p>
+                            <p className="text-base text-[#333] leading-relaxed">
+                                {user?.bio ? user.bio : "Adicione uma biografia"}
+                            </p>
                         </div>
                     </div>
                 </div>
+            </div>
 
             {modal && (
                 <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-                    <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-8 relative">
+                    <div className="bg-white m-4 rounded-xl shadow-xl w-full max-w-lg p-8 relative">
 
                         {/* Imagem centralizada */}
                         <div className="flex justify-center mb-6 -mt-20">
@@ -292,7 +295,7 @@ export default function Start() {
                                     onChange={(e) => setPhone(e.target.value)}
                                 />
                             </div>
-                            
+
                             <div>
                                 <label className="text-sm text-gray-600 font-semibold">Biografia</label>
                                 <textarea
@@ -322,27 +325,33 @@ export default function Start() {
 
                         {/* modal adc interests */}
                         {/* modal para excluir */}
-                        <Modal
-                            open={modalInterest}
-                            onClose={() => setModalInterest(false)}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description">
-                            <Box sx={style}>
 
-                                <Typography id="modal-modal-title" variant="h6" component="h2">
-                                    Adicione um novo interesse
-                                </Typography>
-
-                                <div className="flex items-center justify-center flex-row gap-3 mt-4">
-                                    <Button sx={{width: 100}} onClick={() => addInterest()} variant="contained" color="primary">Cancelar</Button>
-                                    <Button sx={{width: 100}} variant="contained" color="error">Adicionar</Button>
-                                </div>
-                            </Box>
-                        </Modal>
 
                     </div>
                 </div>
             )}
+
+            
+            <Modal
+                open={modalInterest}
+                onClose={() => setModalInterest(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description">
+                <Box sx={style}>
+
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Adicione um novo interesse
+                    </Typography>
+
+                    <TextField />
+
+                    <div className="flex items-center justify-center flex-row gap-3 mt-4">
+                        <Button sx={{width: 100}} onClick={()=> setModalInterest(false)} variant="contained" color="error">Cancelar</Button>
+                        <Button sx={{width: 100}} onClick={() => addInterest()} variant="contained" color="primary">Adicionar</Button>
+                    </div>
+                </Box>
+            </Modal>
+            
         </>
     );
 }
