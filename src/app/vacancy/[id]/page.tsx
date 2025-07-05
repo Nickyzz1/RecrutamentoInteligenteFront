@@ -12,6 +12,7 @@ import { APIURL } from "@/constants/api";
 import { ROUTES } from "@/constants/routes";
 import Link from "next/link";
 import { cookies } from "next/headers";
+import { GoBackHome } from "@/components/goBackHom/page";
 
 // Interface da vaga (opcional, pode estar em um arquivo separado)
 interface IVacancy {
@@ -24,18 +25,9 @@ interface IVacancy {
   "workEnd": Date,
   "createdAt": Date,
   "canApply": boolean,
-  "requirements": {
-
-    "title": string
-  }[],
-  "benefits": {
-
-    "title": string
-  }[],
-  "assignments": {
-
-    "title": string
-  }[],
+  "requirements": string[],
+  "benefits": string[]
+  "assignments": string[],
   "stages": {
     "id": number,
     "description": string,
@@ -125,21 +117,32 @@ const VacancyPage = async ({ params, searchParams }: Props) => {
   const vacancy: IVacancy | null = data;
   const activeStep = 2;
 
-  const getContent = () : string | string[] => {
+  const getContent = (): string | string[] => {
+    if (!vacancy) return "Carregando...";
+
     switch (tab) {
       case "Descrição":
-        return vacancy? vacancy.description: "Não há descrição ainda";
+        return vacancy.description || "Não há descrição ainda.";
+
       case "Responsabilidades":
-        return vacancy? vacancy.assignments.map(a => a).join(", "): []
+        return vacancy.assignments.length > 0
+          ? vacancy.assignments
+          : ["Não há responsabilidades cadastradas."];
+
       case "Requisitos":
-        return vacancy? vacancy.requirements.map(r => r).join(", "): []
+        return vacancy.requirements.length > 0
+          ? vacancy.requirements
+          : ["Não há requisitos cadastrados."];
+
       case "Benefícios":
-        return vacancy? vacancy.benefits.map(b => b).join(", "): []
+        return vacancy.benefits.length > 0
+          ? vacancy.benefits
+          : ["Não há benefícios cadastrados."];
+
       default:
-        return vacancy? vacancy.description: "Não há descrição ainda";
+        return "Conteúdo não disponível.";
     }
   };
-
   //  const CustomStepIcon = (props: any) => {
   //   // desestrutura as props que você usa e ignora o resto, inclusive last
   //   const { active, completed, className, ...other } = props;
@@ -177,8 +180,7 @@ const VacancyPage = async ({ params, searchParams }: Props) => {
     <>
       <HeaderLogged />
       <div className="flex flex-col w-screen min-h-screen overflow-x-hidden p-2 lg:px-32 gap-5">
-        <GoBack />
-
+        <GoBackHome/>
         <div className="flex flex-wrap flex-col md:flex-row bg-white border-1 rounded-2xl border-gray-200 p-7 gap-9">
           <div className="flex flex-col gap-2">
             <h1 className="text-xl font-semibold">{vacancy ? vacancy.title : "Sem título"}</h1>
@@ -239,7 +241,7 @@ const VacancyPage = async ({ params, searchParams }: Props) => {
                             }
                           : {}),
                       }} variant={tab === item ? "contained" : "outlined"}>
-                        {item}
+                        {item.length != 0? item : "Não itens ainda."}
                       </Button>
                     </Link>
                   ))}
@@ -252,7 +254,7 @@ const VacancyPage = async ({ params, searchParams }: Props) => {
                 <p className="m-2 flex flex-wrap">{content}</p> ) : (
                     <ul className="list-disc list-inside space-y-1 pl-4">
                       {content.map((item, index) => (
-                        <li key={index} className="text-justify">{item}</li>
+                        <li key={index} className="text-justify text-black">{item}</li>
                       ))}
                     </ul>
                 )}

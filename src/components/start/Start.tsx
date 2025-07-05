@@ -21,29 +21,59 @@ export default function Start() {
 
     const [vacancies, setVacancies] = useState<IVacancyData[]>([])
     const [title, setTitle] = useState<string>("")
+    const [allVacancies, setAllVacancies] = useState<IVacancyData[]>([]);
+    const [filteredVacancies, setFilteredVacancies] = useState<IVacancyData[]>([]);
+    const [search, setSearch] = useState("");
+
+    // useEffect(() => {
+    //     fetch(`${APIURL}/vacancy?${title !== "" ? `title=${title}&` : ""}`, {
+    //         method: "GET",
+    //         headers: {
+    //         "Authorization": `Bearer ${localStorage.getItem("AUTH")}`
+    //         }
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //     console.log("📦 Dados recebidos do fetch:", data);
+    //     if (Array.isArray(data.value)) {
+    //         setVacancies(data.value);
+    //     } else {
+    //         console.error("A propriedade `value` não é um array:", data.value);
+    //         setVacancies([]);
+    //     }
+    //     })
+    //     .catch(err => {
+    //     console.error("Erro ao buscar vagas:", err);
+    //     setVacancies([]);
+    //     });
+    // }, [title]);
 
     useEffect(() => {
-        fetch(`${APIURL}/vacancy?${title !== "" ? `title=${title}&` : ""}`, {
-            method: "GET",
-            headers: {
-            "Authorization": `Bearer ${localStorage.getItem("AUTH")}`
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-        console.log("📦 Dados recebidos do fetch:", data);
+    fetch(`${APIURL}/vacancy`, {
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${localStorage.getItem("AUTH")}`,
+        },
+    })
+        .then((res) => res.json())
+        .then((data) => {
         if (Array.isArray(data.value)) {
-            setVacancies(data.value);
-        } else {
-            console.error("A propriedade `value` não é um array:", data.value);
-            setVacancies([]);
+            setAllVacancies(data.value);
+            setFilteredVacancies(data.value); // mostra tudo no começo
         }
-        })
-        .catch(err => {
-        console.error("Erro ao buscar vagas:", err);
-        setVacancies([]);
         });
-    }, [title]);
+    }, []);
+
+    useEffect(() => {
+    const busca = search.toLowerCase();
+
+    const resultado = allVacancies.filter((v) =>
+        v.title.toLowerCase().includes(busca)
+    );
+
+    setFilteredVacancies(resultado);
+    }, [search, allVacancies]);
+
 
     return (
         <div className="flex max-w-screen overflow-hidden flex-col items-center justify-center bg-[#F9FAFB]">
@@ -65,16 +95,16 @@ export default function Start() {
                         </button>
                         <input
                             type="text"
-                            className="text-md placeholder:text-[#909192] outline-hidden"
+                            className="text-md placeholder:text-[#909192] outline-hidden w-full"
                             placeholder="Pesquise por cargo"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
                         ></input>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 flex-wrap gap-10 justify-center py-6">
-                    {Array.isArray(vacancies) && vacancies.length > 0 ? (
-                        vacancies.map((item, index) => (
+                    <div className="grid w-full items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 flex-wrap gap-10 justify-center py-6">
+                    {filteredVacancies.length > 0 ? (
+                        filteredVacancies.map((item, index) => (
                             <Card
                             key={index}
                             id={item.id}
@@ -87,7 +117,9 @@ export default function Start() {
                             />
                         ))
                         ) : (
-                        <p className="text-gray-500">Nenhuma vaga encontrada.</p>
+                        <div className="flex absolute w-full justify-center items-center">
+                            <p className="text-gray-500 text-lg">Nenhuma vaga encontrada.</p>
+                        </div>
                         )}
 
                     </div>
