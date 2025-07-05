@@ -187,7 +187,7 @@ export default function Start() {
                     <div className="flex flex-col gap-8 w-full flex-1">
                         <div className="shadow-[0px_0px_5px_1px_rgba(0,_0,_0,_0.2)] rounded-[12px] p-6 bg-white flex justify-between items-center">
                             <p className="text-[#036D3C] font-semibold text-lg">Editar currículo</p>
-                            <IconButton onClick={() => router.push(`${ROUTES.resumeEdit}`)}>
+                            <IconButton onClick={() => router.push(`${ROUTES.resume}`)}>
                                 <DriveFileRenameOutlineOutlinedIcon fontSize="medium" color="success" />
                             </IconButton>
                         </div>

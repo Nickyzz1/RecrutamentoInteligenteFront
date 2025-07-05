@@ -47,6 +47,8 @@ const Resume = () => {
 
     function create()
     {
+        try {
+
         const _user = localStorage.getItem("UserData")
         const userData = JSON.parse(_user != null ? _user : "")
         fetch(`${APIURL}/user/profile/${userData.Id}`, {
@@ -211,7 +213,7 @@ const Resume = () => {
                     });
                 }
             })
-            listLanguages.forEach((item) => {
+            listLanguages?.forEach((item) => {
                 if(item.id == null){
                     fetch(`${APIURL}/resume/language`, {
                         method: "POST",
@@ -229,10 +231,12 @@ const Resume = () => {
                     .then((data) => {
                         console.log(data.message);
                         console.log(data.value)
+                        
                     })
                     .catch((err) => {
                         console.error(err);
                     });
+                    
                 }else{
                     fetch(`${APIURL}/resume/experience/${item.id}`, {
                         method: "PATCH",
@@ -249,6 +253,7 @@ const Resume = () => {
                     .then((data) => {
                         console.log(data.message);
                         console.log(data.value)
+                        window.history.back()
                     })
                     .catch((err) => {
                         console.error(err);
@@ -256,6 +261,12 @@ const Resume = () => {
                 }
             })
         })
+            
+        } catch (error) {
+            console.log(error)
+        } finally {
+            window.history.back();
+        }
     }
 
 
@@ -324,7 +335,7 @@ const Resume = () => {
         setDescription('')
         setStartDate(dayjs(""))
         setEndDate(dayjs(""))
-        window.history.back()
+        create()
     }
     
         useEffect(() => {
@@ -343,14 +354,14 @@ const Resume = () => {
         .then(response => response.json())
         .then(data => {
             console.log(data)
-            setName(data.value.name? data.value.name: "")
-            setEmail(data.value.email? data.value.email: "")
-            setPhone(data.value.phone? data.value.phone: "")
-            setAdress(data.value.adress? data.value.adress : "")
-            setListEducation(data.value.educations ? data.value.educations : [])
+            setName(data.value.name != null? data.value.name: "")
+            setEmail(data.value.email != null? data.value.email: "")
+            setPhone(data.value.phone != null? data.value.phone: "")
+            setAdress(data.value.adress != null? data.value.adress : "")
+            setListEducation(data.value.educations != null ? data.value.educations : [])
             setListExperience(data.value.experiences ? data.value.experiences : [])
-            setListLanguages(data.value.languages? data.value.language : [])
-            setListSkills(data.value.skills? data.value.skills : [])
+            setListLanguages(data.value.languages != null? data.value.language : [])
+            setListSkills(data.value.skills != null? data.value.skills : [])
         })
         .catch(err => {
             console.error("❌ Erro ao buscar currículo:", err);
@@ -371,23 +382,23 @@ const Resume = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="flex flex-col gap-3">
                                 <h2>Nome completo</h2>
-                                <TextField value={name} onChange={(e) => setName(e.target.value)} fullWidth id="outlined-basic" label="ex: Eduardo Ribeiro" variant="outlined" />
+                                <TextField value={name ?? ""} onChange={(e) => setName(e.target.value)} fullWidth id="outlined-basic" label="ex: Eduardo Ribeiro" variant="outlined" />
                             </div>
                             <div className="flex flex-col gap-3">
                                 <h2>Email</h2>
-                                <TextField value={email} onChange={(e) => setEmail(e.target.value)} fullWidth id="outlined-basic" label="ex: EduardoRibeiro@email.com" variant="outlined" />
+                                <TextField value={email ?? ""} onChange={(e) => setEmail(e.target.value)} fullWidth id="outlined-basic" label="ex: EduardoRibeiro@email.com" variant="outlined" />
                             </div>
                             <div className="flex flex-col gap-3">
                                 <h2>Telefone</h2>
-                                <TextField value={phone} onChange={(e) => setPhone(e.target.value)} fullWidth id="outlined-basic" label="ex: 41 99999-9999" variant="outlined" />
+                                <TextField value={phone ?? ""} onChange={(e) => setPhone(e.target.value)} fullWidth id="outlined-basic" label="ex: 41 99999-9999" variant="outlined" />
                             </div>
                             <div className="flex flex-col gap-3">
                                 <h2>Endereço</h2>
-                                <TextField value={adress} onChange={(e) => setAdress(e.target.value)} fullWidth id="outlined-basic" label="ex: Rua Eduardo Ribeiro Ribas" variant="outlined" />
+                                <TextField value={adress ?? ""} onChange={(e) => setAdress(e.target.value)} fullWidth id="outlined-basic" label="ex: Rua Eduardo Ribeiro Ribas" variant="outlined" />
                             </div>
                             <div className="flex flex-col gap-3">
                                 <h2>Linkedin</h2>
-                                <TextField value={linkedin} onChange={(e) => setLinkedin(e.target.value)} fullWidth id="outlined-basic" label="Digite seu link do linkedin" variant="outlined" />
+                                <TextField value={linkedin ?? ""} onChange={(e) => setLinkedin(e.target.value)} fullWidth id="outlined-basic" label="Digite seu link do linkedin" variant="outlined" />
                             </div>
                         </div>
                         <Divider />
@@ -398,16 +409,16 @@ const Resume = () => {
                                 <div className="flex flex-col md:flex-row gap-3 w-full">
                                     <div className="flex w-full flex-col gap-3">
                                         <h2>Cargo</h2>
-                                        <TextField value={role} onChange={(e) => setRole(e.target.value)} fullWidth id="outlined-basic" label="ex: Assistente de RH" variant="outlined" />
+                                        <TextField value={role ?? ""} onChange={(e) => setRole(e.target.value)} fullWidth id="outlined-basic" label="ex: Assistente de RH" variant="outlined" />
                                     </div>
                                     <div className="flex w-full flex-col gap-3">
                                         <h2>Empresa</h2>
-                                        <TextField value={company} onChange={(e) => setCompany(e.target.value)} fullWidth id="outlined-basic" label="Digite a empresa" variant="outlined" />
+                                        <TextField value={company ?? ""} onChange={(e) => setCompany(e.target.value)} fullWidth id="outlined-basic" label="Digite a empresa" variant="outlined" />
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-3">
                                     <h2>Local</h2>
-                                    <TextField value={local} onChange={(e) => setLocal(e.target.value)} fullWidth id="outlined-basic" label="Curitiba - PR" variant="outlined" />
+                                    <TextField value={local ?? ""} onChange={(e) => setLocal(e.target.value)} fullWidth id="outlined-basic" label="Curitiba - PR" variant="outlined" />
                                 </div>
                                 <div className="flex md:flex-row flex-col gap-3 w-full">
                                     <div className="">
@@ -434,7 +445,7 @@ const Resume = () => {
                                     label="Descrição"
                                     multiline
                                     rows={4}
-                                    value={description}
+                                    value={description ?? ""}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
                                 <Button
@@ -488,7 +499,7 @@ const Resume = () => {
                                 </div>
                                 <div className="flex flex-col gap-3">
                                     <h2>Course</h2>
-                                    <TextField value={course} onChange={(e) => setCourse(e.target.value)} fullWidth id="outlined-basic" label="Curitiba - PR" variant="outlined" />
+                                    <TextField value={course ?? ""} onChange={(e) => setCourse(e.target.value)} fullWidth id="outlined-basic" label="Curitiba - PR" variant="outlined" />
                                 </div>
                                 <div className="flex md:flex-row flex-col gap-3 w-full">
                                     <div className="">
@@ -536,7 +547,7 @@ const Resume = () => {
                         </div>
                         {/* skills */}
                         <div className="flex w-full flex-col gap-3">
-                            <TextField value={skill} onChange={(e) => setSkill(e.target.value)} fullWidth id="outlined-basic" label="habilidade" variant="outlined" />
+                            <TextField value={skill ?? ""} onChange={(e) => setSkill(e.target.value)} fullWidth id="outlined-basic" label="habilidade" variant="outlined" />
                             <Button
                                 variant="contained"
                                 color="success"
@@ -547,7 +558,7 @@ const Resume = () => {
                         </div>
                         {/* idiomas */}
                         <div className="flex flex-col md:flex-row items-center gap-3 w-full">
-                            <TextField sx={{marginTop:4.5}} value={language} onChange={(e) => setLanguage(e.target.value)} fullWidth id="outlined-basic" label="idioma" variant="outlined" />
+                            <TextField sx={{marginTop:4.5}} value={language ?? ""} onChange={(e) => setLanguage(e.target.value)} fullWidth id="outlined-basic" label="idioma" variant="outlined" />
                             <FormControl sx={{marginTop: 4.5}} fullWidth>
                                 <InputLabel id="demo-simple-select-label">Grau</InputLabel>
                                 <Select
@@ -574,10 +585,10 @@ const Resume = () => {
                         <div className="flex flex-col w-full gap-6 ">
                             <TextField
                             id="outlined-multiline-static"
-                            label="Nota para recrutador"
+                            label="Escreva sobre você"
                             multiline
                             rows={4}
-                
+                            
                             />
                         <Button
                             variant="contained"

@@ -12,6 +12,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
 import {EProficiencyLevel, EEducationType, EApplicationStatus, EEducationStatus} from '@/constants/enums'
 import { APIURL } from "@/constants/api";
+import { useRouter } from "next/navigation";
 
 const ResumeEdit = () => {
 
@@ -82,7 +83,7 @@ const ResumeEdit = () => {
             setName(userData.name)
             setEmail(userData.email)
             setPhone(userData.phone != null? data.value.phone : '')
-            setAdress(userData.address)
+            setAdress(userData.address != null? data.value.adress : '')
             setListExperience(userData.experiences)
             setListEducation(userData.educations)
     
@@ -91,6 +92,8 @@ const ResumeEdit = () => {
             console.error("Erro ao buscar usuário:", err);
         });
     }, []);
+
+    const router = useRouter
     
     const [name, setName] = useState<string>('')
     const [phone, setPhone] = useState<string>('')
@@ -154,6 +157,7 @@ const ResumeEdit = () => {
         setDescription('')
         setStartDate(dayjs(""))
         setEndDate(dayjs(""))
+        router.psuh(ROUTES.profile)
     }
     
     return (
