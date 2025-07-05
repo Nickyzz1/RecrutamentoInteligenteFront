@@ -51,9 +51,77 @@ interface UserProfile {
 
 export default function Start() {
 
-    function addInterest() {
 
+    interface ISkill {
+        id: number | null,
+        name: string
     }
+    const [listSkills, setListSkills] = useState<ISkill[]>([])
+
+    useEffect(() => {
+        const _user = localStorage.getItem("UserData");
+        if (!_user) return;
+
+        const userData = JSON.parse(_user);
+        const userId = userData.Id
+
+        fetch(`${APIURL}/user/${userId}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("AUTH")}`
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setListSkills(data.value.skills != null ? data.value.skills : [])
+            })
+            .catch(err => {
+                console.error("❌ Erro ao buscar currículo:", err);
+            });
+
+    }, [])
+
+    function addSkill() {
+        const _user = localStorage.getItem("UserData")
+        const userData = JSON.parse(_user != null ? _user : "")
+
+        fetch(`${APIURL}/user/profile/${userData.Id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("AUTH")}`
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                listSkills.forEach((item) => {
+                    if (item.id == null) {
+                        fetch(`${APIURL}/resume/skill`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${localStorage.getItem("AUTH")}`
+                            },
+                            body: JSON.stringify({
+                                userId: userData.Id,
+                                name: item.name
+                            })
+                        })
+                            .then((res) => res.json())
+                            .then((data) => {
+                                console.log(data.message);
+                                console.log(data.value)
+                                setModalInterest(false)
+                            })
+                            .catch((err) => {
+                                console.error(err);
+                            });
+                    }
+                });
+            });
+    }
+
 
     const [user, setUser] = useState<UserProfile | null>(null)
     const [modalInterest, setModalInterest] = useState(false)
@@ -102,34 +170,34 @@ export default function Start() {
     }
 
     const saveChanges = () => {
-        if(user == null){return}
+        if (user == null) { return }
         const _user = localStorage.getItem("UserData")
         const userData = JSON.parse(_user != null ? _user : "")
         fetch(`${APIURL}/user/profile/${userData.Id}`, {
             method: "PATCH",
             headers: {
-                "Content-Type" : "application/json",
-            "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
-          },
-          body: JSON.stringify({
-            name: name == user.name ? null : name,
-            email: email == user.email ? null : email,
-            bio: bio == user.bio ? null : bio,
-            phone: phone == user.phone ? null : phone
-          })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message)
-            setUser({
-                name: data.value.name,
-                email: data.value.email,
-                bio: data.value.bio,
-                phone: data.value.phone,
-                interests: user.interests ? user.interests : [],
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("AUTH")}`
+            },
+            body: JSON.stringify({
+                name: name == user.name ? null : name,
+                email: email == user.email ? null : email,
+                bio: bio == user.bio ? null : bio,
+                phone: phone == user.phone ? null : phone
             })
-                setModal(false);
         })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message)
+                setUser({
+                    name: data.value.name,
+                    email: data.value.email,
+                    bio: data.value.bio,
+                    phone: data.value.phone,
+                    interests: user.interests ? user.interests : [],
+                })
+                setModal(false);
+            })
     }
 
     const openModal = () => {
@@ -196,26 +264,26 @@ export default function Start() {
 
                             <div>
                                 <div className="flex justify-between items-center mb-3">
-                                    <p className="text-[#036D3C] font-semibold text-lg">Interesses</p>
+                                    <p className="text-[#036D3C] font-semibold text-lg">Habilidades</p>
                                     <IconButton onClick={openModalInterest}>
                                         <DriveFileRenameOutlineOutlinedIcon fontSize="medium" color="success" />
                                     </IconButton>
                                 </div>
                                 <div className="flex flex-wrap gap-3">
                                     {
-                                        (user ? user.interests : []).length == 0 ?
+                                        (listSkills.length == 0 ?
 
                                             <div className="flex w-full items-center justify center">
-                                                <p>Adicione novos interesses e eles irão aparecer aqui</p>
+                                                <p>Adicione novas skills e eles irão aparecer aqui</p>
                                             </div>
 
-                                            : (user ? user.interests : []).map((item, index, array) => {
+                                            : listSkills.map((item) => {
                                                 return (
                                                     <span key={item.id} className="bg-[#036D3C] text-white px-5 py-2 rounded-full text-sm font-medium shadow-sm">
                                                         {item.name}
                                                     </span>
                                                 )
-                                            })}
+                                            }))}
                                 </div>
                             </div>
                             <div className="flex items-center flex-col gap-2 text-center mb-6">
@@ -233,9 +301,9 @@ export default function Start() {
                                     <p className="text-[#666666] text-xl">{user?.phone ? user.phone : 'Adicione um telefone'}</p>
                                 </div>
                                 {/* <div className="flex items-center gap-3">
-                                    <Image src={chapeu} alt="formação" className="w-6 h-6 object-contain" />
-                                    <p className="text-[#666666] text-xl">Engenharia de software</p>
-                                </div> */}
+                <Image src={chapeu} alt="formação" className="w-6 h-6 object-contain" />
+                <p className="text-[#666666] text-xl">Engenharia de software</p>
+            </div> */}
                             </div>
                         </div>
 
@@ -332,7 +400,7 @@ export default function Start() {
                 </div>
             )}
 
-            
+
             <Modal
                 open={modalInterest}
                 onClose={() => setModalInterest(false)}
@@ -341,18 +409,19 @@ export default function Start() {
                 <Box sx={style}>
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Adicione um novo interesse
+                        Adicione uma nova skill
                     </Typography>
 
                     <TextField />
 
                     <div className="flex items-center justify-center flex-row gap-3 mt-4">
-                        <Button sx={{width: 100}} onClick={()=> setModalInterest(false)} variant="contained" color="error">Cancelar</Button>
-                        <Button sx={{width: 100}} onClick={() => addInterest()} variant="contained" color="primary">Adicionar</Button>
+                        <Button sx={{ width: 100, }} onClick={() => setModalInterest(false)} variant="contained" color="error">Cancelar</Button>
+                        <Button sx={{ width: 100, }} onClick={() => addSkill()} variant="contained" color="primary">Adicionar</Button>
                     </div>
                 </Box>
             </Modal>
-            
+
         </>
     );
 }
+

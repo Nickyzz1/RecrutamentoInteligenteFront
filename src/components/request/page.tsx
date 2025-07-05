@@ -121,6 +121,8 @@ export function ApplicationRequest({id} : {id : string})
         })
     
     }, [])
+
+    console.log(user)
     return(
         <>
             <HeaderLoggedAdmin/>

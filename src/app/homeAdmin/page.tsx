@@ -125,7 +125,7 @@ const manageAplication = () => {
                             <p>Nova vaga</p>
                         </Button>
                     </div>
-                 <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-6">
+                 <div className="grid w-full items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 flex-wrap gap-10 justify-center py-6">
                     {vacancies.map((item, index) => (
                         <Card
                             key={index}
