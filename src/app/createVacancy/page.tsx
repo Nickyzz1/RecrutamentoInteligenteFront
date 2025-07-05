@@ -85,6 +85,7 @@ const createVacancy = () => {
 
     function create()
     {
+    
         const vacancy: IVacancyFirstData = {
             title: title,
             description: description,
@@ -106,6 +107,20 @@ const createVacancy = () => {
             listResponsabilities.forEach((item) => {
                 let data : any = {name: item, vacancyId: vacancyData.value.id}
                 fetch(`${APIURL}/vacancy/assignment`,{
+                    method: `POST`,
+                    headers: {
+                        "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`,
+                        "Content-type" : "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(res => res.json())
+                .then(data => console.log(data))
+                .catch(error => console.log(error))
+            })
+            listSteps.forEach((item) => {
+                let data : any = {name: item, vacancyId: vacancyData.value.id}
+                fetch(`${APIURL}/vacancy/stages`,{
                     method: `POST`,
                     headers: {
                         "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`,

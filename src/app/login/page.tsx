@@ -32,6 +32,7 @@ export default function Login() {
       }else{
         response.json().then((data) => {
           localStorage.setItem("AUTH", data.token)
+          document.cookie = `token=${data.token}; path=/; max-age=86400; Secure; SameSite=Strict`;
           let userData = jwt.decode(data.token)
           localStorage.setItem("UserData", JSON.stringify(userData))
           const tokenData = JSON.parse(JSON.stringify(userData))

@@ -9,7 +9,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import DeleteIcon from '@mui/icons-material/Delete';
 import dayjs, { Dayjs } from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EEducationStatus, EEducationType, EProficiencyLevel } from "@/constants/enums";
 import { APIURL } from "@/constants/api";
 
@@ -258,6 +258,8 @@ const Resume = () => {
         })
     }
 
+
+    
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [email, setEmail] = useState('')
@@ -282,7 +284,7 @@ const Resume = () => {
     const [listEducation, setListEducation] = useState<IEducation[]>([])
     const [listSkills, setListSkills] = useState<ISkill[]>([])
     const [listLanguages, setListLanguages] = useState<ILanguage[]>([])
-
+    
     const ObjExperience: IExperience = {
         "id": null,
         "role": role,
@@ -310,7 +312,7 @@ const Resume = () => {
         const updatedList = list.filter((_, i) => i !== index);
         setList(updatedList);
     }
-
+    
     function addItem<T>(
         setList: React.Dispatch<React.SetStateAction<T[]>>,
         obj: T
@@ -322,8 +324,40 @@ const Resume = () => {
         setDescription('')
         setStartDate(dayjs(""))
         setEndDate(dayjs(""))
+        window.history.back()
     }
+    
+        useEffect(() => {
+        const _user = localStorage.getItem("UserData");
+        if (!_user) return;
 
+        const userData = JSON.parse(_user);
+        const userId = userData.Id 
+    
+        fetch(`${APIURL}/user/${userId}`, {
+            method: "GET",
+            headers: {
+            "Authorization": `Bearer ${localStorage.getItem("AUTH")}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            setName(data.value.name? data.value.name: "")
+            setEmail(data.value.email? data.value.email: "")
+            setPhone(data.value.phone? data.value.phone: "")
+            setAdress(data.value.adress? data.value.adress : "")
+            setListEducation(data.value.educations ? data.value.educations : [])
+            setListExperience(data.value.experiences ? data.value.experiences : [])
+            setListLanguages(data.value.languages? data.value.language : [])
+            setListSkills(data.value.skills? data.value.skills : [])
+        })
+        .catch(err => {
+            console.error("❌ Erro ao buscar currículo:", err);
+        });
+    
+        },[])
+    
     return (
         <>
             <div className="bg-[#eeeeee] overflow-x-hidden">

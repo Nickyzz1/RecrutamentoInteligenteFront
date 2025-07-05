@@ -35,12 +35,12 @@ export default function Start() {
         if (Array.isArray(data.value)) {
             setVacancies(data.value);
         } else {
-            console.error("❌ A propriedade `value` não é um array:", data.value);
+            console.error("A propriedade `value` não é um array:", data.value);
             setVacancies([]);
         }
         })
         .catch(err => {
-        console.error("❌ Erro ao buscar vagas:", err);
+        console.error("Erro ao buscar vagas:", err);
         setVacancies([]);
         });
     }, [title]);
@@ -72,7 +72,7 @@ export default function Start() {
                         ></input>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 flex-wrap gap-10 justify-center py-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 flex-wrap gap-10 justify-center py-6">
                     {Array.isArray(vacancies) && vacancies.length > 0 ? (
                         vacancies.map((item, index) => (
                             <Card

@@ -11,59 +11,60 @@ import { EEducationType, EProficiencyLevel } from '@/constants/enums';
 import { APIURL } from "@/constants/api";
 import { ROUTES } from "@/constants/routes";
 import Link from "next/link";
+import { cookies } from "next/headers";
 
 // Interface da vaga (opcional, pode estar em um arquivo separado)
 interface IVacancy {
-    
-    "id" : number,
-    "title" : string,
-    "description" : string,
-    "workDays" : number,
-    "workStart" : Date,
-    "workEnd" : Date,
-    "createdAt" : Date,
-    "canApply" : boolean,
-    "requirements" : {
-        "id" : number,
-        "title" : string
-    }[],
-    "benefits" : {
-        "id" : number,
-        "title" : string
-    }[],
-    "assignments" : {
-        "id" : number,
-        "title" : string
-    }[],
-    "stages" : {
-        "id" : number,
-        "description" : string,
-        "startDate" : Date,
-        "endDate" : Date
-    }[],
-    "desiredExperiences" : {
-        "id" : number,
-        "name" : string,
-        "time" : number,
-        "required" : boolean
-    }[],
-    "desiredEducations" : {
-        "id" : number,
-        "name" : string,
-        "type" : EEducationType,
-        "required" : boolean
-    }[],
-    "desiredLanguages" : {
-        "id" : number,
-        "name" : string,
-        "level" : EProficiencyLevel,
-        "required" : boolean
-    }[],
-    "desiredSkills" : {
-        "id" : number,
-        "name" : string,
-        "required" : boolean
-    }[],
+
+  "id": number,
+  "title": string,
+  "description": string,
+  "workDays": number,
+  "workStart": Date,
+  "workEnd": Date,
+  "createdAt": Date,
+  "canApply": boolean,
+  "requirements": {
+
+    "title": string
+  }[],
+  "benefits": {
+
+    "title": string
+  }[],
+  "assignments": {
+
+    "title": string
+  }[],
+  "stages": {
+    "id": number,
+    "description": string,
+    "startDate": Date,
+    "endDate": Date
+  }[],
+  "desiredExperiences": {
+    "id": number,
+    "name": string,
+    "time": number,
+    "required": boolean
+  }[],
+  "desiredEducations": {
+    "id": number,
+    "name": string,
+    "type": EEducationType,
+    "required": boolean
+  }[],
+  "desiredLanguages": {
+    "id": number,
+    "name": string,
+    "level": EProficiencyLevel,
+    "required": boolean
+  }[],
+  "desiredSkills": {
+    "id": number,
+    "name": string,
+    "required": boolean
+  }[],
 
 }
 
@@ -75,13 +76,27 @@ interface Props {
 
 const getVacancyById = async (id: string): Promise<IVacancy | null> => {
   try {
+    const token = (await cookies()).get("token")?.value;
+    if (!token) {
+      console.warn("Token não encontrado no localStorage");
+      return null;
+    }
+
     const res = await fetch(`${APIURL}/vacancy/${id}`, {
-      cache: "no-store", // evita cache em dev
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
 
-    if (!res.ok) return null;
-
-    const data: IVacancy = await res.json();
+    if (!res.ok) {
+      console.warn(`Erro ao buscar vaga - Status: ${res.status}`);
+      return null;
+    }
+    const response = await res.json()
+    const data: IVacancy = response.value;
     return data;
   } catch (error) {
     console.error("Erro ao buscar vaga:", error);
@@ -89,47 +104,74 @@ const getVacancyById = async (id: string): Promise<IVacancy | null> => {
   }
 };
 
-const VacancyPage = async ({params} : any) => {
-  const {id} = await params;
+interface Props {
+  params: {
+    id: string;
+  };
+  searchParams?: {
+    tab?: string;
+  };
+}
 
-  console.log("PARAMS:", params);
-  console.log("ID:", id);
+const VacancyPage = async ({ params, searchParams }: Props) => {
 
+  const { id } = await params;
   const data = await getVacancyById(id);
+  const tab = await searchParams?.tab ?? "Descrição";
+  console.log("data:", data);
 
   // if (!data) return notFound(); 
 
   const vacancy: IVacancy | null = data;
   const activeStep = 2;
 
-  const CustomStepIcon = (props: any) => {
-    const { active, completed, className } = props;
-    let color = "#B0BEC5";
-    if (active) color = "#036D3C";
-    if (completed) color = "#339d6c";
-
-    return (
-      <div
-        className={className}
-        style={{
-          color: "#f0f0f0",
-          borderRadius: "50%",
-          backgroundColor: color,
-          width: 24,
-          height: 24,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontWeight: "bold",
-        }}
-      >
-        ✓
-      </div>
-    );
+  const getContent = () : string | string[] => {
+    switch (tab) {
+      case "Descrição":
+        return vacancy? vacancy.description: "Não há descrição ainda";
+      case "Responsabilidades":
+        return vacancy? vacancy.assignments.map(a => a).join(", "): []
+      case "Requisitos":
+        return vacancy? vacancy.requirements.map(r => r).join(", "): []
+      case "Benefícios":
+        return vacancy? vacancy.benefits.map(b => b).join(", "): []
+      default:
+        return vacancy? vacancy.description: "Não há descrição ainda";
+    }
   };
 
-  console.log("params", params);
-  // return <div>ID: {params.id}</div>;
+  //  const CustomStepIcon = (props: any) => {
+  //   // desestrutura as props que você usa e ignora o resto, inclusive last
+  //   const { active, completed, className, ...other } = props;
+  //   console.log(props)
+
+  //   let color = "#B0BEC5";
+  //   if (active) color = "#036D3C";
+  //   if (completed) color = "#339d6c";
+
+  //   return (
+  //     <div
+  //       className={className}
+  //       style={{
+  //         color: "#f0f0f0",
+  //         borderRadius: "50%",
+  //         backgroundColor: color,
+  //         width: 24,
+  //         height: 24,
+  //         display: "flex",
+  //         alignItems: "center",
+  //         justifyContent: "center",
+  //         fontWeight: "bold",
+  //       }}
+  //       // NÃO faça {...other} aqui para evitar passar props extras
+  //     >
+  //       ✓
+  //     </div>
+  //   );
+  // };
+
+
+  const content = getContent();
 
   return (
     <>
@@ -155,7 +197,7 @@ const VacancyPage = async ({params} : any) => {
               <Button
                 variant="contained"
                 sx={{ backgroundColor: "#036D3C", width: "100%", maxWidth: "700px" }}
-          
+
               >
                 Candidate-se
               </Button>
@@ -168,8 +210,8 @@ const VacancyPage = async ({params} : any) => {
             {/* Detalhes da vaga */}
             <div className="flex flex-col bg-white border-1 rounded-2xl border-gray-200 p-7 gap-5">
               <h1 className="text-xl font-semibold">Detalhes da vaga</h1>
-              <div className="md:flex sm:grid sm:grid-cols-2 flex-col gap-0.5 flex-wrap">
-                {["Descrição", "Responsabilidades", "Requisitos", "Benefícios"].map((item) => (
+              <div className="md:flex md:flex-row sm:grid sm:grid-cols-2 flex-col gap-0.5 flex-wrap">
+                {/* {["Descrição", "Responsabilidades", "Requisitos", "Benefícios"].map((item) => (
                   <Button
                     key={item}
                     variant="outlined"
@@ -177,36 +219,68 @@ const VacancyPage = async ({params} : any) => {
                   >
                     {item}
                   </Button>
-                ))}
+                ))} */}
+
+              
+                  {["Descrição", "Responsabilidades", "Requisitos", "Benefícios"].map((item) => (
+                    <Link
+                      key={item}
+                      href={`/vacancy/${id}?tab=${encodeURIComponent(item)}`}
+                      className={tab === item ? "active" : ""}
+                    >
+                      <Button sx={{
+                        color: "#036D3C",
+                        borderColor: "green",
+                        flexWrap: "wrap",
+                        ...(tab === item
+                          ? {
+                              backgroundColor: "#036D3C",
+                              color: "#fff",
+                            }
+                          : {}),
+                      }} variant={tab === item ? "contained" : "outlined"}>
+                        {item}
+                      </Button>
+                    </Link>
+                  ))}
+                
+                          
               </div>
               <div className="bg-[#efffef] flex flex-wrap gap-4 rounded-r-sm">
                 <div className="bg-[#60a860] w-2 "></div>
-                <p className="m-2 flex flex-wrap">{vacancy ? vacancy.description : "Não há detalhes ainda."}</p>
+                {typeof content === "string" ? (
+                <p className="m-2 flex flex-wrap">{content}</p> ) : (
+                    <ul className="list-disc list-inside space-y-1 pl-4">
+                      {content.map((item, index) => (
+                        <li key={index} className="text-justify">{item}</li>
+                      ))}
+                    </ul>
+                )}
+
               </div>
             </div>
 
             {/* Etapas do processo */}
             <div className="flex flex-col bg-white border-1 rounded-2xl border-gray-200 p-7 gap-9">
               <h2 className="text-xl font-semibold">Etapas do processo</h2>
-              <Stepper activeStep={activeStep} orientation="vertical">
-                {(vacancy?.stages ?? []).length === 0 ? (
-                  <p>Nenhuma etapa cadastrada</p>
-                ) : (
-                  (vacancy?.stages ?? []).map((step) => (
-                    <Step key={step.id}>
-                      <StepLabel StepIconComponent={CustomStepIcon}>
-                        {step.description}
-                      </StepLabel>
-                      <StepContent>
-                        <Typography variant="caption">
-                          {new Date(step.startDate).toLocaleDateString()} - {new Date(step.endDate).toLocaleDateString()}
-                        </Typography>
-                        <Box sx={{ mb: 2, backgroundColor: "#036D3C" }} />
-                      </StepContent>
-                    </Step>
-                  ))
-                )}
-              </Stepper>
+                {
+                vacancy?
+                vacancy.stages.length != 0?
+                vacancy.stages.map((item, index) => {
+                    return(
+                      
+                      <div className="flex flex-row gap-3 items-center" key={index}>
+                          <div className="bg-green-700 w-3 h-3 rounded-full"></div>
+                          <div>
+                            <p>{item.description}</p>
+                            <p>{item.startDate.toString()} - {item.endDate.toString()}</p>
+                          </div>
+                      </div>
+                     
+                    )
+                }) 
+                : ( <p>Não há etapas cadastradas</p>) : (<p>Não há etapas cadastradas</p>)}
+              
             </div>
           </div>
 
