@@ -16,6 +16,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { APIURL } from '@/constants/api';
 import { EEducationType, EProficiencyLevel } from '@/constants/enums';
+import { ROUTES } from '@/constants/routes';
 
 type EditVacancyProps = {
     id: string;
@@ -110,7 +111,7 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
     const [listBenefits, setListBenefits] = useState<string[]>([])
     const [listSkills, setListSkills] = useState<string[]>([])
     const [selectedWorkDays, setSelectedWorkDays] = useState<number[]>([])
-    const [page, setPage] = useState(2)
+    const [page, setPage] = useState(1)
 
     // ------- fazer requisição get para conseguir dados da vaga
 
@@ -478,8 +479,8 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
                             <ArrowBackIcon/>
                             <p>Anterior</p>
                         </Button>
-                        <Button onClick={() => setPage(3)} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{backgroundColor: '#0AA851FF'}}>
-                            <p>Próximo</p>
+                        <Button onClick={() => ROUTES.homeAdmin} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{backgroundColor: '#0AA851FF'}}>
+                            <p>Finaliazar</p>
                             <ArrowForwardIcon/>
                         </Button>
                      </div>
