@@ -479,7 +479,7 @@ const EditVacancyComponent = ({ id }: EditVacancyProps) => {
                             <ArrowBackIcon/>
                             <p>Anterior</p>
                         </Button>
-                        <Button onClick={() => ROUTES.homeAdmin} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{backgroundColor: '#0AA851FF'}}>
+                        <Button onClick={() => router.push(ROUTES.homeAdmin)} variant='contained' className="flex items-center justify-center gap-3 w-40 self-center" sx={{backgroundColor: '#0AA851FF'}}>
                             <p>Finaliazar</p>
                             <ArrowForwardIcon/>
                         </Button>
