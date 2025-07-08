@@ -40,22 +40,30 @@ const EditDelete = ({id} : Isla) =>
     const handleRemove = () => {
         setIsDeleteModalOpen(false);
 
-        fetch(`${APIURL}/resume/vacancy/${id}`, {
+        fetch(`${APIURL}/vacancy/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type" : "application/json",
                 "Authorization" : `Bearer ${localStorage.getItem("AUTH")}`
             }
         })
-        .then((res) => res.json())
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error(`Erro na requisição: ${res.statusText}`);
+                router.push(ROUTES.homeAdmin)
+            }
+            return res.json()
+            router.push(ROUTES.homeAdmin)
+        })
         .then((data) => {
             console.log(data.message);
             console.log(data.value)
+            router.push(ROUTES.homeAdmin)
         })
         .catch((err) => {
             console.error(err);
         });
-
+      
         console.log("Vaga excluída");
     }
 
@@ -87,7 +95,7 @@ const EditDelete = ({id} : Isla) =>
                     </Typography>
 
                     <div className="flex items-center justify-center flex-row gap-3 mt-4">
-                        <Button onClick={handleRemove} variant="contained" color="error">Excluir</Button>
+                        <Button onClick={() => router.push(ROUTES.homeAdmin)} variant="contained" color="error">Excluir</Button>
                         <Button onClick={() => setIsDeleteModalOpen(false)} variant="contained" color="primary">Cancelar</Button>
                     </div>
                 </Box>
